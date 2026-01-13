@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.10"/>
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.04"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.10"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" rx="64" fill="url(#bg)"/>
+  <rect x="70" y="70" width="1060" height="660" rx="44" fill="#ffffff" opacity="0.06"/>
+  <path d="M310 470c70-80 170-120 290-120h120c80 0 150 35 210 95l45 45c15 15 25 35 25 55v10H260v-15c0-25 10-48 28-66l22-19z" fill="url(#shine)"/>
+  <circle cx="410" cy="610" r="42" fill="#e5e7eb" opacity="0.9"/>
+  <circle cx="840" cy="610" r="42" fill="#e5e7eb" opacity="0.9"/>
+  <text x="95" y="165" fill="#ffffff" font-size="54" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial" font-weight="800">Sample Car 13</text>
+  <text x="95" y="220" fill="#e5e7eb" font-size="26" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial">Local placeholder • No external images</text>
+</svg>
+
+

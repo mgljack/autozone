@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --accent-orange: lab(8.30603% 0.618212 -2.16573);
+  --accent-orange-light: lab(8.30603% 0.618212 -2.16573 / 0.1);
+  --slider-track: lab(8.30603% 0.618212 -2.16573);
+  --slider-thumb: lab(8.30603% 0.618212 -2.16573);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+}
+
+/* Ensure all form elements inherit the global font */
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Custom accent color for search tabs */
+  .accent-orange {
+    color: var(--accent-orange);
+  }
+  .accent-orange-bg {
+    background-color: var(--accent-orange);
+  }
+  .accent-orange-bg-light {
+    background-color: var(--accent-orange-light);
+  }
+  
+  /* Budget search slider colors */
+  .budget-slider-thumb::-webkit-slider-thumb {
+    background-color: var(--slider-thumb) !important;
+  }
+  .budget-slider-thumb::-moz-range-thumb {
+    background-color: var(--slider-thumb) !important;
+  }
+}
+
+/* Car Center Marquee Animation */
+/* Moves exactly 25% of container width (since we duplicate 4x) */
+/* This creates a seamless loop: when first quarter exits, second quarter is in place */
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-25%);
+  }
+}

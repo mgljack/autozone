@@ -1,0 +1,291 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import React from "react";
+
+import { LanguageSelect } from "@/components/common/LanguageSelect";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { useAuth } from "@/context/AuthContext";
+import { useI18n } from "@/context/I18nContext";
+import { cn } from "@/lib/utils";
+
+function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
+  const pathname = usePathname();
+  const active = pathname === href || (href !== "/" && pathname?.startsWith(href));
+  return (
+    <Link
+      href={href}
+      suppressHydrationWarning
+      className={cn(
+        "rounded-lg px-2 py-1 text-sm font-normal text-zinc-700 hover:text-zinc-900",
+        active && "bg-zinc-100 text-zinc-900",
+      )}
+    >
+      {children}
+    </Link>
+  );
+}
+
+export function Header() {
+  const { t } = useI18n();
+  const { session, logout } = useAuth();
+  const router = useRouter();
+  const pathname = usePathname();
+  const [mounted, setMounted] = React.useState(false);
+  const [rentOpen, setRentOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const rentOpenTimer = React.useRef<number | null>(null);
+  const rentCloseTimer = React.useRef<number | null>(null);
+
+  const clearRentTimers = React.useCallback(() => {
+    if (rentOpenTimer.current) window.clearTimeout(rentOpenTimer.current);
+    if (rentCloseTimer.current) window.clearTimeout(rentCloseTimer.current);
+    rentOpenTimer.current = null;
+    rentCloseTimer.current = null;
+  }, []);
+
+  const openRent = React.useCallback(() => {
+    clearRentTimers();
+    rentOpenTimer.current = window.setTimeout(() => setRentOpen(true), 120);
+  }, [clearRentTimers]);
+
+  const closeRent = React.useCallback(() => {
+    clearRentTimers();
+    rentCloseTimer.current = window.setTimeout(() => setRentOpen(false), 160);
+  }, [clearRentTimers]);
+
+  React.useEffect(() => clearRentTimers, [clearRentTimers]);
+  React.useEffect(() => setMounted(true), []);
+
+  const tt = React.useCallback(
+    (key: string) => (mounted ? t(key as any) : ""),
+    [mounted, t],
+  );
+
+  return (
+    <header className="sticky top-0 z-30 border-b border-zinc-200 bg-white/80 backdrop-blur">
+      <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-3 py-3 sm:px-4">
+        <div className="flex items-center gap-4">
+          <button
+            type="button"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-200 bg-white hover:bg-zinc-50 sm:hidden"
+            onClick={() => setMobileOpen(true)}
+            aria-label={tt("common.openMenu")}
+            suppressHydrationWarning
+          >
+            ☰
+          </button>
+          <Link href="/" className="text-lg font-extrabold tracking-tight text-zinc-900">
+            {t("app.name")}
+          </Link>
+
+          <nav className="hidden items-center gap-1 sm:flex">
+            <div className="group relative">
+              <Link
+                href="/buy"
+                suppressHydrationWarning
+                onClick={(e) => {
+                  e.preventDefault();
+                  router.push("/buy/all");
+                }}
+                className={cn(
+                  "rounded-lg px-2 py-1 text-sm font-normal text-zinc-700 hover:text-zinc-900",
+                  (pathname === "/buy" || (pathname && pathname.startsWith("/buy"))) && "bg-zinc-100 text-zinc-900",
+                )}
+              >
+                {tt("nav.buy")}
+              </Link>
+              <div className="invisible absolute left-0 top-full mt-2 w-64 rounded-2xl border border-zinc-200 bg-white p-2 opacity-0 shadow-lg transition-all group-hover:visible group-hover:opacity-100">
+                <Link className="block rounded-xl px-3 py-2 text-sm hover:bg-zinc-50" href="/buy/all" suppressHydrationWarning>
+                  {tt("nav.allVehicles")}
+                </Link>
+                <Link className="block rounded-xl px-3 py-2 text-sm hover:bg-zinc-50" href="/buy/motorcycle" suppressHydrationWarning>
+                  {tt("nav.motorcycle")}
+                </Link>
+                <Link className="block rounded-xl px-3 py-2 text-sm hover:bg-zinc-50" href="/buy/tire" suppressHydrationWarning>
+                  {tt("nav.tire")}
+                </Link>
+                <Link className="block rounded-xl px-3 py-2 text-sm hover:bg-zinc-50" href="/buy/parts" suppressHydrationWarning>
+                  {tt("nav.parts")}
+                </Link>
+              </div>
+            </div>
+            <div
+              className="relative"
+              onMouseEnter={openRent}
+              onMouseLeave={closeRent}
+              onFocusCapture={openRent}
+              onBlurCapture={(e) => {
+                const next = e.relatedTarget as Node | null;
+                if (next && e.currentTarget.contains(next)) return;
+                closeRent();
+              }}
+            >
+              <button
+                type="button"
+                onClick={() => router.push("/rent/small")}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") {
+                    e.preventDefault();
+                    setRentOpen(false);
+                  }
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    router.push("/rent/small");
+                  }
+                }}
+                className={cn(
+                  "rounded-lg px-2 py-1 text-sm font-normal text-zinc-700 hover:text-zinc-900",
+                  pathname?.startsWith("/rent") && "bg-zinc-100 text-zinc-900",
+                )}
+                aria-expanded={rentOpen}
+                suppressHydrationWarning
+              >
+                {tt("nav.rent")}
+              </button>
+              {rentOpen ? (
+                <div
+                  className="absolute left-0 top-full mt-2 w-56 rounded-2xl border border-zinc-200 bg-white p-2 shadow-lg"
+                  onKeyDown={(e) => {
+                    if (e.key === "Escape") {
+                      e.preventDefault();
+                      setRentOpen(false);
+                    }
+                  }}
+                >
+                  <Link className="block rounded-xl px-3 py-2 text-sm hover:bg-zinc-50" href="/rent/small" onClick={() => setRentOpen(false)} suppressHydrationWarning>
+                    {tt("rent.small")}
+                  </Link>
+                  <Link className="block rounded-xl px-3 py-2 text-sm hover:bg-zinc-50" href="/rent/large" onClick={() => setRentOpen(false)} suppressHydrationWarning>
+                    {tt("rent.large")}
+                  </Link>
+                  <Link className="block rounded-xl px-3 py-2 text-sm hover:bg-zinc-50" href="/rent/truck" onClick={() => setRentOpen(false)} suppressHydrationWarning>
+                    {tt("rent.truck")}
+                  </Link>
+                </div>
+              ) : null}
+            </div>
+            <NavLink href="/service">{tt("nav.service")}</NavLink>
+            <NavLink href="/media">{tt("nav.media")}</NavLink>
+            <NavLink href="/sell">{tt("nav.sell")}</NavLink>
+          </nav>
+        </div>
+
+        <div className="flex items-center gap-2">
+          {mounted ? <LanguageSelect /> : null}
+          {mounted && session ? (
+            <>
+              <Link href="/mypage" className="hidden sm:inline-flex">
+                <Button variant="outline">{tt("nav.mypage")}</Button>
+              </Link>
+              <Button variant="outline" className="hidden sm:inline-flex" onClick={logout}>
+                {tt("auth.logout")}
+              </Button>
+            </>
+          ) : mounted ? (
+            <>
+              <Link href="/login" className="hidden sm:inline-flex">
+                <Button>{tt("auth.login")}</Button>
+              </Link>
+              <Link href="/signup" className="hidden sm:inline-flex">
+                <Button variant="outline">{tt("auth.signup")}</Button>
+              </Link>
+            </>
+          ) : null}
+        </div>
+      </div>
+
+      <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+        <SheetContent className="p-0">
+          <SheetHeader>
+            <SheetTitle>{t("app.name")}</SheetTitle>
+            <button
+              type="button"
+              className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-normal hover:bg-zinc-50"
+              onClick={() => setMobileOpen(false)}
+            >
+              {tt("common.close")}
+            </button>
+          </SheetHeader>
+          <div className="grid gap-4 p-4">
+            <div className="grid gap-2">
+              <div className="text-xs font-normal text-zinc-600">{tt("nav.buy")}</div>
+              <div className="grid gap-1">
+                <Link className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-normal" href="/buy/all" onClick={() => setMobileOpen(false)}>
+                  {tt("nav.allVehicles")}
+                </Link>
+                <Link className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-normal" href="/buy/motorcycle" onClick={() => setMobileOpen(false)}>
+                  {tt("nav.motorcycle")}
+                </Link>
+                <Link className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-normal" href="/buy/tire" onClick={() => setMobileOpen(false)}>
+                  {tt("nav.tire")}
+                </Link>
+                <Link className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-normal" href="/buy/parts" onClick={() => setMobileOpen(false)}>
+                  {tt("nav.parts")}
+                </Link>
+              </div>
+            </div>
+
+            <div className="grid gap-2">
+              <div className="text-xs font-normal text-zinc-600">{tt("nav.rent")}</div>
+              <div className="grid gap-1">
+                <Link className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-normal" href="/rent/small" onClick={() => setMobileOpen(false)}>
+                  {tt("rent.small")}
+                </Link>
+                <Link className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-normal" href="/rent/large" onClick={() => setMobileOpen(false)}>
+                  {tt("rent.large")}
+                </Link>
+                <Link className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-normal" href="/rent/truck" onClick={() => setMobileOpen(false)}>
+                  {tt("rent.truck")}
+                </Link>
+              </div>
+            </div>
+
+            <div className="grid gap-2">
+              <Link className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-normal" href="/service" onClick={() => setMobileOpen(false)}>
+                {t("nav.service")}
+              </Link>
+              <Link className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-normal" href="/media" onClick={() => setMobileOpen(false)}>
+                {t("nav.media")}
+              </Link>
+              <Link className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-normal" href="/sell" onClick={() => setMobileOpen(false)}>
+                {t("nav.sell")}
+              </Link>
+            </div>
+
+            <div className="grid gap-2">
+              <LanguageSelect />
+              {mounted && session ? (
+                <div className="grid grid-cols-2 gap-2">
+                  <Link href="/mypage" onClick={() => setMobileOpen(false)}>
+                    <Button className="w-full" variant="outline">
+                      {tt("nav.mypage")}
+                    </Button>
+                  </Link>
+                  <Button className="w-full" variant="outline" onClick={() => (logout(), setMobileOpen(false))}>
+                    {tt("auth.logout")}
+                  </Button>
+                </div>
+              ) : mounted ? (
+                <div className="grid grid-cols-2 gap-2">
+                  <Link href="/login" onClick={() => setMobileOpen(false)}>
+                    <Button className="w-full">{tt("auth.login")}</Button>
+                  </Link>
+                  <Link href="/signup" onClick={() => setMobileOpen(false)}>
+                    <Button className="w-full" variant="outline">
+                      {tt("auth.signup")}
+                    </Button>
+                  </Link>
+                </div>
+              ) : null}
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
+    </header>
+  );
+}
+
+

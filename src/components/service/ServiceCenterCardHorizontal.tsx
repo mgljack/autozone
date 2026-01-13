@@ -1,0 +1,89 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+
+import { formatMnt } from "@/lib/format";
+import type { CenterDTO } from "@/lib/apiTypes";
+
+export function ServiceCenterCardHorizontal({ center }: { center: CenterDTO }) {
+  const imageUrl = center.imageUrl || "/samples/cars/car-01.svg";
+
+  return (
+    <Link
+      href={`/service/center/${center.id}`}
+      className="group block w-full overflow-hidden rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
+    >
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-[360px_1fr_220px] md:items-start">
+        {/* LEFT: Single service center image */}
+        <div className="relative h-[200px] w-full overflow-hidden rounded-xl bg-zinc-100 md:h-[160px]">
+          <Image 
+            src={imageUrl} 
+            alt={center.name} 
+            fill 
+            className="object-cover object-center transition-transform duration-300 group-hover:scale-105" 
+            sizes="(max-width: 768px) 100vw, 360px"
+          />
+        </div>
+
+        {/* CENTER: Service center details */}
+        <div className="min-w-0">
+          {/* Service Center Name */}
+          <div className="text-lg font-normal text-zinc-900">{center.name}</div>
+          
+          {/* Location and Rating */}
+          <div className="mt-1 flex items-center gap-2 text-sm text-zinc-600">
+            <span>{center.regionLabel}</span>
+            <span>•</span>
+            <span className="flex items-center gap-1">
+              ★ {center.rating.toFixed(1)}
+            </span>
+          </div>
+          
+          {/* Address */}
+          <div className="mt-2 text-sm text-zinc-600">{center.address}</div>
+          
+          {/* Service Types */}
+          <div className="mt-3 flex flex-wrap gap-2">
+            {center.services.map((service) => (
+              <span
+                key={service}
+                className="rounded-full border border-zinc-200 px-2 py-1 text-xs font-normal text-zinc-600"
+              >
+                {service}
+              </span>
+            ))}
+          </div>
+
+          {/* Operating hours */}
+          {center.operatingHours && (
+            <div className="mt-3 text-xs text-zinc-500">운영시간: {center.operatingHours}</div>
+          )}
+        </div>
+
+        {/* RIGHT: Rating and Price */}
+        <div className="flex flex-col items-end gap-3 md:items-end">
+          <div className="text-right">
+            <div className="text-xs text-zinc-500">평점</div>
+            <div className="mt-1 text-lg font-extrabold text-zinc-900">★ {center.rating.toFixed(1)}</div>
+          </div>
+          {center.minPriceMnt && center.maxPriceMnt && (
+            <div className="mt-auto text-right">
+              <div className="text-xs text-zinc-500">서비스 가격</div>
+              <div className="mt-1 text-lg font-extrabold text-zinc-900">
+                {center.minPriceMnt === center.maxPriceMnt 
+                  ? formatMnt(center.minPriceMnt)
+                  : `${formatMnt(center.minPriceMnt)} ~ ${formatMnt(center.maxPriceMnt)}`}
+              </div>
+            </div>
+          )}
+          <div className="text-right">
+            <div className="text-xs text-zinc-500">연락처</div>
+            <div className="mt-1 text-sm font-normal text-zinc-900">{center.phone}</div>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+}
+

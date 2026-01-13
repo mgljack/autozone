@@ -1,0 +1,108 @@
+[
+  {
+    "id": "car_1001",
+    "title": "Toyota Prius 30",
+    "year": 2014,
+    "priceMnt": 28500000,
+    "mileageKm": 148000,
+    "location": "Улаанбаатар",
+    "fuel": "Hybrid",
+    "transmission": "AT",
+    "steering": "LHD",
+    "images": ["/mock/cars/prius-30.svg"],
+    "postedAt": "2025-12-22T10:15:00.000Z"
+  },
+  {
+    "id": "car_1002",
+    "title": "Toyota Land Cruiser 200",
+    "year": 2016,
+    "priceMnt": 188000000,
+    "mileageKm": 92000,
+    "location": "Улаанбаатар",
+    "fuel": "Diesel",
+    "transmission": "AT",
+    "steering": "LHD",
+    "images": ["/mock/cars/lc200.svg"],
+    "postedAt": "2025-12-21T08:40:00.000Z"
+  },
+  {
+    "id": "car_1003",
+    "title": "Hyundai Sonata YF",
+    "year": 2013,
+    "priceMnt": 24500000,
+    "mileageKm": 176000,
+    "location": "Дархан",
+    "fuel": "Gasoline",
+    "transmission": "AT",
+    "steering": "LHD",
+    "images": ["/mock/cars/sonata-yf.svg"],
+    "postedAt": "2025-12-20T13:05:00.000Z"
+  },
+  {
+    "id": "car_1004",
+    "title": "Lexus RX 350",
+    "year": 2012,
+    "priceMnt": 78000000,
+    "mileageKm": 162000,
+    "location": "Эрдэнэт",
+    "fuel": "Gasoline",
+    "transmission": "AT",
+    "steering": "LHD",
+    "images": ["/mock/cars/rx350.svg"],
+    "postedAt": "2025-12-19T18:20:00.000Z"
+  },
+  {
+    "id": "car_1005",
+    "title": "Kia Sportage",
+    "year": 2017,
+    "priceMnt": 46000000,
+    "mileageKm": 111000,
+    "location": "Улаанбаатар",
+    "fuel": "Diesel",
+    "transmission": "AT",
+    "steering": "LHD",
+    "images": ["/mock/cars/sportage.svg"],
+    "postedAt": "2025-12-18T09:30:00.000Z"
+  },
+  {
+    "id": "car_1006",
+    "title": "Toyota Vitz",
+    "year": 2010,
+    "priceMnt": 16500000,
+    "mileageKm": 198000,
+    "location": "Улаанбаатар",
+    "fuel": "Gasoline",
+    "transmission": "AT",
+    "steering": "RHD",
+    "images": ["/mock/cars/vitz.svg"],
+    "postedAt": "2025-12-17T11:50:00.000Z"
+  },
+  {
+    "id": "car_1007",
+    "title": "Subaru Forester",
+    "year": 2015,
+    "priceMnt": 52000000,
+    "mileageKm": 139000,
+    "location": "Дархан",
+    "fuel": "Gasoline",
+    "transmission": "AT",
+    "steering": "RHD",
+    "images": ["/mock/cars/forester.svg"],
+    "postedAt": "2025-12-16T16:12:00.000Z"
+  },
+  {
+    "id": "car_1008",
+    "title": "Toyota Alphard",
+    "year": 2018,
+    "priceMnt": 135000000,
+    "mileageKm": 87000,
+    "location": "Улаанбаатар",
+    "fuel": "Hybrid",
+    "transmission": "AT",
+    "steering": "RHD",
+    "images": ["/mock/cars/alphard.svg"],
+    "postedAt": "2025-12-15T07:55:00.000Z"
+  }
+]
+
+
