@@ -22,7 +22,7 @@ import { rentItems, type RentItem, type RentType } from "@/mock/rent";
 export type { RentType };
 import { readLocalStorage } from "@/lib/storage";
 import type { MyListing } from "@/features/sell/types";
-import type { CarDetailDTO, CarListItemDTO, CenterDTO, MediaDTO, PartListItemDTO, TireListItemDTO } from "@/lib/apiTypes";
+import type { CarDetailDTO, CarListItemDTO, CenterDTO, MediaDTO, PartDetailDTO, PartListItemDTO, TireDetailDTO, TireListItemDTO } from "@/lib/apiTypes";
 
 function deepClone<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
