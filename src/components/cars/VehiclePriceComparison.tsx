@@ -200,16 +200,18 @@ export function VehiclePriceComparison({
         <div className="relative h-14 w-full rounded-full overflow-visible">
           {/* Full bar background */}
           <div
-            className="absolute inset-0 rounded-full"
+            className="absolute rounded-full"
             style={{
+              inset: "calc(var(--spacing) * 3)",
               background: "linear-gradient(90deg, #e9edf3 0%, #f3f5f8 100%)",
             }}
           />
           
           {/* Active range (Base → Sale) - filled area */}
           <div
-            className="absolute inset-0 rounded-full transition-all duration-75 ease-out"
+            className="absolute rounded-full transition-all duration-75 ease-out"
             style={{
+              inset: "calc(var(--spacing) * 3)",
               width: `${animatedProgress * 100}%`,
               background: "linear-gradient(90deg, #3b82f6 0%, #22c55e 100%)",
             }}

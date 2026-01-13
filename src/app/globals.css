@@ -3,6 +3,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --spacing: 4px;
   --accent-orange: lab(8.30603% 0.618212 -2.16573);
   --accent-orange-light: lab(8.30603% 0.618212 -2.16573 / 0.1);
   --slider-track: lab(8.30603% 0.618212 -2.16573);
