@@ -77,3 +77,13 @@ select {
     transform: translateX(-25%);
   }
 }
+
+/* Heart pulse animation for like action */
+@keyframes heart-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}

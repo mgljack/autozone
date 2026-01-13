@@ -147,6 +147,8 @@ export function VehiclePriceComparison({
       className="rounded-[20px] border border-zinc-200/50 p-8 shadow-[0_12px_30px_rgba(0,0,0,0.06)]"
       style={{
         background: "linear-gradient(180deg, #ffffff 0%, #f8f9fb 100%)",
+        marginTop: "calc(var(--spacing) * 6)",
+        marginBottom: "calc(var(--spacing) * 6)",
       }}
     >
       {/* Header */}

@@ -52,10 +52,29 @@ export default function PartDetailClient({ id }: { id: string }) {
   const onShare = async () => {
     const url = window.location.href;
     try {
+      // Try Web Share API first
+      if (navigator.share) {
+        await navigator.share({
+          title: part.name,
+          text: `${part.name} - ${formatMnt(part.priceMnt)}`,
+          url: url,
+        });
+        return;
+      }
+      // Fallback to clipboard
       await navigator.clipboard.writeText(url);
-      alert("링크가 복사되었습니다");
-    } catch {
-      alert("링크가 복사되었습니다");
+      alert(t("common.linkCopied"));
+    } catch (err) {
+      // User cancelled share or error occurred
+      if (err instanceof Error && err.name !== "AbortError") {
+        // If not user cancellation, try clipboard fallback
+        try {
+          await navigator.clipboard.writeText(url);
+          alert(t("common.linkCopied"));
+        } catch {
+          alert(t("common.shareFailed"));
+        }
+      }
     }
   };
 
