@@ -760,6 +760,8 @@ export default function MainHomePage() {
           title={t("home.sections.goldTitle")}
           viewAllHref="/buy/all?tier=gold"
           cars={homeQuery.data?.goldCars ?? []}
+          centerTitle={true}
+          customSubtitle={t("home.goldSection.subtitle")}
         />
       </section>
 
@@ -789,7 +791,7 @@ export default function MainHomePage() {
       <section className="grid gap-3">
         <div className="flex items-end justify-between">
           <div>
-            <div className="text-lg font-normal">{t("nav.media")}</div>
+            <div className="text-2xl font-bold">{t("nav.media")}</div>
           </div>
           <Link href="/media" className="text-sm font-normal text-zinc-900 hover:underline">
             {t("common.viewAll")}
@@ -822,7 +824,7 @@ export default function MainHomePage() {
       <section className="grid gap-3">
         <div className="flex items-end justify-between">
           <div>
-            <div className="text-lg font-normal">{t("home.sections.recentTitle")}</div>
+            <div className="text-2xl font-bold">{t("home.sections.recentTitle")}</div>
           </div>
           <Link href="/buy/all?tier=general" className="text-sm font-normal text-zinc-900 hover:underline">
             {t("common.viewAll")}

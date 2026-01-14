@@ -42,7 +42,7 @@ export function CarCenterMarquee({ centers }: CarCenterMarqueeProps) {
   return (
     <section className="w-full overflow-hidden">
       <div className="mb-4 flex items-end justify-between">
-        <div className="text-lg font-normal">{t("home.sections.carCenter")}</div>
+        <div className="text-2xl font-bold">{t("home.sections.carCenter")}</div>
         <Link href="/service" className="text-sm font-normal text-zinc-900 hover:underline">
           {t("common.viewAll")}
         </Link>

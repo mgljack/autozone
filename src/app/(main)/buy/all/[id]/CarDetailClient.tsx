@@ -91,9 +91,9 @@ export default function CarDetailClient({ id }: { id: string }) {
       if (err instanceof Error && err.name !== "AbortError") {
         // If not user cancellation, try clipboard fallback
         try {
-          await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(url);
           alert(t("common.linkCopied"));
-        } catch {
+    } catch {
           alert(t("common.shareFailed"));
         }
       }

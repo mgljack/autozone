@@ -15,12 +15,16 @@ export function HomeTierCarousel({
   viewAllHref,
   cars,
   className,
+  centerTitle,
+  customSubtitle,
 }: {
   title: string;
   subtitle?: string;
   viewAllHref: string;
   cars: CarListItemDTO[];
   className?: string;
+  centerTitle?: boolean;
+  customSubtitle?: string;
 }) {
   const { t } = useI18n();
   const trackRef = React.useRef<HTMLDivElement | null>(null);
@@ -101,32 +105,89 @@ export function HomeTierCarousel({
 
   return (
     <div className={cn("rounded-3xl bg-zinc-50 p-4 sm:p-6", className)}>
-      <div className="flex items-end justify-between gap-4">
-        <div className="min-w-0">
-          <div className="text-lg font-normal text-zinc-900">{title}</div>
+      {centerTitle ? (
+        <div className="mb-6">
+          <div className="text-center">
+            <div className="text-2xl font-bold text-zinc-900">{title}</div>
+          </div>
+          {customSubtitle ? (
+            <div className="mt-1.5 flex items-center justify-between">
+              <div className="flex-1 text-center">
+                <div className="text-sm font-normal text-zinc-500 tracking-tight">
+                  {customSubtitle}
+                </div>
+              </div>
+              <Link
+                href={viewAllHref}
+                className="shrink-0 text-sm font-normal text-zinc-900 hover:underline"
+              >
+                {t("common.viewAll")}
+              </Link>
+            </div>
+          ) : (
+            <div className="mt-1.5 flex justify-end">
+              <Link
+                href={viewAllHref}
+                className="shrink-0 text-sm font-normal text-zinc-900 hover:underline"
+              >
+                {t("common.viewAll")}
+              </Link>
+            </div>
+          )}
         </div>
-        <Link href={viewAllHref} className="shrink-0 text-sm font-normal text-zinc-900 hover:underline">
-          {t("common.viewAll")}
-        </Link>
-      </div>
+      ) : (
+        <div className="flex items-end justify-between gap-4">
+          <div className="min-w-0">
+            <div className="text-2xl font-bold text-zinc-900">{title}</div>
+            {subtitle ? <div className="mt-1 text-sm text-zinc-600">{subtitle}</div> : null}
+          </div>
+          <Link href={viewAllHref} className="shrink-0 text-sm font-normal text-zinc-900 hover:underline">
+            {t("common.viewAll")}
+          </Link>
+        </div>
+      )}
 
       <div className="relative mt-4">
-        {/* Desktop arrows */}
+        {/* Desktop arrows - Premium design */}
         <button
           type="button"
-          className="absolute left-0 top-1/2 z-10 hidden h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-zinc-200 bg-white shadow-sm transition-colors hover:bg-zinc-50 md:flex"
+          className="absolute left-0 top-1/2 z-20 hidden h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-black/55 text-white shadow-[0_8px_20px_rgba(0,0,0,0.25)] transition-all duration-200 hover:bg-rose-600 hover:shadow-[0_10px_26px_rgba(0,0,0,0.35)] hover:scale-105 active:scale-95 disabled:opacity-40 disabled:pointer-events-none disabled:cursor-not-allowed md:flex"
           aria-label="Previous"
           onClick={() => scrollByStep("left")}
         >
-          ←
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
         </button>
         <button
           type="button"
-          className="absolute right-0 top-1/2 z-10 hidden h-10 w-10 translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-zinc-200 bg-white shadow-sm transition-colors hover:bg-zinc-50 md:flex"
+          className="absolute right-0 top-1/2 z-20 hidden h-10 w-10 translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-black/55 text-white shadow-[0_8px_20px_rgba(0,0,0,0.25)] transition-all duration-200 hover:bg-rose-600 hover:shadow-[0_10px_26px_rgba(0,0,0,0.35)] hover:scale-105 active:scale-95 disabled:opacity-40 disabled:pointer-events-none disabled:cursor-not-allowed md:flex"
           aria-label="Next"
           onClick={() => scrollByStep("right")}
         >
-          →
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M9 18l6-6-6-6" />
+          </svg>
         </button>
 
         <div
