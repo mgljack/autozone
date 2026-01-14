@@ -316,6 +316,7 @@ export default function MyPage() {
               </div>
               <div className="flex justify-end">
                 <Button
+                  variant="primary"
                   onClick={() => {
                     setProfileMsg(null);
                     const res = updateProfile({

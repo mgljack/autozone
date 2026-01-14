@@ -514,7 +514,7 @@ export default function MainHomePage() {
               <button
                 type="button"
                 onClick={onSearch}
-                className="inline-flex h-14 min-w-[120px] items-center justify-center gap-2 rounded-full bg-zinc-900 px-6 text-lg font-bold text-white transition-colors hover:bg-zinc-800 active:bg-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-700 focus-visible:ring-offset-2"
+                className="inline-flex h-14 min-w-[120px] items-center justify-center gap-2 rounded-full bg-rose-600 px-6 text-lg font-bold text-white transition-all duration-200 hover:bg-[#e11d48] hover:shadow-[0_8px_20px_rgba(225,29,72,0.35)] active:scale-[0.98] active:shadow-[inset_0_2px_6px_rgba(0,0,0,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-600/50 focus-visible:ring-offset-2"
               >
                 <span>{t("home.quickSearch.search")}</span>
                 <svg
@@ -539,7 +539,7 @@ export default function MainHomePage() {
             {/* Budget panel */}
             {quickTab === "budget" && budgetOpen ? (
               <div className="relative mt-4 w-full max-w-full">
-                <div className="relative w-full max-w-full rounded-3xl border border-zinc-200 bg-zinc-50 px-6 py-6 shadow-md sm:px-8">
+                <div className="relative w-full max-w-full rounded-2xl border border-zinc-200 bg-white px-6 py-5 shadow-[0_4px_12px_rgba(0,0,0,0.06)] transition-shadow hover:shadow-[0_6px_16px_rgba(0,0,0,0.08)] sm:px-8">
                   <div className="text-sm font-extrabold text-zinc-900">{t("home.quickSearch.priceSelect")}</div>
                   <button
                     type="button"
@@ -560,24 +560,61 @@ export default function MainHomePage() {
                   </button>
 
                   <div className="mt-4 grid gap-4">
-                    <div className="flex items-center justify-between text-sm font-normal text-zinc-700">
-                      <div>
-                        {t("home.quickSearch.min")} <span className="font-extrabold text-zinc-900">{formatSaya(minManwon)}</span>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-zinc-50 px-2 py-1">
+                        <span className="text-sm font-medium text-zinc-700">{t("home.quickSearch.min")}</span>
+                        <span className="text-base font-semibold text-zinc-900">{formatSaya(minManwon)}</span>
                       </div>
-                      <div>
-                        {t("home.quickSearch.max")} <span className="font-extrabold text-zinc-900">{formatSaya(maxManwon)}</span>
+                      <div className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-zinc-50 px-2 py-1">
+                        <span className="text-sm font-medium text-zinc-700">{t("home.quickSearch.max")}</span>
+                        <span className="text-base font-semibold text-zinc-900">{formatSaya(maxManwon)}</span>
                       </div>
                     </div>
 
-                    <div className="w-full max-w-full overflow-hidden">
-                      <div className="relative w-full max-w-full px-2 pt-4">
-                        <div className="h-2 w-full rounded-full bg-zinc-200" />
+                    <div className="w-full max-w-full overflow-visible">
+                      <div className="group relative w-full max-w-full pt-6 pb-2">
+                        {/* Track background with inset highlight */}
+                        <div className="absolute left-0 right-0 top-[26px] h-[10px] rounded-full bg-zinc-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.7),inset_0_-1px_0_rgba(0,0,0,0.06)] transition-colors group-hover:bg-zinc-300/80 sm:top-[24px] sm:h-2" />
+                        {/* Range (selected area) */}
                         <div
-                          className="absolute top-4 h-2 rounded-full"
+                          className="absolute top-[26px] h-[10px] rounded-full transition-all sm:top-[24px] sm:h-2"
                           style={{
-                            left: `calc(${((minManwon - MIN_MANWON) / (MAX_MANWON - MIN_MANWON)) * 100}% + 8px)`,
-                            right: `calc(${100 - ((maxManwon - MIN_MANWON) / (MAX_MANWON - MIN_MANWON)) * 100}% + 8px)`,
-                            backgroundColor: "var(--slider-track)",
+                            left: `${((minManwon - MIN_MANWON) / (MAX_MANWON - MIN_MANWON)) * 100}%`,
+                            right: `${100 - ((maxManwon - MIN_MANWON) / (MAX_MANWON - MIN_MANWON)) * 100}%`,
+                            backgroundColor: "#16a34a",
+                            boxShadow: "0 6px 14px rgba(22,163,74,0.18)",
+                          }}
+                          aria-hidden="true"
+                        />
+
+                        {/* Track click handler */}
+                        <div
+                          className="absolute inset-x-0 top-[21px] z-0 h-[10px] cursor-pointer sm:top-[20px] sm:h-2"
+                          onPointerDown={(e) => {
+                            e.preventDefault();
+                            const track = e.currentTarget;
+                            const rect = track.getBoundingClientRect();
+                            const x = e.clientX - rect.left;
+                            const width = rect.width;
+                            const ratio = Math.max(0, Math.min(1, x / width));
+                            const rawValue = MIN_MANWON + ratio * (MAX_MANWON - MIN_MANWON);
+                            const step = 500;
+                            const snappedValue = Math.round((rawValue - MIN_MANWON) / step) * step + MIN_MANWON;
+                            const clampedValue = Math.max(MIN_MANWON, Math.min(MAX_MANWON, snappedValue));
+
+                            // Determine which thumb is closer
+                            const minDistance = Math.abs(clampedValue - minManwon);
+                            const maxDistance = Math.abs(clampedValue - maxManwon);
+
+                            if (minDistance <= maxDistance) {
+                              // Move min thumb
+                              const newMin = Math.max(MIN_MANWON, Math.min(clampedValue, maxManwon));
+                              setMinManwon(newMin);
+                            } else {
+                              // Move max thumb
+                              const newMax = Math.max(clampedValue, minManwon);
+                              setMaxManwon(Math.min(MAX_MANWON, newMax));
+                            }
                           }}
                           aria-hidden="true"
                         />
@@ -593,7 +630,11 @@ export default function MainHomePage() {
                             const next = Number(e.target.value);
                             setMinManwon(Math.min(Math.max(MIN_MANWON, next), maxManwon));
                           }}
-                          className="budget-slider-thumb absolute inset-x-2 top-3 h-8 w-[calc(100%-16px)] appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:shadow [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:shadow"
+                          onPointerDown={(e) => {
+                            // Allow thumb drag - stop propagation so track handler doesn't interfere
+                            e.stopPropagation();
+                          }}
+                          className="budget-slider-thumb absolute inset-x-0 top-[24px] z-20 h-[10px] w-full appearance-none bg-transparent sm:top-[24px] sm:h-2"
                           aria-label={t("home.quickSearch.min")}
                         />
                         <input
@@ -606,14 +647,18 @@ export default function MainHomePage() {
                             const next = Number(e.target.value);
                             setMaxManwon(Math.max(Math.min(MAX_MANWON, next), minManwon));
                           }}
-                          className="budget-slider-thumb absolute inset-x-2 top-3 h-8 w-[calc(100%-16px)] appearance-none bg-transparent [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:shadow [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:shadow"
+                          onPointerDown={(e) => {
+                            // Allow thumb drag - stop propagation so track handler doesn't interfere
+                            e.stopPropagation();
+                          }}
+                          className="budget-slider-thumb absolute inset-x-0 top-[24px] z-20 h-[10px] w-full appearance-none bg-transparent sm:top-[24px] sm:h-2"
                           aria-label={t("home.quickSearch.max")}
                         />
                       </div>
                     </div>
 
                     {/* Tick marks + labels */}
-                    <div className="mt-2">
+                    <div className="mt-3">
                       <div className="relative h-3 w-full px-2">
                         {(() => {
                           const ticks = [
@@ -646,7 +691,9 @@ export default function MainHomePage() {
                             return (
                               <div
                                 key={tick.value}
-                                className="absolute top-0 h-3 w-px bg-zinc-400/60"
+                                className={`absolute top-0 w-px ${
+                                  tick.saya % 10 === 0 ? "h-[10px] bg-zinc-400" : "h-2 bg-zinc-300"
+                                }`}
                                 style={{ left: `${percent}%`, transform }}
                                 aria-hidden="true"
                               />

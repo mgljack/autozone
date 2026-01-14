@@ -64,7 +64,7 @@ export default function SignupPage() {
           <Input value={password} onChange={(e) => setPassword(e.target.value)} placeholder={t("signup.placeholder.password")} type="password" />
           <Input value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder={t("signup.placeholder.confirm")} type="password" />
 
-          <Button onClick={onSubmit}>{t("signup.createMock")}</Button>
+          <Button variant="primary" onClick={onSubmit}>{t("signup.createMock")}</Button>
           <div className="text-sm text-zinc-600">
             {t("signup.alreadyHave")}{" "}
             <Link className="font-normal text-zinc-900 hover:underline" href="/login">

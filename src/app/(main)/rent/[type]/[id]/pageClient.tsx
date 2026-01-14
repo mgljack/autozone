@@ -109,7 +109,8 @@ export default function RentDetailClient({ type, id }: { type: string; id: strin
 
             <div className="mt-4">
               <Button
-                className="w-full bg-rose-600 hover:bg-rose-500"
+                variant="primary"
+                className="w-full"
                 onClick={() => setSellerOpen((v) => !v)}
               >
                 {t("carDetail.sellerContact")}

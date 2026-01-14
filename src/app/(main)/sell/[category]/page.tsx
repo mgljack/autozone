@@ -528,7 +528,7 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
             >
               초기화
             </Button>
-            <Button onClick={onSubmit}>{t("sell.form.continueToPayment")}</Button>
+            <Button variant="primary" onClick={onSubmit}>{t("sell.form.continueToPayment")}</Button>
           </div>
         </div>
 

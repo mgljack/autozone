@@ -83,7 +83,7 @@ export default function LoginPage() {
             <TabsContent value="idpw" className="grid gap-3">
               <Input value={id} onChange={(e) => setId(e.target.value)} placeholder={t("login.placeholder.id")} />
               <Input value={pw} onChange={(e) => setPw(e.target.value)} placeholder={t("login.placeholder.password")} type="password" />
-              <Button onClick={onIdPwLogin}>{t("auth.login")}</Button>
+              <Button variant="primary" onClick={onIdPwLogin}>{t("auth.login")}</Button>
             </TabsContent>
 
             <TabsContent value="phone" className="grid gap-3">
@@ -95,7 +95,7 @@ export default function LoginPage() {
               ) : (
                 <>
                   <Input value={otp} onChange={(e) => setOtp(e.target.value)} placeholder={t("login.placeholder.otp")} />
-                  <Button onClick={onPhoneLogin}>{t("login.verifyAndLogin")}</Button>
+                  <Button variant="primary" onClick={onPhoneLogin}>{t("login.verifyAndLogin")}</Button>
                 </>
               )}
             </TabsContent>

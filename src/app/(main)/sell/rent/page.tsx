@@ -416,7 +416,7 @@ export default function RentRegistrationPage() {
             >
               초기화
             </Button>
-            <Button onClick={onSubmit}>등록하기</Button>
+            <Button variant="primary" onClick={onSubmit}>등록하기</Button>
           </div>
         </div>
 
