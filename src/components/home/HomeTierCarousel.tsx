@@ -111,7 +111,7 @@ export function HomeTierCarousel({
             <div className="text-2xl font-bold text-zinc-900">{title}</div>
           </div>
           {customSubtitle ? (
-            <div className="mt-1.5 flex items-center justify-between">
+            <div className="relative mt-1.5 flex items-center">
               <div className="flex-1 text-center">
                 <div className="text-sm font-normal text-zinc-500 tracking-tight">
                   {customSubtitle}
@@ -119,7 +119,7 @@ export function HomeTierCarousel({
               </div>
               <Link
                 href={viewAllHref}
-                className="shrink-0 text-sm font-normal text-zinc-900 hover:underline"
+                className="absolute right-0 shrink-0 text-sm font-normal text-zinc-900 hover:underline"
               >
                 {t("common.viewAll")}
               </Link>
