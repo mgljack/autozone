@@ -5,6 +5,7 @@ import Link from "next/link";
 import React from "react";
 
 import { formatMnt } from "@/lib/format";
+import { formatRelativeTimeKo } from "@/lib/formatRelativeTime";
 import { useFavorites, type FavoriteItem } from "@/features/favorites/favorites";
 import type { CarListItemDTO } from "@/lib/apiTypes";
 
@@ -76,6 +77,11 @@ export function CarCardHorizontal({ car, href }: { car: CarListItemDTO; href?: s
           {metaLine ? (
             <div className="mt-1 text-sm text-zinc-600">{metaLine}</div>
           ) : null}
+          {car.createdAt && (
+            <div className="mt-1 text-xs text-zinc-500">
+              {formatRelativeTimeKo(car.createdAt)}
+            </div>
+          )}
           
           {/* Tags row */}
           <div className="mt-2 flex flex-wrap gap-2">

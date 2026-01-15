@@ -706,6 +706,16 @@ function toCarListItemDTO(c: Car): CarListItemDTO {
     ? [c.images[0], c.images[1] ?? c.images[0]] 
     : [thumbnailUrl, thumbnailUrl];
   
+  // Generate createdAt if missing (random within last 30 days)
+  let createdAt = c.createdAt;
+  if (!createdAt) {
+    const now = Date.now();
+    const minMs = 60 * 1000; // 1 minute
+    const maxMs = 30 * 24 * 60 * 60 * 1000; // 30 days
+    const randomMs = Math.floor(Math.random() * (maxMs - minMs) + minMs);
+    createdAt = new Date(now - randomMs).toISOString();
+  }
+  
   return {
     id: c.id,
     title: carTitleFromMock(c),
@@ -714,7 +724,7 @@ function toCarListItemDTO(c: Car): CarListItemDTO {
     yearImported: c.yearImported,
     mileageKm: c.mileageKm,
     priceMnt: c.priceMnt,
-    createdAt: c.createdAt,
+    createdAt,
     regionLabel: c.region,
     thumbnailUrl,
     images,
@@ -757,6 +767,16 @@ function toMotorcycleListItemDTO(m: Motorcycle): CarListItemDTO {
     ? [m.images[0], m.images[1] ?? m.images[0]] 
     : [thumbnailUrl, thumbnailUrl];
   
+  // Generate createdAt if missing (random within last 30 days)
+  let createdAt = m.createdAt;
+  if (!createdAt) {
+    const now = Date.now();
+    const minMs = 60 * 1000; // 1 minute
+    const maxMs = 30 * 24 * 60 * 60 * 1000; // 30 days
+    const randomMs = Math.floor(Math.random() * (maxMs - minMs) + minMs);
+    createdAt = new Date(now - randomMs).toISOString();
+  }
+  
   return {
     id: m.id,
     title: `${m.manufacturer} ${m.model} ${m.subModel}`.trim(),
@@ -765,7 +785,7 @@ function toMotorcycleListItemDTO(m: Motorcycle): CarListItemDTO {
     yearImported: m.yearImported,
     mileageKm: m.mileageKm ?? 0,
     priceMnt: m.priceMnt,
-    createdAt: m.createdAt,
+    createdAt,
     regionLabel: m.region,
     thumbnailUrl,
     images,
@@ -888,6 +908,17 @@ export type TiresListResponse = {
 function toTireListItemDTO(t: Tire): TireListItemDTO {
   // Fallback to a neutral tire placeholder if no image is available
   const tirePlaceholder = "https://images.pexels.com/photos/3802508/pexels-photo-3802508.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop";
+  
+  // Generate createdAt if missing (random within last 30 days)
+  let createdAt = t.createdAt;
+  if (!createdAt) {
+    const now = Date.now();
+    const minMs = 60 * 1000; // 1 minute
+    const maxMs = 30 * 24 * 60 * 60 * 1000; // 30 days
+    const randomMs = Math.floor(Math.random() * (maxMs - minMs) + minMs);
+    createdAt = new Date(now - randomMs).toISOString();
+  }
+  
   return {
     id: t.id,
     brand: t.brand,
@@ -899,7 +930,7 @@ function toTireListItemDTO(t: Tire): TireListItemDTO {
     qty: t.qty,
     priceMnt: t.priceMnt,
     regionLabel: t.region,
-    createdAt: t.createdAt,
+    createdAt,
     thumbnailUrl: t.images?.[0] ?? tirePlaceholder,
   };
 }
@@ -984,6 +1015,17 @@ export type PartsListResponse = {
 
 function toPartListItemDTO(p: Part): PartListItemDTO {
   const placeholder = "https://images.pexels.com/photos/3802508/pexels-photo-3802508.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop";
+  
+  // Generate createdAt if missing (random within last 30 days)
+  let createdAt = p.createdAt;
+  if (!createdAt) {
+    const now = Date.now();
+    const minMs = 60 * 1000; // 1 minute
+    const maxMs = 30 * 24 * 60 * 60 * 1000; // 30 days
+    const randomMs = Math.floor(Math.random() * (maxMs - minMs) + minMs);
+    createdAt = new Date(now - randomMs).toISOString();
+  }
+  
   return {
     id: p.id,
     name: p.name,
@@ -992,7 +1034,7 @@ function toPartListItemDTO(p: Part): PartListItemDTO {
     condition: p.condition,
     priceMnt: p.priceMnt,
     regionLabel: p.region,
-    createdAt: p.createdAt,
+    createdAt,
     thumbnailUrl: p.images?.[0] ?? placeholder,
     accessoryType: inferAccessoryType(p.name),
   };

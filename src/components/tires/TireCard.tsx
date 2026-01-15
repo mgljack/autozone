@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { formatMnt } from "@/lib/format";
+import { formatRelativeTimeKo } from "@/lib/formatRelativeTime";
 import type { TireListItemDTO } from "@/lib/apiTypes";
 
 export function TireCard({ tire }: { tire: TireListItemDTO }) {
@@ -39,6 +40,11 @@ export function TireCard({ tire }: { tire: TireListItemDTO }) {
         {metaParts.length > 0 ? (
           <div className="mt-1 text-sm text-zinc-600">{metaParts.join(" · ")}</div>
         ) : null}
+        {tire.createdAt && (
+          <div className="mt-1 text-xs text-zinc-500">
+            {formatRelativeTimeKo(tire.createdAt)}
+          </div>
+        )}
         <div className="mt-2 flex items-center justify-between">
           <span className="rounded-full border border-zinc-200 px-2 py-1 text-xs font-normal text-zinc-600">
             {tire.condition === "new" ? "신품" : "중고"}

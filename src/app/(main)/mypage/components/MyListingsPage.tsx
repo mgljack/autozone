@@ -226,7 +226,7 @@ export function MyListingsPage() {
       </div>
 
       {/* Listings */}
-      {filteredListings.length > 0 ? (
+      {false && filteredListings.length > 0 ? (
         <div className="space-y-4">
           {filteredListings.map((x) => {
             const title = getListingTitle(x);
@@ -306,13 +306,7 @@ export function MyListingsPage() {
             );
           })}
         </div>
-      ) : (
-        <Card>
-          <CardContent className="py-12 text-center">
-            <p className="text-sm text-zinc-600">{t("mypage.none")}</p>
-          </CardContent>
-        </Card>
-      )}
+      ) : null}
     </div>
   );
 }

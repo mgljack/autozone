@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/context/I18nContext";
 import { formatKm, formatMnt } from "@/lib/format";
+import { formatRelativeTimeKo } from "@/lib/formatRelativeTime";
 import { fetchCarTaxonomy, fetchCenters, fetchHomeSections } from "@/lib/mockApi";
 import type { CarListItemDTO } from "@/lib/apiTypes";
 import { HomeTierCarousel } from "@/components/home/HomeTierCarousel";
@@ -581,8 +582,8 @@ export default function MainHomePage() {
                           style={{
                             left: `${((minManwon - MIN_MANWON) / (MAX_MANWON - MIN_MANWON)) * 100}%`,
                             right: `${100 - ((maxManwon - MIN_MANWON) / (MAX_MANWON - MIN_MANWON)) * 100}%`,
-                            backgroundColor: "#16a34a",
-                            boxShadow: "0 6px 14px rgba(22,163,74,0.18)",
+                            background: "linear-gradient(90deg, #13579b 0%, #13579b 100%)",
+                            boxShadow: "0 6px 14px rgba(19,87,155,0.18)",
                           }}
                           aria-hidden="true"
                         />
@@ -859,6 +860,11 @@ function CarCard({ car }: { car: CarListItemDTO }) {
         <div className="mt-1 text-xs text-zinc-600">
           {car.yearMade} • {car.regionLabel} • {car.mileageKm ? formatKm(car.mileageKm) : ""}
         </div>
+        {car.createdAt && (
+          <div className="mt-1 text-xs text-zinc-500">
+            {formatRelativeTimeKo(car.createdAt)}
+          </div>
+        )}
         <div className="mt-1.5 text-sm font-bold text-zinc-900">{formatMnt(car.priceMnt)}</div>
       </div>
     </Link>

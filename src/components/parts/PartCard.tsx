@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { formatMnt } from "@/lib/format";
+import { formatRelativeTimeKo } from "@/lib/formatRelativeTime";
 import type { PartListItemDTO } from "@/lib/apiTypes";
 
 export function PartCard({ part }: { part: PartListItemDTO }) {
@@ -25,6 +26,11 @@ export function PartCard({ part }: { part: PartListItemDTO }) {
             {part.forModel}
           </div>
         ) : null}
+        {part.createdAt && (
+          <div className="mt-1 text-xs text-zinc-500">
+            {formatRelativeTimeKo(part.createdAt)}
+          </div>
+        )}
         <div className="mt-2 flex items-center justify-between">
           <span className="rounded-full border border-zinc-200 px-2 py-1 text-xs font-normal text-zinc-600">
             {part.condition === "new" ? "신품" : "중고"}

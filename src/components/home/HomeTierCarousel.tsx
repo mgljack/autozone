@@ -6,6 +6,7 @@ import React from "react";
 
 import type { CarListItemDTO } from "@/lib/apiTypes";
 import { formatKm, formatMnt } from "@/lib/format";
+import { formatRelativeTimeKo } from "@/lib/formatRelativeTime";
 import { useI18n } from "@/context/I18nContext";
 import { cn } from "@/lib/utils";
 
@@ -222,6 +223,11 @@ export function HomeTierCarousel({
                   const metaLine = [years, mileage].filter(Boolean).join(" · ");
                   return metaLine ? <div className="mt-1 text-xs text-zinc-600">{metaLine}</div> : null;
                 })()}
+                {c.createdAt && (
+                  <div className="mt-1 text-xs text-zinc-500">
+                    {formatRelativeTimeKo(c.createdAt)}
+                  </div>
+                )}
               </div>
             </Link>
           ))}
