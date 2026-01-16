@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useI18n } from "@/context/I18nContext";
 import { useFavorites } from "@/features/favorites/favorites";
-import { cars as mockCars } from "@/mock/cars";
+import { cars as mockCars, carTitle } from "@/mock/cars";
 import { formatMnt } from "@/lib/format";
 // Simple icon component
 function HeartIcon({ className, filled }: { className?: string; filled?: boolean }) {
@@ -37,13 +37,15 @@ export function FavoritesPage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {favoriteCars.map((car) => {
             if (!car) return null;
+            const title = carTitle(car);
+            const thumbnailUrl = car.images?.[0] ?? "/samples/cars/car-01.svg";
             return (
               <Card key={car.id} className="group overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-md">
                 <Link href={`/buy/all/${car.id}`}>
                   <div className="relative h-48 w-full bg-zinc-100">
                     <Image
-                      src={car.thumbnailUrl ?? "/samples/cars/car-01.svg"}
-                      alt={car.title}
+                      src={thumbnailUrl}
+                      alt={title}
                       fill
                       className="object-cover"
                     />
@@ -53,7 +55,7 @@ export function FavoritesPage() {
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0 flex-1">
                       <Link href={`/buy/all/${car.id}`} className="hover:underline">
-                        <h3 className="truncate text-base font-semibold text-zinc-900">{car.title}</h3>
+                        <h3 className="truncate text-base font-semibold text-zinc-900">{title}</h3>
                       </Link>
                       <div className="mt-1 text-lg font-bold text-zinc-900">{formatMnt(car.priceMnt)}</div>
                     </div>

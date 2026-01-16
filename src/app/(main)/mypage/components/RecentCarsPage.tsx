@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useI18n } from "@/context/I18nContext";
 import { useRecentCars } from "@/features/recent/recent";
-import { cars as mockCars } from "@/mock/cars";
+import { cars as mockCars, carTitle } from "@/mock/cars";
 import { formatMnt } from "@/lib/format";
 
 export function RecentCarsPage() {
@@ -46,6 +46,8 @@ export function RecentCarsPage() {
         <div className="space-y-3">
           {recentCars.map((item) => {
             if (!item.car) return null;
+            const title = carTitle(item.car);
+            const thumbnailUrl = item.car.images?.[0] ?? "/samples/cars/car-01.svg";
             return (
               <Card key={item.id} className="group transition-all hover:-translate-y-0.5 hover:shadow-md">
                 <Link href={`/buy/all/${item.id}`}>
@@ -53,14 +55,14 @@ export function RecentCarsPage() {
                     <div className="flex gap-4">
                       <div className="relative h-20 w-32 shrink-0 overflow-hidden rounded-lg bg-zinc-100">
                         <Image
-                          src={item.car.thumbnailUrl ?? "/samples/cars/car-01.svg"}
-                          alt={item.car.title}
+                          src={thumbnailUrl}
+                          alt={title}
                           fill
                           className="object-cover"
                         />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <h3 className="text-base font-semibold text-zinc-900">{item.car.title}</h3>
+                        <h3 className="text-base font-semibold text-zinc-900">{title}</h3>
                         <div className="mt-1 text-lg font-bold text-zinc-900">{formatMnt(item.car.priceMnt)}</div>
                         <div className="mt-1 text-xs text-zinc-600">
                           {new Date(item.viewedAt).toLocaleString("ko-KR")}

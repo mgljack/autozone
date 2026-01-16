@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { SectionTitle } from "@/components/common/SectionTitle";
 import { Button } from "@/components/ui/button";
@@ -19,7 +19,7 @@ import { NotificationsPage } from "./components/NotificationsPage";
 import { WithdrawPage } from "./components/WithdrawPage";
 import Link from "next/link";
 
-export default function MyPage() {
+function MyPageContent() {
   const { session } = useAuth();
   const { t } = useI18n();
   const searchParams = useSearchParams();
@@ -79,5 +79,19 @@ export default function MyPage() {
     <MyPageLayout leftPanel={leftPanel}>
       {renderContent()}
     </MyPageLayout>
+  );
+}
+
+export default function MyPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-zinc-50">
+        <div className="mx-auto w-full max-w-[1400px] px-4 py-8">
+          <div className="text-sm text-zinc-600">Loading...</div>
+        </div>
+      </div>
+    }>
+      <MyPageContent />
+    </Suspense>
   );
 }
