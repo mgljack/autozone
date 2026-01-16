@@ -582,7 +582,7 @@ export default function MainHomePage() {
                           style={{
                             left: `${((minManwon - MIN_MANWON) / (MAX_MANWON - MIN_MANWON)) * 100}%`,
                             right: `${100 - ((maxManwon - MIN_MANWON) / (MAX_MANWON - MIN_MANWON)) * 100}%`,
-                            background: "linear-gradient(90deg, #13579b 0%, #13579b 100%)",
+                            background: "lab(8.30603% .618212 -2.16573)",
                             boxShadow: "0 6px 14px rgba(19,87,155,0.18)",
                           }}
                           aria-hidden="true"
