@@ -9,9 +9,9 @@ import { Button } from "@/components/ui/button";
 import { CarGallery } from "@/components/cars/CarGallery";
 import { useFavorites } from "@/features/favorites/favorites";
 import { formatMnt } from "@/lib/format";
-import { fetchPartById } from "@/lib/mockApi";
+import { fetchPartById, fetchPartsList } from "@/lib/mockApi";
 import { useI18n } from "@/context/I18nContext";
-import type { PartDetailDTO } from "@/lib/apiTypes";
+import type { PartDetailDTO, PartListItemDTO } from "@/lib/apiTypes";
 
 export default function PartDetailClient({ id }: { id: string }) {
   const { t } = useI18n();
@@ -21,6 +21,29 @@ export default function PartDetailClient({ id }: { id: string }) {
   const partQuery = useQuery({
     queryKey: ["parts", "detail", id],
     queryFn: () => fetchPartById(id),
+  });
+
+  // Fetch similar parts (동급매물)
+  const similarPartsQuery = useQuery({
+    queryKey: ["parts", "similar", id],
+    queryFn: async () => {
+      if (!partQuery.data) return { items: [] };
+      const part = partQuery.data;
+      // Filter similar parts: exclude current part, similar price range (±30%)
+      const priceMin = part.priceMnt * 0.7;
+      const priceMax = part.priceMnt * 1.3;
+      const result = await fetchPartsList({
+        page: 1,
+        pageSize: 20, // Get more to filter
+        priceMinMnt: Math.floor(priceMin),
+        priceMaxMnt: Math.ceil(priceMax),
+      });
+      // Exclude current part and limit to 4
+      return {
+        items: result.items.filter((p) => p.id !== part.id).slice(0, 4),
+      };
+    },
+    enabled: !!partQuery.data,
   });
 
   if (partQuery.isLoading) return <div className="text-sm text-zinc-600">{t("common.loading")}</div>;
@@ -69,9 +92,9 @@ export default function PartDetailClient({ id }: { id: string }) {
       if (err instanceof Error && err.name !== "AbortError") {
         // If not user cancellation, try clipboard fallback
         try {
-          await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(url);
           alert(t("common.linkCopied"));
-        } catch {
+    } catch {
           alert(t("common.shareFailed"));
         }
       }
@@ -162,7 +185,44 @@ export default function PartDetailClient({ id }: { id: string }) {
           <div className="mt-3 whitespace-pre-line text-sm text-zinc-600">{part.description}</div>
         </div>
       )}
+
+      {/* Similar Parts (동급매물) */}
+      {similarPartsQuery.data && similarPartsQuery.data.items.length > 0 && (
+        <div className="grid gap-4">
+          <h2 className="text-xl font-bold text-zinc-900">{t("carDetail.similarCars")}</h2>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {similarPartsQuery.data.items.map((similarPart) => (
+              <SimilarPartCard key={similarPart.id} part={similarPart} />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
+  );
+}
+
+function SimilarPartCard({ part }: { part: PartListItemDTO }) {
+  const imageUrl = part.thumbnailUrl || "/samples/cars/car-01.svg";
+
+  return (
+    <Link
+      href={`/buy/parts/${part.id}`}
+      className="group block overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md hover:border-zinc-300"
+    >
+      <div className="relative h-32 w-full bg-zinc-100 sm:h-36">
+        <Image
+          src={imageUrl}
+          alt={part.name}
+          fill
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+        />
+      </div>
+      <div className="p-3">
+        <div className="truncate text-sm font-normal text-zinc-900">{part.name}</div>
+        <div className="mt-1.5 text-base font-bold text-zinc-900">{formatMnt(part.priceMnt)}</div>
+      </div>
+    </Link>
   );
 }
 

@@ -127,18 +127,6 @@ export function ServiceCentersClient({ searchParams }: { searchParams: Record<st
             </div>
 
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">최소 평점</span>
-              <Select value={ratingMin} onChange={(e) => setRatingMin(e.target.value)}>
-                <option value="">전체</option>
-                <option value="1">1점 이상</option>
-                <option value="2">2점 이상</option>
-                <option value="3">3점 이상</option>
-                <option value="4">4점 이상</option>
-                <option value="4.5">4.5점 이상</option>
-              </Select>
-            </label>
-
-            <label className="grid gap-1">
               <span className="text-xs font-normal text-zinc-600">가용성</span>
               <Select value={availability} onChange={(e) => setAvailability(e.target.value as any)}>
                 <option value="all">전체</option>
@@ -159,8 +147,6 @@ export function ServiceCentersClient({ searchParams }: { searchParams: Record<st
               <span className="text-xs font-normal text-zinc-600">{t("buyAll.sort.label")}</span>
               <Select value={sort} onChange={(e) => setSort(e.target.value as CentersSort)} className="w-44">
                 <option value="newest">{t("common.sort.newest")}</option>
-                <option value="ratingDesc">평점 높은순</option>
-                <option value="ratingAsc">평점 낮은순</option>
                 <option value="nameAsc">이름순</option>
               </Select>
             </label>

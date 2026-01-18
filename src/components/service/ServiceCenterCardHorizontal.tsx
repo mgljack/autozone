@@ -31,13 +31,9 @@ export function ServiceCenterCardHorizontal({ center }: { center: CenterDTO }) {
           {/* Service Center Name */}
           <div className="text-lg font-normal text-zinc-900">{center.name}</div>
           
-          {/* Location and Rating */}
-          <div className="mt-1 flex items-center gap-2 text-sm text-zinc-600">
+          {/* Location */}
+          <div className="mt-1 text-sm text-zinc-600">
             <span>{center.regionLabel}</span>
-            <span>•</span>
-            <span className="flex items-center gap-1">
-              ★ {center.rating.toFixed(1)}
-            </span>
           </div>
           
           {/* Address */}
@@ -61,12 +57,8 @@ export function ServiceCenterCardHorizontal({ center }: { center: CenterDTO }) {
           )}
         </div>
 
-        {/* RIGHT: Rating and Price */}
+        {/* RIGHT: Price */}
         <div className="flex flex-col items-end gap-3 md:items-end">
-          <div className="text-right">
-            <div className="text-xs text-zinc-500">평점</div>
-            <div className="mt-1 text-lg font-extrabold text-zinc-900">★ {center.rating.toFixed(1)}</div>
-          </div>
           {center.minPriceMnt && center.maxPriceMnt && (
             <div className="mt-auto text-right">
               <div className="text-xs text-zinc-500">서비스 가격</div>

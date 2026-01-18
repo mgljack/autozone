@@ -137,15 +137,15 @@ export function HomeTierCarousel({
           )}
         </div>
       ) : (
-        <div className="flex items-end justify-between gap-4">
-          <div className="min-w-0">
+      <div className="flex items-end justify-between gap-4">
+        <div className="min-w-0">
             <div className="text-2xl font-bold text-zinc-900">{title}</div>
             {subtitle ? <div className="mt-1 text-sm text-zinc-600">{subtitle}</div> : null}
-          </div>
-          <Link href={viewAllHref} className="shrink-0 text-sm font-normal text-zinc-900 hover:underline">
-            {t("common.viewAll")}
-          </Link>
         </div>
+        <Link href={viewAllHref} className="shrink-0 text-sm font-normal text-zinc-900 hover:underline">
+          {t("common.viewAll")}
+        </Link>
+      </div>
       )}
 
       <div className="relative mt-4">

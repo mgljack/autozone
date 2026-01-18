@@ -100,22 +100,22 @@ export function RentTypeClient({
 
   return (
     <div className="grid gap-6">
-      <SectionTitle title={typeLabel} subtitle="차량을 검색하고 선택하세요" />
+      <SectionTitle title={typeLabel} subtitle={t("rent.subtitle")} />
 
       <div className="grid gap-4 lg:grid-cols-[320px_1fr] items-start">
         <aside className="rounded-2xl border border-zinc-200 bg-white p-4 h-auto self-start">
-          <div className="text-sm font-normal text-zinc-900">필터</div>
+          <div className="text-sm font-normal text-zinc-900">{t("rent.filter")}</div>
 
           <div className="mt-3 grid gap-3">
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">검색</span>
-              <Input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="차량명 검색" />
+              <span className="text-xs font-normal text-zinc-600">{t("rent.search")}</span>
+              <Input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder={t("rent.searchPlaceholder")} />
             </label>
 
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">전체 모델</span>
+              <span className="text-xs font-normal text-zinc-600">{t("rent.allModels")}</span>
               <Select value={model} onChange={(e) => setModel(e.target.value)}>
-                <option value="all">전체 모델</option>
+                <option value="all">{t("rent.allModels")}</option>
                 {(modelsQuery.data ?? []).map((m) => (
                   <option key={m} value={m}>
                     {m}
@@ -125,43 +125,43 @@ export function RentTypeClient({
             </label>
 
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">연료</span>
+              <span className="text-xs font-normal text-zinc-600">{t("rent.fuel")}</span>
               <Select value={fuel} onChange={(e) => setFuel(e.target.value as any)}>
-                <option value="all">전체</option>
-                <option value="gasoline">가솔린</option>
-                <option value="diesel">디젤</option>
-                <option value="electric">전기</option>
-                <option value="hybrid">하이브리드</option>
+                <option value="all">{t("common.all")}</option>
+                <option value="gasoline">{t("rent.fuel.gasoline")}</option>
+                <option value="diesel">{t("rent.fuel.diesel")}</option>
+                <option value="electric">{t("rent.fuel.electric")}</option>
+                <option value="hybrid">{t("rent.fuel.hybrid")}</option>
               </Select>
             </label>
 
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">변속기</span>
+              <span className="text-xs font-normal text-zinc-600">{t("rent.transmission")}</span>
               <Select value={transmission} onChange={(e) => setTransmission(e.target.value as any)}>
-                <option value="all">전체</option>
-                <option value="at">자동</option>
-                <option value="mt">수동</option>
+                <option value="all">{t("common.all")}</option>
+                <option value="at">{t("rent.transmission.at")}</option>
+                <option value="mt">{t("rent.transmission.mt")}</option>
               </Select>
             </label>
 
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">지역</span>
+              <span className="text-xs font-normal text-zinc-600">{t("rent.region")}</span>
               <Select value={regionGroup} onChange={(e) => setRegionGroup(e.target.value)}>
-                <option value="">전체</option>
-                <option value="Ulaanbaatar">울란바토르</option>
-                <option value="Erdenet">에르데네트</option>
-                <option value="Darkhan">다르항</option>
-                <option value="Other">기타</option>
+                <option value="">{t("common.all")}</option>
+                <option value="Ulaanbaatar">{t("rent.region.ulaanbaatar")}</option>
+                <option value="Erdenet">{t("rent.region.erdenet")}</option>
+                <option value="Darkhan">{t("rent.region.darkhan")}</option>
+                <option value="Other">{t("rent.region.other")}</option>
               </Select>
             </label>
 
             <div className="grid grid-cols-2 gap-3">
               <label className="grid gap-1">
-                <span className="text-xs font-normal text-zinc-600">최소 가격</span>
+                <span className="text-xs font-normal text-zinc-600">{t("rent.priceMin")}</span>
                 <Input value={priceMinMnt} onChange={(e) => setPriceMinMnt(e.target.value.replace(/[^\d]/g, ""))} inputMode="numeric" />
               </label>
               <label className="grid gap-1">
-                <span className="text-xs font-normal text-zinc-600">최대 가격</span>
+                <span className="text-xs font-normal text-zinc-600">{t("rent.priceMax")}</span>
                 <Input value={priceMaxMnt} onChange={(e) => setPriceMaxMnt(e.target.value.replace(/[^\d]/g, ""))} inputMode="numeric" />
               </label>
             </div>
@@ -171,14 +171,14 @@ export function RentTypeClient({
         <section className="grid gap-3">
           <div className="flex items-center justify-between rounded-2xl border border-zinc-200 bg-white p-4">
             <div className="text-sm font-normal text-zinc-900">
-              {listQuery.data ? `총 ${listQuery.data.total}개` : "로딩 중..."}
+              {listQuery.data ? t("rent.total", { count: listQuery.data.total }) : t("common.loading")}
             </div>
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">정렬</span>
+              <span className="text-xs font-normal text-zinc-600">{t("rent.sort")}</span>
               <Select value={sort} onChange={(e) => setSort(e.target.value as RentSort)} className="w-44">
-                <option value="newest">최신순</option>
-                <option value="priceAsc">가격 낮은순</option>
-                <option value="priceDesc">가격 높은순</option>
+                <option value="newest">{t("rent.sort.newest")}</option>
+                <option value="priceAsc">{t("rent.sort.priceAsc")}</option>
+                <option value="priceDesc">{t("rent.sort.priceDesc")}</option>
               </Select>
             </label>
           </div>
@@ -200,7 +200,7 @@ export function RentTypeClient({
               ) : null}
             </>
           ) : (
-            <EmptyState title="차량이 없습니다" />
+            <EmptyState title={t("rent.noVehicles")} />
           )}
         </section>
       </div>

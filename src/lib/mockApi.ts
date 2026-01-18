@@ -895,6 +895,8 @@ export type TiresListQuery = {
   brands?: string[];
   installationIncluded?: boolean | "all";
   regionGroup?: string;
+  priceMinMnt?: number;
+  priceMaxMnt?: number;
 };
 
 export type TiresListResponse = {
@@ -936,7 +938,7 @@ function toTireListItemDTO(t: Tire): TireListItemDTO {
 }
 
 function applyTireFilters(all: Tire[], query: TiresListQuery) {
-  const { sizes, seasons, dotYearMin, dotYearMax, brands, installationIncluded, regionGroup } = query;
+  const { sizes, seasons, dotYearMin, dotYearMax, brands, installationIncluded, regionGroup, priceMinMnt, priceMaxMnt } = query;
   let filtered = all.slice();
 
   if (sizes && sizes.length > 0) {
@@ -965,6 +967,13 @@ function applyTireFilters(all: Tire[], query: TiresListQuery) {
   if (regionGroup && regionGroup !== "") {
     const validRegionGroup = regionGroup as "Ulaanbaatar" | "Erdenet" | "Darkhan" | "Other";
     filtered = filtered.filter((t) => matchesRegionGroup(t.region, validRegionGroup));
+  }
+
+  if (typeof priceMinMnt === "number") {
+    filtered = filtered.filter((t) => t.priceMnt >= priceMinMnt);
+  }
+  if (typeof priceMaxMnt === "number") {
+    filtered = filtered.filter((t) => t.priceMnt <= priceMaxMnt);
   }
 
   return filtered;

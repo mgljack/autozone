@@ -80,7 +80,7 @@ export default function ServiceCenterDetailClient({ id }: { id: string }) {
         </Link>
       </div>
 
-      <SectionTitle title={center.name} subtitle={`${center.regionLabel} • ★ ${center.rating.toFixed(1)}`} />
+      <SectionTitle title={center.name} subtitle={center.regionLabel} />
 
       {/* Photos */}
       <CenterGallery images={images} title={center.name} />

@@ -4,13 +4,15 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { formatKm, formatMnt } from "@/lib/format";
+import { useI18n } from "@/context/I18nContext";
 import type { RentItem } from "@/mock/rent";
 
 export function RentCard({ item }: { item: RentItem }) {
+  const { t } = useI18n();
   const imageUrl = item.image || "/samples/cars/car-01.svg";
 
-  const fuelLabel = item.fuel === "gasoline" ? "가솔린" : item.fuel === "diesel" ? "디젤" : item.fuel === "electric" ? "전기" : item.fuel === "hybrid" ? "하이브리드" : "";
-  const transmissionLabel = item.transmission === "at" ? "자동" : item.transmission === "mt" ? "수동" : "";
+  const fuelLabel = item.fuel === "gasoline" ? t("rent.fuel.gasoline") : item.fuel === "diesel" ? t("rent.fuel.diesel") : item.fuel === "electric" ? t("rent.fuel.electric") : item.fuel === "hybrid" ? t("rent.fuel.hybrid") : "";
+  const transmissionLabel = item.transmission === "at" ? t("rent.transmission.at") : item.transmission === "mt" ? t("rent.transmission.mt") : "";
 
   return (
     <Link
@@ -38,25 +40,25 @@ export function RentCard({ item }: { item: RentItem }) {
         <div className="mt-4 space-y-2.5 text-sm">
           {item.yearMade && (
             <div className="flex items-center justify-between">
-              <span className="text-zinc-500">제조년도</span>
-              <span className="font-normal text-zinc-900">{item.yearMade}년</span>
+              <span className="text-zinc-500">{t("rent.card.yearMade")}</span>
+              <span className="font-normal text-zinc-900">{item.yearMade}{t("common.year")}</span>
             </div>
           )}
           {item.mileageKm && (
             <div className="flex items-center justify-between">
-              <span className="text-zinc-500">주행거리</span>
+              <span className="text-zinc-500">{t("rent.card.mileage")}</span>
               <span className="font-normal text-zinc-900">{formatKm(item.mileageKm)}</span>
             </div>
           )}
           {fuelLabel && (
             <div className="flex items-center justify-between">
-              <span className="text-zinc-500">연료 타입</span>
+              <span className="text-zinc-500">{t("rent.card.fuelType")}</span>
               <span className="font-normal text-zinc-900">{fuelLabel}</span>
             </div>
           )}
           {transmissionLabel && (
             <div className="flex items-center justify-between">
-              <span className="text-zinc-500">변속기</span>
+              <span className="text-zinc-500">{t("rent.card.transmission")}</span>
               <span className="font-normal text-zinc-900">{transmissionLabel}</span>
             </div>
           )}
@@ -68,11 +70,11 @@ export function RentCard({ item }: { item: RentItem }) {
         {/* Price and Location */}
         <div className="mt-auto flex items-end justify-between">
           <div>
-            <div className="text-xs font-medium text-zinc-500">위치</div>
+            <div className="text-xs font-medium text-zinc-500">{t("rent.card.location")}</div>
             <div className="mt-1 text-sm font-normal text-zinc-700">{item.region}</div>
           </div>
           <div className="text-right">
-            <div className="text-xs font-medium text-zinc-500">일일 렌트</div>
+            <div className="text-xs font-medium text-zinc-500">{t("rent.card.dailyRent")}</div>
             <div className="mt-1 text-2xl font-extrabold text-zinc-900">{formatMnt(item.pricePerDayMnt)}</div>
           </div>
         </div>

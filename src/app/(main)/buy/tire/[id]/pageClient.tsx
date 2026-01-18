@@ -9,9 +9,9 @@ import { Button } from "@/components/ui/button";
 import { CarGallery } from "@/components/cars/CarGallery";
 import { useFavorites } from "@/features/favorites/favorites";
 import { formatMnt } from "@/lib/format";
-import { fetchTireById } from "@/lib/mockApi";
+import { fetchTireById, fetchTiresList } from "@/lib/mockApi";
 import { useI18n } from "@/context/I18nContext";
-import type { TireDetailDTO } from "@/lib/apiTypes";
+import type { TireDetailDTO, TireListItemDTO } from "@/lib/apiTypes";
 
 export default function TireDetailClient({ id }: { id: string }) {
   const { t } = useI18n();
@@ -21,6 +21,29 @@ export default function TireDetailClient({ id }: { id: string }) {
   const tireQuery = useQuery({
     queryKey: ["tires", "detail", id],
     queryFn: () => fetchTireById(id),
+  });
+
+  // Fetch similar tires (동급매물)
+  const similarTiresQuery = useQuery({
+    queryKey: ["tires", "similar", id],
+    queryFn: async () => {
+      if (!tireQuery.data) return { items: [] };
+      const tire = tireQuery.data;
+      // Filter similar tires: exclude current tire, similar price range (±30%)
+      const priceMin = tire.priceMnt * 0.7;
+      const priceMax = tire.priceMnt * 1.3;
+      const result = await fetchTiresList({
+        page: 1,
+        pageSize: 20, // Get more to filter
+        priceMinMnt: Math.floor(priceMin),
+        priceMaxMnt: Math.ceil(priceMax),
+      });
+      // Exclude current tire and limit to 4
+      return {
+        items: result.items.filter((t) => t.id !== tire.id).slice(0, 4),
+      };
+    },
+    enabled: !!tireQuery.data,
   });
 
   if (tireQuery.isLoading) return <div className="text-sm text-zinc-600">{t("common.loading")}</div>;
@@ -173,7 +196,45 @@ export default function TireDetailClient({ id }: { id: string }) {
           <div className="mt-3 whitespace-pre-line text-sm text-zinc-600">{tire.description}</div>
         </div>
       )}
+
+      {/* Similar Tires (동급매물) */}
+      {similarTiresQuery.data && similarTiresQuery.data.items.length > 0 && (
+        <div className="grid gap-4">
+          <h2 className="text-xl font-bold text-zinc-900">{t("carDetail.similarCars")}</h2>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {similarTiresQuery.data.items.map((similarTire) => (
+              <SimilarTireCard key={similarTire.id} tire={similarTire} />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
+  );
+}
+
+function SimilarTireCard({ tire }: { tire: TireListItemDTO }) {
+  const imageUrl = tire.thumbnailUrl || "/samples/cars/car-01.svg";
+  const title = `${tire.brand} ${tire.size}`;
+
+  return (
+    <Link
+      href={`/buy/tire/${tire.id}`}
+      className="group block overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md hover:border-zinc-300"
+    >
+      <div className="relative h-32 w-full bg-zinc-100 sm:h-36">
+        <Image
+          src={imageUrl}
+          alt={title}
+          fill
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+        />
+      </div>
+      <div className="p-3">
+        <div className="truncate text-sm font-normal text-zinc-900">{title}</div>
+        <div className="mt-1.5 text-base font-bold text-zinc-900">{formatMnt(tire.priceMnt)}</div>
+      </div>
+    </Link>
   );
 }
 

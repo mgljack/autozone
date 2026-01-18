@@ -12,8 +12,9 @@ import { VehiclePriceComparison } from "@/components/cars/VehiclePriceComparison
 import { useFavorites } from "@/features/favorites/favorites";
 import { useRecentCars } from "@/features/recent/recent";
 import { formatMnt } from "@/lib/format";
-import { fetchCarById } from "@/lib/mockApi";
+import { fetchCarById, fetchCarsList, fetchMotorcyclesList } from "@/lib/mockApi";
 import { useI18n } from "@/context/I18nContext";
+import type { CarListItemDTO } from "@/lib/apiTypes";
 
 export default function CarDetailClient({ id }: { id: string }) {
   const { t } = useI18n();
@@ -24,6 +25,38 @@ export default function CarDetailClient({ id }: { id: string }) {
   const carQuery = useQuery({
     queryKey: ["cars", "detail", id],
     queryFn: () => fetchCarById(id),
+  });
+
+  // Fetch similar cars/motorcycles (동급매물)
+  const similarCarsQuery = useQuery({
+    queryKey: ["cars", "similar", id],
+    queryFn: async () => {
+      if (!carQuery.data) return { items: [] };
+      const car = carQuery.data;
+      const isMotorcycle = car.id.startsWith("moto_");
+      // Filter similar vehicles: exclude current vehicle, similar price range (±30%)
+      const priceMin = car.priceMnt * 0.7;
+      const priceMax = car.priceMnt * 1.3;
+      
+      const result = isMotorcycle
+        ? await fetchMotorcyclesList({
+            page: 1,
+            pageSize: 20, // Get more to filter
+            priceMinMnt: Math.floor(priceMin),
+            priceMaxMnt: Math.ceil(priceMax),
+          })
+        : await fetchCarsList({
+            page: 1,
+            pageSize: 20, // Get more to filter
+            priceMinMnt: Math.floor(priceMin),
+            priceMaxMnt: Math.ceil(priceMax),
+          });
+      // Exclude current vehicle and limit to 4
+      return {
+        items: result.items.filter((c) => c.id !== car.id).slice(0, 4),
+      };
+    },
+    enabled: !!carQuery.data,
   });
 
   React.useEffect(() => {
@@ -217,7 +250,44 @@ export default function CarDetailClient({ id }: { id: string }) {
         newCarPrice={undefined}
         recentImportPrice={undefined}
       />
+
+      {/* Similar Cars (동급매물) */}
+      {similarCarsQuery.data && similarCarsQuery.data.items.length > 0 && (
+        <div className="grid gap-4">
+          <h2 className="text-xl font-bold text-zinc-900">{t("carDetail.similarCars")}</h2>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {similarCarsQuery.data.items.map((similarCar) => (
+              <SimilarCarCard key={similarCar.id} car={similarCar} />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
+  );
+}
+
+function SimilarCarCard({ car }: { car: CarListItemDTO }) {
+  const imageUrl = car.thumbnailUrl || car.images?.[0] || "/samples/cars/car-01.svg";
+
+  return (
+    <Link
+      href={`/buy/all/${car.id}`}
+      className="group block overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm transition-all hover:shadow-md hover:border-zinc-300"
+    >
+      <div className="relative h-32 w-full bg-zinc-100 sm:h-36">
+        <Image
+          src={imageUrl}
+          alt={car.title}
+          fill
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+        />
+      </div>
+      <div className="p-3">
+        <div className="truncate text-sm font-normal text-zinc-900">{car.title}</div>
+        <div className="mt-1.5 text-base font-bold text-zinc-900">{formatMnt(car.priceMnt)}</div>
+      </div>
+    </Link>
   );
 }
 

@@ -37,7 +37,7 @@ export default function ServiceCenterDetailPage({ params }: { params: { id: stri
         <div className="p-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div className="min-w-0">
-              <SectionTitle title={center.name} subtitle={`${center.regionLabel} • ★ ${center.rating.toFixed(1)}`} />
+              <SectionTitle title={center.name} subtitle={center.regionLabel} />
               <div className="mt-3 text-sm text-zinc-600">
                 <div>
                   <span className="font-normal text-zinc-900">{t("service.phoneLabel")}:</span> {center.phone}
