@@ -101,12 +101,12 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
     const extOk = /\.(mpg|mp4|mov)$/i.test(file.name);
     if (!extOk) {
       setVideo(null);
-      return setVideoError("동영상은 .mpg, .mp4, .mov만 업로드할 수 있어요.");
+      return setVideoError(t("sell.error.videoFormat"));
     }
     const max = 500 * 1024 * 1024;
     if (file.size > max) {
       setVideo(null);
-      return setVideoError("동영상은 최대 500MB까지 업로드할 수 있어요.");
+      return setVideoError(t("sell.error.videoSize"));
     }
     setVideo(file);
   };
@@ -114,27 +114,27 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
   const validate = () => {
     const next: Record<string, string> = {};
 
-    if (images.length < 1) next.images = "이미지는 최소 1장 업로드해 주세요. (최대 20장)";
-    if (draft.memo.trim().length < 1) next.memo = "메모를 입력해 주세요.";
-    if (draft.memo.length > 10_000) next.memo = "메모는 최대 10,000자까지 입력할 수 있어요.";
-    if (!draft.contactName.trim()) next.contactName = "이름을 입력해 주세요.";
-    if (!draft.contactEmail.trim()) next.contactEmail = "이메일을 입력해 주세요.";
-    if (!draft.contactPhone.trim()) next.contactPhone = "휴대폰 번호를 입력해 주세요.";
+    if (images.length < 1) next.images = t("sell.error.imagesRequired");
+    if (draft.memo.trim().length < 1) next.memo = t("sell.error.memoRequired");
+    if (draft.memo.length > 10_000) next.memo = t("sell.error.memoMaxLength");
+    if (!draft.contactName.trim()) next.contactName = t("sell.error.nameRequired");
+    if (!draft.contactEmail.trim()) next.contactEmail = t("sell.error.emailRequired");
+    if (!draft.contactPhone.trim()) next.contactPhone = t("sell.error.phoneRequired");
 
     const require = (key: string, value: string) => {
-      if (!value.trim()) next[key] = "필수 입력 항목입니다.";
+      if (!value.trim()) next[key] = t("sell.error.required");
     };
 
     if (draft.category === "car") {
       require("manufacturer", draft.manufacturer);
       require("model", draft.model);
-      if (!draft.region) next.region = "지역을 선택해 주세요.";
-      if (!draft.hasPlate) next.hasPlate = "번호판 유무를 선택해 주세요.";
-      if (!draft.steering) next.steering = "핸들 방향을 선택해 주세요.";
+      if (!draft.region) next.region = t("sell.error.regionRequired");
+      if (!draft.hasPlate) next.hasPlate = t("sell.error.hasPlateRequired");
+      if (!draft.steering) next.steering = t("sell.error.steeringRequired");
       require("yearMade", draft.yearMade);
       require("yearImported", draft.yearImported);
-      if (!draft.fuel) next.fuel = "연료를 선택해 주세요.";
-      if (!draft.transmission) next.transmission = "변속기를 선택해 주세요.";
+      if (!draft.fuel) next.fuel = t("sell.error.fuelRequired");
+      if (!draft.transmission) next.transmission = t("sell.error.transmissionRequired");
       require("color", draft.color);
       require("vin", draft.vin);
       require("priceMnt", draft.priceMnt);
@@ -143,16 +143,16 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
     if (draft.category === "motorcycle") {
       require("manufacturer", draft.manufacturer);
       require("model", draft.model);
-      if (!draft.region) next.region = "지역을 선택해 주세요.";
-      if (!draft.hasPlate) next.hasPlate = "번호판 유무를 선택해 주세요.";
+      if (!draft.region) next.region = t("sell.error.regionRequired");
+      if (!draft.hasPlate) next.hasPlate = t("sell.error.hasPlateRequired");
       require("yearMade", draft.yearMade);
       require("yearImported", draft.yearImported);
-      if (!draft.fuel) next.fuel = "연료를 선택해 주세요.";
+      if (!draft.fuel) next.fuel = t("sell.error.fuelRequired");
       require("priceMnt", draft.priceMnt);
     }
 
     if (draft.category === "tire") {
-      if (!draft.season) next.season = "시즌을 선택해 주세요.";
+      if (!draft.season) next.season = t("sell.error.seasonRequired");
       require("radius", draft.radius);
       require("width", draft.width);
       require("height", draft.height);
@@ -161,7 +161,7 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
 
     if (draft.category === "parts") {
       require("title", draft.title);
-      if (!draft.condition) next.condition = "상태를 선택해 주세요.";
+      if (!draft.condition) next.condition = t("sell.error.conditionRequired");
       require("priceMnt", draft.priceMnt);
     }
 
@@ -194,7 +194,7 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
     return (
       <RequireAuth returnUrl={`/sell/${params.category}`}>
         <div className="grid gap-6">
-          <SectionTitle title={t("sell.title")} subtitle="지원하지 않는 카테고리입니다." />
+          <SectionTitle title={t("sell.title")} subtitle={t("sell.common.unsupportedCategory")} />
           <Link href="/sell">
             <Button variant="outline">{t("common.back")}</Button>
           </Link>
@@ -210,49 +210,49 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
 
         <Card>
           <CardHeader>
-            <CardTitle>기본 정보</CardTitle>
+            <CardTitle>{t("sell.common.basicInfo")}</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4">
             {draft.category === "car" || draft.category === "motorcycle" ? (
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="grid gap-2">
-                  <Label>제조사</Label>
+                  <Label>{t("sell.vehicle.manufacturer")}</Label>
                   <Input
                     value={draft.manufacturer}
                     onChange={(e) => setField("manufacturer", e.target.value as any)}
-                    placeholder="예) Toyota"
+                    placeholder={t("sell.vehicle.manufacturerPlaceholder")}
                   />
                   {errors.manufacturer ? <div className="text-xs text-red-600">{errors.manufacturer}</div> : null}
                 </div>
 
                 <div className="grid gap-2">
-                  <Label>모델</Label>
+                  <Label>{t("sell.vehicle.model")}</Label>
                   <Input
                     value={draft.model}
                     onChange={(e) => setField("model", e.target.value as any)}
-                    placeholder="예) Prius"
+                    placeholder={t("sell.vehicle.modelPlaceholder")}
                   />
                   {errors.model ? <div className="text-xs text-red-600">{errors.model}</div> : null}
                 </div>
 
                 <div className="grid gap-2">
-                  <Label>지역</Label>
+                  <Label>{t("sell.vehicle.region")}</Label>
                   <Select value={draft.region} onChange={(e) => setField("region", e.target.value as any)}>
-                    <option value="">선택</option>
-                    <option value="Ulaanbaatar">Ulaanbaatar</option>
-                    <option value="Erdenet">Erdenet</option>
-                    <option value="Darkhan">Darkhan</option>
-                    <option value="Other">Other</option>
+                    <option value="">{t("sell.common.select")}</option>
+                    <option value="Ulaanbaatar">{t("sell.vehicle.region.ulaanbaatar")}</option>
+                    <option value="Erdenet">{t("sell.vehicle.region.erdenet")}</option>
+                    <option value="Darkhan">{t("sell.vehicle.region.darkhan")}</option>
+                    <option value="Other">{t("sell.vehicle.region.other")}</option>
                   </Select>
                   {errors.region ? <div className="text-xs text-red-600">{errors.region}</div> : null}
                 </div>
 
                 <div className="grid gap-2">
-                  <Label>번호판 유무</Label>
+                  <Label>{t("sell.vehicle.hasPlate")}</Label>
                   <Select value={draft.hasPlate} onChange={(e) => setField("hasPlate", e.target.value as any)}>
-                    <option value="">선택</option>
-                    <option value="yes">있음</option>
-                    <option value="no">없음</option>
+                    <option value="">{t("sell.common.select")}</option>
+                    <option value="yes">{t("sell.vehicle.hasPlate.yes")}</option>
+                    <option value="no">{t("sell.vehicle.hasPlate.no")}</option>
                   </Select>
                   {errors.hasPlate ? <div className="text-xs text-red-600">{errors.hasPlate}</div> : null}
                 </div>
@@ -262,61 +262,61 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
             {draft.category === "car" ? (
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="grid gap-2">
-                  <Label>핸들</Label>
+                  <Label>{t("sell.vehicle.steering")}</Label>
                   <Select value={draft.steering} onChange={(e) => setField("steering", e.target.value as any)}>
-                    <option value="">선택</option>
-                    <option value="left">좌핸들</option>
-                    <option value="right">우핸들</option>
+                    <option value="">{t("sell.common.select")}</option>
+                    <option value="left">{t("sell.vehicle.steering.left")}</option>
+                    <option value="right">{t("sell.vehicle.steering.right")}</option>
                   </Select>
                   {errors.steering ? <div className="text-xs text-red-600">{errors.steering}</div> : null}
                 </div>
 
                 <div className="grid gap-2">
-                  <Label>연료</Label>
+                  <Label>{t("sell.vehicle.fuel")}</Label>
                   <Select value={draft.fuel} onChange={(e) => setField("fuel", e.target.value as any)}>
-                    <option value="">선택</option>
-                    <option value="gasoline">gasoline</option>
-                    <option value="diesel">diesel</option>
-                    <option value="lpg">LPG</option>
-                    <option value="electric">electric</option>
-                    <option value="hybrid">hybrid</option>
+                    <option value="">{t("sell.common.select")}</option>
+                    <option value="gasoline">{t("sell.vehicle.fuel.gasoline")}</option>
+                    <option value="diesel">{t("sell.vehicle.fuel.diesel")}</option>
+                    <option value="lpg">{t("sell.vehicle.fuel.lpg")}</option>
+                    <option value="electric">{t("sell.vehicle.fuel.electric")}</option>
+                    <option value="hybrid">{t("sell.vehicle.fuel.hybrid")}</option>
                   </Select>
                   {errors.fuel ? <div className="text-xs text-red-600">{errors.fuel}</div> : null}
                 </div>
 
                 <div className="grid gap-2">
-                  <Label>변속기</Label>
+                  <Label>{t("sell.vehicle.transmission")}</Label>
                   <Select value={draft.transmission} onChange={(e) => setField("transmission", e.target.value as any)}>
-                    <option value="">변속기 선택</option>
-                    <option value="automatic">자동</option>
-                    <option value="manual">수동</option>
+                    <option value="">{t("sell.vehicle.transmission.select")}</option>
+                    <option value="automatic">{t("sell.vehicle.transmission.automatic")}</option>
+                    <option value="manual">{t("sell.vehicle.transmission.manual")}</option>
                   </Select>
                   {errors.transmission ? <div className="text-xs text-red-600">{errors.transmission}</div> : null}
                 </div>
 
                 <div className="grid gap-2">
-                  <Label>제조연식</Label>
-                  <Input value={draft.yearMade} onChange={(e) => setField("yearMade", e.target.value as any)} placeholder="예) 2018" />
+                  <Label>{t("sell.vehicle.yearMade")}</Label>
+                  <Input value={draft.yearMade} onChange={(e) => setField("yearMade", e.target.value as any)} placeholder={t("sell.vehicle.yearMadePlaceholder")} />
                   {errors.yearMade ? <div className="text-xs text-red-600">{errors.yearMade}</div> : null}
                 </div>
                 <div className="grid gap-2">
-                  <Label>수입연식</Label>
+                  <Label>{t("sell.vehicle.yearImported")}</Label>
                   <Input
                     value={draft.yearImported}
                     onChange={(e) => setField("yearImported", e.target.value as any)}
-                    placeholder="예) 2019"
+                    placeholder={t("sell.vehicle.yearImportedPlaceholder")}
                   />
                   {errors.yearImported ? <div className="text-xs text-red-600">{errors.yearImported}</div> : null}
                 </div>
 
                 <div className="grid gap-2">
-                  <Label>색상</Label>
-                  <Input value={draft.color} onChange={(e) => setField("color", e.target.value as any)} placeholder="예) white" />
+                  <Label>{t("sell.vehicle.color")}</Label>
+                  <Input value={draft.color} onChange={(e) => setField("color", e.target.value as any)} placeholder={t("sell.vehicle.colorPlaceholder")} />
                   {errors.color ? <div className="text-xs text-red-600">{errors.color}</div> : null}
                 </div>
                 <div className="grid gap-2">
-                  <Label>VIN</Label>
-                  <Input value={draft.vin} onChange={(e) => setField("vin", e.target.value as any)} placeholder="예) JTDB..." />
+                  <Label>{t("sell.vehicle.vin")}</Label>
+                  <Input value={draft.vin} onChange={(e) => setField("vin", e.target.value as any)} placeholder={t("sell.vehicle.vinPlaceholder")} />
                   {errors.vin ? <div className="text-xs text-red-600">{errors.vin}</div> : null}
                 </div>
               </div>
@@ -325,26 +325,26 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
             {draft.category === "motorcycle" ? (
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="grid gap-2">
-                  <Label>제조연식</Label>
-                  <Input value={draft.yearMade} onChange={(e) => setField("yearMade", e.target.value as any)} placeholder="예) 2020" />
+                  <Label>{t("sell.vehicle.yearMade")}</Label>
+                  <Input value={draft.yearMade} onChange={(e) => setField("yearMade", e.target.value as any)} placeholder={t("sell.motorcycle.yearMadePlaceholder")} />
                   {errors.yearMade ? <div className="text-xs text-red-600">{errors.yearMade}</div> : null}
                 </div>
                 <div className="grid gap-2">
-                  <Label>수입연식</Label>
+                  <Label>{t("sell.vehicle.yearImported")}</Label>
                   <Input
                     value={draft.yearImported}
                     onChange={(e) => setField("yearImported", e.target.value as any)}
-                    placeholder="예) 2021"
+                    placeholder={t("sell.motorcycle.yearImportedPlaceholder")}
                   />
                   {errors.yearImported ? <div className="text-xs text-red-600">{errors.yearImported}</div> : null}
                 </div>
 
                 <div className="grid gap-2">
-                  <Label>연료</Label>
+                  <Label>{t("sell.vehicle.fuel")}</Label>
                   <Select value={draft.fuel} onChange={(e) => setField("fuel", e.target.value as any)}>
-                    <option value="">선택</option>
-                    <option value="gasoline">gasoline</option>
-                    <option value="electric">electric</option>
+                    <option value="">{t("sell.common.select")}</option>
+                    <option value="gasoline">{t("sell.motorcycle.fuel.gasoline")}</option>
+                    <option value="electric">{t("sell.motorcycle.fuel.electric")}</option>
                   </Select>
                   {errors.fuel ? <div className="text-xs text-red-600">{errors.fuel}</div> : null}
                 </div>
@@ -354,28 +354,28 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
             {draft.category === "tire" ? (
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="grid gap-2">
-                  <Label>시즌</Label>
+                  <Label>{t("sell.tire.season")}</Label>
                   <Select value={draft.season} onChange={(e) => setField("season", e.target.value as any)}>
-                    <option value="">선택</option>
-                    <option value="all-season">all-season</option>
-                    <option value="winter">winter</option>
-                    <option value="summer">summer</option>
+                    <option value="">{t("sell.common.select")}</option>
+                    <option value="all-season">{t("sell.tire.season.allSeason")}</option>
+                    <option value="winter">{t("sell.tire.season.winter")}</option>
+                    <option value="summer">{t("sell.tire.season.summer")}</option>
                   </Select>
                   {errors.season ? <div className="text-xs text-red-600">{errors.season}</div> : null}
                 </div>
                 <div className="grid gap-2">
-                  <Label>반경 (radius)</Label>
-                  <Input value={draft.radius} onChange={(e) => setField("radius", e.target.value as any)} placeholder="예) 17" />
+                  <Label>{t("sell.tire.radius")}</Label>
+                  <Input value={draft.radius} onChange={(e) => setField("radius", e.target.value as any)} placeholder={t("sell.tire.radiusPlaceholder")} />
                   {errors.radius ? <div className="text-xs text-red-600">{errors.radius}</div> : null}
                 </div>
                 <div className="grid gap-2">
-                  <Label>폭 (width)</Label>
-                  <Input value={draft.width} onChange={(e) => setField("width", e.target.value as any)} placeholder="예) 225" />
+                  <Label>{t("sell.tire.width")}</Label>
+                  <Input value={draft.width} onChange={(e) => setField("width", e.target.value as any)} placeholder={t("sell.tire.widthPlaceholder")} />
                   {errors.width ? <div className="text-xs text-red-600">{errors.width}</div> : null}
                 </div>
                 <div className="grid gap-2">
-                  <Label>편평비 (height)</Label>
-                  <Input value={draft.height} onChange={(e) => setField("height", e.target.value as any)} placeholder="예) 55" />
+                  <Label>{t("sell.tire.height")}</Label>
+                  <Input value={draft.height} onChange={(e) => setField("height", e.target.value as any)} placeholder={t("sell.tire.heightPlaceholder")} />
                   {errors.height ? <div className="text-xs text-red-600">{errors.height}</div> : null}
                 </div>
               </div>
@@ -384,16 +384,16 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
             {draft.category === "parts" ? (
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="grid gap-2 sm:col-span-2">
-                  <Label>제목</Label>
-                  <Input value={draft.title} onChange={(e) => setField("title", e.target.value as any)} placeholder="부품 제목" />
+                  <Label>{t("sell.parts.title")}</Label>
+                  <Input value={draft.title} onChange={(e) => setField("title", e.target.value as any)} placeholder={t("sell.parts.titlePlaceholder")} />
                   {errors.title ? <div className="text-xs text-red-600">{errors.title}</div> : null}
                 </div>
                 <div className="grid gap-2">
-                  <Label>상태</Label>
+                  <Label>{t("sell.parts.condition")}</Label>
                   <Select value={draft.condition} onChange={(e) => setField("condition", e.target.value as any)}>
-                    <option value="">선택</option>
-                    <option value="new">new</option>
-                    <option value="used">used</option>
+                    <option value="">{t("sell.common.select")}</option>
+                    <option value="new">{t("sell.parts.condition.new")}</option>
+                    <option value="used">{t("sell.parts.condition.used")}</option>
                   </Select>
                   {errors.condition ? <div className="text-xs text-red-600">{errors.condition}</div> : null}
                 </div>
@@ -401,11 +401,11 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
             ) : null}
 
             <div className="grid gap-2 sm:max-w-sm">
-              <Label>가격 (MNT)</Label>
+              <Label>{t("sell.vehicle.price")}</Label>
               <Input
                 value={(draft as any).priceMnt ?? ""}
                 onChange={(e) => setField("priceMnt" as any, e.target.value as any)}
-                placeholder="예) 12,000,000"
+                placeholder={t("sell.vehicle.pricePlaceholder")}
               />
               {errors.priceMnt ? <div className="text-xs text-red-600">{errors.priceMnt}</div> : null}
             </div>
@@ -414,11 +414,11 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
 
         <Card>
           <CardHeader>
-            <CardTitle>사진/동영상</CardTitle>
+            <CardTitle>{t("sell.common.photos")}</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4">
             <div className="grid gap-2">
-              <Label>이미지 업로드 (최대 20장)</Label>
+              <Label>{t("sell.common.imageUpload")}</Label>
               <Input
                 type="file"
                 accept=".jpg,.jpeg,.png,.gif"
@@ -437,7 +437,7 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
                         onClick={() => removeImageAt(idx)}
                         className="absolute right-1 top-1 rounded-md bg-black/60 px-2 py-1 text-xs text-white"
                       >
-                        삭제
+                        {t("sell.common.delete")}
                       </button>
                     </div>
                   ))}
@@ -446,9 +446,9 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
             </div>
 
             <div className="grid gap-2">
-              <Label>동영상 업로드 (선택, 최대 500MB)</Label>
+              <Label>{t("sell.common.videoUpload")}</Label>
               <Input type="file" accept=".mpg,.mp4,.mov" onChange={onPickVideo} />
-              {video ? <div className="text-xs text-zinc-600">선택됨: {video.name}</div> : null}
+              {video ? <div className="text-xs text-zinc-600">{t("sell.common.selected")}: {video.name}</div> : null}
               {errors.video ? <div className="text-xs text-red-600">{errors.video}</div> : null}
             </div>
           </CardContent>
@@ -456,14 +456,14 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
 
         <Card>
           <CardHeader>
-            <CardTitle>메모</CardTitle>
+            <CardTitle>{t("sell.common.memo")}</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-2">
             <Textarea
               value={draft.memo}
               maxLength={10_000}
               onChange={(e) => setField("memo", e.target.value as any)}
-              placeholder="판매 메모를 입력하세요 (최대 10,000자)"
+              placeholder={t("sell.common.memoPlaceholder")}
             />
             <div className="flex items-center justify-between text-xs text-zinc-600">
               <div>{errors.memo ? <span className="text-red-600">{errors.memo}</span> : null}</div>
@@ -476,33 +476,33 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
 
         <Card>
           <CardHeader>
-            <CardTitle>연락처</CardTitle>
+            <CardTitle>{t("sell.common.contact")}</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4 sm:grid-cols-3">
             <div className="grid gap-2">
-              <Label>이름</Label>
+              <Label>{t("sell.contact.name")}</Label>
               <Input
                 value={draft.contactName}
                 onChange={(e) => setField("contactName", e.target.value as any)}
-                placeholder="이름"
+                placeholder={t("sell.contact.namePlaceholder")}
               />
               {errors.contactName ? <div className="text-xs text-red-600">{errors.contactName}</div> : null}
             </div>
             <div className="grid gap-2">
-              <Label>이메일</Label>
+              <Label>{t("sell.contact.email")}</Label>
               <Input
                 value={draft.contactEmail}
                 onChange={(e) => setField("contactEmail", e.target.value as any)}
-                placeholder="이메일"
+                placeholder={t("sell.contact.emailPlaceholder")}
               />
               {errors.contactEmail ? <div className="text-xs text-red-600">{errors.contactEmail}</div> : null}
             </div>
             <div className="grid gap-2">
-              <Label>휴대폰</Label>
+              <Label>{t("sell.contact.phone")}</Label>
               <Input
                 value={draft.contactPhone}
                 onChange={(e) => setField("contactPhone", e.target.value as any)}
-                placeholder="휴대폰 번호"
+                placeholder={t("sell.contact.phonePlaceholder")}
               />
               {errors.contactPhone ? <div className="text-xs text-red-600">{errors.contactPhone}</div> : null}
             </div>
@@ -526,14 +526,14 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
                 setErrors({});
               }}
             >
-              초기화
+              {t("sell.common.reset")}
             </Button>
             <Button variant="primary" onClick={onSubmit}>{t("sell.form.continueToPayment")}</Button>
           </div>
         </div>
 
         <div className="text-xs text-zinc-500">
-          Draft는 자동 저장됩니다: <span className="font-mono">sellDraft:{category}</span>
+          {t("sell.common.draftAutoSave")}: <span className="font-mono">sellDraft:{category}</span>
         </div>
       </div>
     </RequireAuth>

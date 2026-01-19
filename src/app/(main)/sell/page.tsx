@@ -120,8 +120,8 @@ function CategoryCard({ card }: { card: CategoryCard }) {
             {/* Chevron */}
             <div className="shrink-0 self-center">
               <ChevronRightIcon className="h-5 w-5 text-zinc-400 transition-colors group-hover:text-rose-600" />
-            </div>
-          </div>
+      </div>
+      </div>
         </CardContent>
       </Card>
     </Link>

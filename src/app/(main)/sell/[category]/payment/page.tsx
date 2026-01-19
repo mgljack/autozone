@@ -124,17 +124,17 @@ export default function SellPaymentPage({ params }: { params: { category: string
         {!listing ? (
           <Card>
             <CardHeader>
-              <CardTitle>Draft를 찾을 수 없음</CardTitle>
+              <CardTitle>{t("payment.draftNotFound")}</CardTitle>
             </CardHeader>
             <CardContent className="text-sm text-zinc-600">
-              draftId로 저장된 매물을 찾을 수 없습니다. 폼에서 다시 제출해 주세요.
+              {t("payment.draftNotFoundDesc")}
             </CardContent>
           </Card>
         ) : (
           <>
             <Card>
               <CardHeader>
-                <CardTitle>플랜 선택</CardTitle>
+                <CardTitle>{t("payment.plan.title")}</CardTitle>
               </CardHeader>
               <CardContent className="grid gap-4">
                 <div className="grid gap-3 sm:grid-cols-3">
@@ -151,7 +151,7 @@ export default function SellPaymentPage({ params }: { params: { category: string
                       >
                         <div className="text-base font-normal">{p.label}</div>
                         <div className={`mt-1 text-sm ${active ? "text-white/80" : "text-zinc-600"}`}>
-                          {p.tier === "general" ? "Free plan" : "Featured plan"}
+                          {p.tier === "general" ? t("payment.plan.freePlan") : t("payment.plan.featuredPlan")}
                         </div>
                       </button>
                     );
@@ -159,7 +159,7 @@ export default function SellPaymentPage({ params }: { params: { category: string
                 </div>
 
                 <div className="grid gap-2">
-                  <Label>기간</Label>
+                  <Label>{t("payment.plan.duration")}</Label>
                   <div className="grid gap-2 sm:grid-cols-2">
                     {selectedPlan.options.map((o) => (
                       <label
@@ -175,7 +175,7 @@ export default function SellPaymentPage({ params }: { params: { category: string
                             checked={durationDays === o.days}
                             onChange={() => setDurationDays(o.days)}
                           />
-                          <div className="font-normal">{o.days} days</div>
+                          <div className="font-normal">{o.days} {t("payment.plan.days")}</div>
                         </div>
                         <div className="font-normal">{o.priceMnt.toLocaleString("mn-MN")} MNT</div>
                       </label>
@@ -185,8 +185,8 @@ export default function SellPaymentPage({ params }: { params: { category: string
 
                 <div className="flex items-center justify-between rounded-2xl border border-zinc-200 bg-white p-4">
                   <div className="text-sm text-zinc-600">
-                    선택: <span className="font-normal text-zinc-900">{tier.toUpperCase()}</span> ·{" "}
-                    <span className="font-normal text-zinc-900">{durationDays} days</span>
+                    {t("payment.plan.selectedInfo")}: <span className="font-normal text-zinc-900">{tier.toUpperCase()}</span> ·{" "}
+                    <span className="font-normal text-zinc-900">{durationDays} {t("payment.plan.days")}</span>
                   </div>
                   <div className="text-base font-extrabold">{amountMnt.toLocaleString("mn-MN")} MNT</div>
                 </div>
@@ -197,7 +197,7 @@ export default function SellPaymentPage({ params }: { params: { category: string
               <Link href={`/sell/${category}`}>
                 <Button variant="outline">{t("payment.backToForm")}</Button>
               </Link>
-              <Button onClick={() => setOpen(true)}>{t("common.confirm")} · 등록</Button>
+              <Button onClick={() => setOpen(true)}>{t("payment.confirmRegister")}</Button>
             </div>
           </>
         )}
@@ -205,58 +205,58 @@ export default function SellPaymentPage({ params }: { params: { category: string
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>결제 (mock)</DialogTitle>
+              <DialogTitle>{t("payment.method.title")}</DialogTitle>
             </DialogHeader>
             {paid ? (
               <div className="grid gap-4">
                 <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
-                  결제가 완료되었습니다. 매물이 <span className="font-normal">PUBLISHED</span> 상태로 등록됐어요.
+                  <span dangerouslySetInnerHTML={{ __html: t("payment.success.completed") }} />
                 </div>
                 <div className="grid gap-2 text-sm text-zinc-700">
                   <div className="flex items-center justify-between">
-                    <div className="text-zinc-500">tier</div>
+                    <div className="text-zinc-500">{t("payment.success.tier")}</div>
                     <div className="font-normal">{tier.toUpperCase()}</div>
                   </div>
                   <div className="flex items-center justify-between">
-                    <div className="text-zinc-500">duration</div>
-                    <div className="font-normal">{durationDays} days</div>
+                    <div className="text-zinc-500">{t("payment.success.duration")}</div>
+                    <div className="font-normal">{durationDays} {t("payment.plan.days")}</div>
                   </div>
                   <div className="flex items-center justify-between">
-                    <div className="text-zinc-500">amount</div>
+                    <div className="text-zinc-500">{t("payment.success.amount")}</div>
                     <div className="font-normal">{amountMnt.toLocaleString("mn-MN")} MNT</div>
                   </div>
                 </div>
                 <div className="flex justify-end gap-2">
                   <Button variant="outline" onClick={() => setOpen(false)}>
-                    닫기
+                    {t("payment.success.close")}
                   </Button>
                   <Link href={successHref}>
-                    <Button>매물 보기</Button>
+                    <Button>{t("payment.success.viewListing")}</Button>
                   </Link>
                 </div>
               </div>
             ) : (
               <div className="grid gap-4">
                 <div className="text-sm text-zinc-600">
-                  결제수단을 선택하고 Pay를 누르면, 이 매물은 <span className="font-normal">published</span>로 전환됩니다. (prototype)
+                  <span dangerouslySetInnerHTML={{ __html: t("payment.method.description") }} />
                 </div>
 
                 <div className="grid gap-2">
-                  <Label>결제수단</Label>
+                  <Label>{t("payment.method.choose")}</Label>
                   <div className="grid gap-2 sm:grid-cols-2">
                     <label className={`flex cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3 text-sm ${method === "card" ? "border-zinc-900 bg-zinc-50" : "border-zinc-200 bg-white hover:bg-zinc-50"}`}>
                       <input type="radio" name="method" checked={method === "card"} onChange={() => setMethod("card")} />
-                      <div className="font-normal">Card</div>
+                      <div className="font-normal">{t("payment.method.card")}</div>
                     </label>
                     <label className={`flex cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3 text-sm ${method === "qpay" ? "border-zinc-900 bg-zinc-50" : "border-zinc-200 bg-white hover:bg-zinc-50"}`}>
                       <input type="radio" name="method" checked={method === "qpay"} onChange={() => setMethod("qpay")} />
-                      <div className="font-normal">QPay</div>
+                      <div className="font-normal">{t("payment.method.qpay")}</div>
                     </label>
                   </div>
                 </div>
 
                 <div className="grid gap-2">
-                  <Label>결제 금액</Label>
+                  <Label>{t("payment.method.amount")}</Label>
                   <Input readOnly value={`${amountMnt.toLocaleString("mn-MN")} MNT`} />
                 </div>
 
@@ -265,7 +265,7 @@ export default function SellPaymentPage({ params }: { params: { category: string
                     {t("common.cancel")}
                   </Button>
                   <Button onClick={onPay} disabled={paying || !listing}>
-                    {paying ? "Paying..." : "Pay"}
+                    {paying ? t("payment.method.paying") : t("payment.method.pay")}
                   </Button>
                 </div>
               </div>

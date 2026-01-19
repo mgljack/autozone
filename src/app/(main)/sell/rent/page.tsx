@@ -126,25 +126,25 @@ export default function RentRegistrationPage() {
   const validate = () => {
     const next: Record<string, string> = {};
 
-    if (images.length < 1) next.images = "이미지는 최소 1장 업로드해 주세요. (최대 20장)";
-    if (draft.description.trim().length < 1) next.description = "설명을 입력해 주세요.";
-    if (draft.description.length > 10_000) next.description = "설명은 최대 10,000자까지 입력할 수 있어요.";
-    if (!draft.contactName.trim()) next.contactName = "이름을 입력해 주세요.";
-    if (!draft.contactEmail.trim()) next.contactEmail = "이메일을 입력해 주세요.";
-    if (!draft.contactPhone.trim()) next.contactPhone = "휴대폰 번호를 입력해 주세요.";
+    if (images.length < 1) next.images = t("sell.error.imagesRequired");
+    if (draft.description.trim().length < 1) next.description = t("sell.error.memoRequired");
+    if (draft.description.length > 10_000) next.description = t("sell.error.memoMaxLength");
+    if (!draft.contactName.trim()) next.contactName = t("sell.error.nameRequired");
+    if (!draft.contactEmail.trim()) next.contactEmail = t("sell.error.emailRequired");
+    if (!draft.contactPhone.trim()) next.contactPhone = t("sell.error.phoneRequired");
 
     const require = (key: string, value: string) => {
-      if (!value.trim()) next[key] = "필수 입력 항목입니다.";
+      if (!value.trim()) next[key] = t("sell.error.required");
     };
 
-    if (!draft.rentType) next.rentType = "차량 타입을 선택해 주세요.";
+    if (!draft.rentType) next.rentType = t("sell.error.rentTypeRequired");
     require("manufacturer", draft.manufacturer);
     require("model", draft.model);
     require("yearMade", draft.yearMade);
     require("mileageKm", draft.mileageKm);
-    if (!draft.fuel) next.fuel = "연료를 선택해 주세요.";
-    if (!draft.transmission) next.transmission = "변속기를 선택해 주세요.";
-    if (!draft.region) next.region = "지역을 선택해 주세요.";
+    if (!draft.fuel) next.fuel = t("sell.error.fuelRequired");
+    if (!draft.transmission) next.transmission = t("sell.error.transmissionRequired");
+    if (!draft.region) next.region = t("sell.error.regionRequired");
     require("pricePerDayMnt", draft.pricePerDayMnt);
     require("availabilityDate", draft.availabilityDate);
 
@@ -168,120 +168,120 @@ export default function RentRegistrationPage() {
     });
     localStorage.setItem("rentListings", JSON.stringify(rentListings));
 
-    alert("렌탈 등록이 완료되었습니다!");
+    alert(t("sell.rental.registered"));
     router.push("/rent/small");
   };
 
   return (
     <RequireAuth returnUrl="/sell/rent">
       <div className="grid gap-6">
-        <SectionTitle title="차량 렌탈 등록" subtitle="렌탈할 차량 정보를 입력해 주세요" />
+        <SectionTitle title={t("sell.rental.title")} subtitle={t("sell.rental.subtitle")} />
 
         <Card>
           <CardHeader>
-            <CardTitle>기본 정보</CardTitle>
+            <CardTitle>{t("sell.common.basicInfo")}</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="grid gap-2">
-                <Label>차량 타입</Label>
+                <Label>{t("sell.rental.rentType")}</Label>
                 <Select value={draft.rentType} onChange={(e) => setField("rentType", e.target.value as any)}>
-                  <option value="">선택</option>
-                  <option value="small">소형차</option>
-                  <option value="large">대형차</option>
-                  <option value="truck">화물차</option>
+                  <option value="">{t("sell.common.select")}</option>
+                  <option value="small">{t("sell.rental.rentType.small")}</option>
+                  <option value="large">{t("sell.rental.rentType.large")}</option>
+                  <option value="truck">{t("sell.rental.rentType.truck")}</option>
                 </Select>
                 {errors.rentType ? <div className="text-xs text-red-600">{errors.rentType}</div> : null}
               </div>
 
               <div className="grid gap-2">
-                <Label>제조사</Label>
+                <Label>{t("sell.vehicle.manufacturer")}</Label>
                 <Input
                   value={draft.manufacturer}
                   onChange={(e) => setField("manufacturer", e.target.value)}
-                  placeholder="예) Toyota"
+                  placeholder={t("sell.vehicle.manufacturerPlaceholder")}
                 />
                 {errors.manufacturer ? <div className="text-xs text-red-600">{errors.manufacturer}</div> : null}
               </div>
 
               <div className="grid gap-2">
-                <Label>모델</Label>
+                <Label>{t("sell.vehicle.model")}</Label>
                 <Input
                   value={draft.model}
                   onChange={(e) => setField("model", e.target.value)}
-                  placeholder="예) Prius"
+                  placeholder={t("sell.vehicle.modelPlaceholder")}
                 />
                 {errors.model ? <div className="text-xs text-red-600">{errors.model}</div> : null}
               </div>
 
               <div className="grid gap-2">
-                <Label>제조년도</Label>
+                <Label>{t("sell.vehicle.yearMade")}</Label>
                 <Input
                   value={draft.yearMade}
                   onChange={(e) => setField("yearMade", e.target.value)}
-                  placeholder="예) 2018"
+                  placeholder={t("sell.rental.yearMadePlaceholder")}
                 />
                 {errors.yearMade ? <div className="text-xs text-red-600">{errors.yearMade}</div> : null}
               </div>
 
               <div className="grid gap-2">
-                <Label>주행거리 (km)</Label>
+                <Label>{t("sell.rental.mileageKm")}</Label>
                 <Input
                   value={draft.mileageKm}
                   onChange={(e) => setField("mileageKm", e.target.value.replace(/[^\d]/g, ""))}
-                  placeholder="예) 50000"
+                  placeholder={t("sell.rental.mileageKmPlaceholder")}
                   inputMode="numeric"
                 />
                 {errors.mileageKm ? <div className="text-xs text-red-600">{errors.mileageKm}</div> : null}
               </div>
 
               <div className="grid gap-2">
-                <Label>연료</Label>
+                <Label>{t("sell.vehicle.fuel")}</Label>
                 <Select value={draft.fuel} onChange={(e) => setField("fuel", e.target.value as any)}>
-                  <option value="">선택</option>
-                  <option value="gasoline">가솔린</option>
-                  <option value="diesel">디젤</option>
-                  <option value="electric">전기</option>
-                  <option value="hybrid">하이브리드</option>
+                  <option value="">{t("sell.common.select")}</option>
+                  <option value="gasoline">{t("sell.rental.fuel.gasoline")}</option>
+                  <option value="diesel">{t("sell.rental.fuel.diesel")}</option>
+                  <option value="electric">{t("sell.rental.fuel.electric")}</option>
+                  <option value="hybrid">{t("sell.rental.fuel.hybrid")}</option>
                 </Select>
                 {errors.fuel ? <div className="text-xs text-red-600">{errors.fuel}</div> : null}
               </div>
 
               <div className="grid gap-2">
-                <Label>변속기</Label>
+                <Label>{t("sell.vehicle.transmission")}</Label>
                 <Select value={draft.transmission} onChange={(e) => setField("transmission", e.target.value as any)}>
-                  <option value="">선택</option>
-                  <option value="at">자동</option>
-                  <option value="mt">수동</option>
+                  <option value="">{t("sell.common.select")}</option>
+                  <option value="at">{t("sell.rental.transmission.at")}</option>
+                  <option value="mt">{t("sell.rental.transmission.mt")}</option>
                 </Select>
                 {errors.transmission ? <div className="text-xs text-red-600">{errors.transmission}</div> : null}
               </div>
 
               <div className="grid gap-2">
-                <Label>지역</Label>
+                <Label>{t("sell.vehicle.region")}</Label>
                 <Select value={draft.region} onChange={(e) => setField("region", e.target.value as any)}>
-                  <option value="">선택</option>
-                  <option value="Ulaanbaatar">울란바토르</option>
-                  <option value="Erdenet">에르데네트</option>
-                  <option value="Darkhan">다르항</option>
-                  <option value="Other">기타</option>
+                  <option value="">{t("sell.common.select")}</option>
+                  <option value="Ulaanbaatar">{t("sell.rental.region.ulaanbaatar")}</option>
+                  <option value="Erdenet">{t("sell.rental.region.erdenet")}</option>
+                  <option value="Darkhan">{t("sell.rental.region.darkhan")}</option>
+                  <option value="Other">{t("sell.rental.region.other")}</option>
                 </Select>
                 {errors.region ? <div className="text-xs text-red-600">{errors.region}</div> : null}
               </div>
 
               <div className="grid gap-2">
-                <Label>일일 렌트 가격 (MNT)</Label>
+                <Label>{t("sell.rental.pricePerDay")}</Label>
                 <Input
                   value={draft.pricePerDayMnt}
                   onChange={(e) => setField("pricePerDayMnt", e.target.value.replace(/[^\d]/g, ""))}
-                  placeholder="예) 50000"
+                  placeholder={t("sell.rental.pricePerDayPlaceholder")}
                   inputMode="numeric"
                 />
                 {errors.pricePerDayMnt ? <div className="text-xs text-red-600">{errors.pricePerDayMnt}</div> : null}
               </div>
 
               <div className="grid gap-2">
-                <Label>이용 가능 날짜</Label>
+                <Label>{t("sell.rental.availabilityDate")}</Label>
                 <Input
                   type="date"
                   value={draft.availabilityDate}
@@ -295,11 +295,11 @@ export default function RentRegistrationPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>사진</CardTitle>
+            <CardTitle>{t("sell.common.photos")}</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4">
             <div className="grid gap-2">
-              <Label>이미지 업로드 (최대 20장)</Label>
+              <Label>{t("sell.common.imageUpload")}</Label>
               <Input
                 type="file"
                 accept=".jpg,.jpeg,.png,.gif"
@@ -318,7 +318,7 @@ export default function RentRegistrationPage() {
                         onClick={() => removeImageAt(idx)}
                         className="absolute right-1 top-1 rounded-md bg-black/60 px-2 py-1 text-xs text-white"
                       >
-                        삭제
+                        {t("sell.common.delete")}
                       </button>
                     </div>
                   ))}
@@ -330,14 +330,14 @@ export default function RentRegistrationPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>설명</CardTitle>
+            <CardTitle>{t("sell.rental.description")}</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-2">
             <Textarea
               value={draft.description}
               maxLength={10_000}
               onChange={(e) => setField("description", e.target.value)}
-              placeholder="차량에 대한 설명을 입력하세요 (최대 10,000자)"
+              placeholder={t("sell.rental.descriptionPlaceholder")}
             />
             <div className="flex items-center justify-between text-xs text-zinc-600">
               <div>{errors.description ? <span className="text-red-600">{errors.description}</span> : null}</div>
@@ -350,33 +350,33 @@ export default function RentRegistrationPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>연락처</CardTitle>
+            <CardTitle>{t("sell.common.contact")}</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4 sm:grid-cols-3">
             <div className="grid gap-2">
-              <Label>이름</Label>
+              <Label>{t("sell.contact.name")}</Label>
               <Input
                 value={draft.contactName}
                 onChange={(e) => setField("contactName", e.target.value)}
-                placeholder="이름"
+                placeholder={t("sell.contact.namePlaceholder")}
               />
               {errors.contactName ? <div className="text-xs text-red-600">{errors.contactName}</div> : null}
             </div>
             <div className="grid gap-2">
-              <Label>이메일</Label>
+              <Label>{t("sell.contact.email")}</Label>
               <Input
                 value={draft.contactEmail}
                 onChange={(e) => setField("contactEmail", e.target.value)}
-                placeholder="이메일"
+                placeholder={t("sell.contact.emailPlaceholder")}
               />
               {errors.contactEmail ? <div className="text-xs text-red-600">{errors.contactEmail}</div> : null}
             </div>
             <div className="grid gap-2">
-              <Label>휴대폰</Label>
+              <Label>{t("sell.contact.phone")}</Label>
               <Input
                 value={draft.contactPhone}
                 onChange={(e) => setField("contactPhone", e.target.value)}
-                placeholder="휴대폰 번호"
+                placeholder={t("sell.contact.phonePlaceholder")}
               />
               {errors.contactPhone ? <div className="text-xs text-red-600">{errors.contactPhone}</div> : null}
             </div>
@@ -414,14 +414,14 @@ export default function RentRegistrationPage() {
                 setErrors({});
               }}
             >
-              초기화
+              {t("sell.common.reset")}
             </Button>
-            <Button variant="primary" onClick={onSubmit}>등록하기</Button>
+            <Button variant="primary" onClick={onSubmit}>{t("sell.rental.register")}</Button>
           </div>
         </div>
 
         <div className="text-xs text-zinc-500">
-          Draft는 자동 저장됩니다: <span className="font-mono">rentDraft</span>
+          {t("sell.common.draftAutoSave")}: <span className="font-mono">rentDraft</span>
         </div>
       </div>
     </RequireAuth>
