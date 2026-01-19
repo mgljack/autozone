@@ -78,6 +78,11 @@ export type CenterDTO = {
   minPriceMnt?: number;
   maxPriceMnt?: number;
   operatingHours?: string;
+  // Extended fields for detail pages
+  images?: string[];
+  serviceItems?: Array<{ name: string; priceMnt: number; duration?: string }>;
+  location?: { address: string; lat: number; lng: number };
+  phoneNumbers?: string[];
 };
 
 export type ListingDraftDTO = {

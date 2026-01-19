@@ -28,6 +28,24 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
   );
 }
 
+function PlusIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <line x1="12" y1="5" x2="12" y2="19" />
+      <line x1="5" y1="12" x2="19" y2="12" />
+    </svg>
+  );
+}
+
 export function Header() {
   const { t } = useI18n();
   const { session, logout } = useAuth();
@@ -169,7 +187,17 @@ export function Header() {
             </div>
             <NavLink href="/service">{tt("nav.service")}</NavLink>
             <NavLink href="/media">{tt("nav.media")}</NavLink>
-            <NavLink href="/sell">{tt("nav.sell")}</NavLink>
+            <Link
+              href="/sell"
+              suppressHydrationWarning
+              className={cn(
+                "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-rose-600 transition-all duration-200 hover:bg-rose-600/10 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-rose-600",
+                pathname?.startsWith("/sell") && "bg-rose-600/10",
+              )}
+            >
+              <PlusIcon className="h-4 w-4" />
+              {tt("header.addListing")}
+            </Link>
           </nav>
         </div>
 

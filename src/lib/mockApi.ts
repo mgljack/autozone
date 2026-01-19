@@ -426,6 +426,24 @@ export async function fetchCenters(): Promise<CenterDTO[]> {
 }
 
 export async function fetchCenterById(id: string): Promise<CenterDTO | null> {
+  // Check localStorage first
+  if (typeof window !== "undefined") {
+    try {
+      const stored = localStorage.getItem("autozone.carCenters");
+      if (stored) {
+        const storedCenters = JSON.parse(stored);
+        const found = storedCenters.find((c: any) => c.id === id);
+        if (found) {
+          // Convert stored center to CenterDTO format
+          return toCenterDTOFromStored(found);
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }
+  
+  // Fallback to mock data
   // TODO: Replace with GET /centers/:id
   const found = centers.find((c) => c.id === id) ?? null;
   return await mockApi(found ? toCenterDTO(found) : null, 300, 600);
@@ -452,7 +470,7 @@ export type CentersListResponse = {
   totalPages: number;
 };
 
-function applyCenterFilters(all: Center[], query: CentersListQuery) {
+function applyCenterFilters(all: (Center | any)[], query: CentersListQuery) {
   const { q, serviceType, regionGroup, priceMinMnt, priceMaxMnt, ratingMin, availability } = query;
   let filtered = all.slice();
 
@@ -462,24 +480,26 @@ function applyCenterFilters(all: Center[], query: CentersListQuery) {
       (c) =>
         includesCI(c.name, needle) ||
         includesCI(c.address, needle) ||
-        c.services.some((s) => includesCI(s, needle)),
+        ((c as any).services || []).some((s: string) => includesCI(s, needle)),
     );
   }
 
   if (serviceType && serviceType !== "all") {
-    filtered = filtered.filter((c) => c.services.some((s) => includesCI(s, serviceType)));
+    filtered = filtered.filter((c) => ((c as any).services || []).some((s: string) => includesCI(s, serviceType)));
   }
 
   if (regionGroup && regionGroup !== "") {
     const validRegionGroup = regionGroup as "Ulaanbaatar" | "Erdenet" | "Darkhan" | "Other";
-    filtered = filtered.filter((c) => matchesRegionGroup(c.region as any, validRegionGroup));
+    filtered = filtered.filter((c) => matchesRegionGroup((c as any).region || "", validRegionGroup));
   }
 
   // Price filtering based on service items
   if (typeof priceMinMnt === "number" || typeof priceMaxMnt === "number") {
     filtered = filtered.filter((c) => {
-      const minPrice = Math.min(...c.serviceItems.map((item) => item.priceMnt));
-      const maxPrice = Math.max(...c.serviceItems.map((item) => item.priceMnt));
+      const serviceItems = (c as any).serviceItems || [];
+      if (serviceItems.length === 0) return true;
+      const minPrice = Math.min(...serviceItems.map((item: any) => item.priceMnt || 0));
+      const maxPrice = Math.max(...serviceItems.map((item: any) => item.priceMnt || 0));
       if (typeof priceMinMnt === "number" && maxPrice < priceMinMnt) return false;
       if (typeof priceMaxMnt === "number" && minPrice > priceMaxMnt) return false;
       return true;
@@ -487,7 +507,7 @@ function applyCenterFilters(all: Center[], query: CentersListQuery) {
   }
 
   if (typeof ratingMin === "number") {
-    filtered = filtered.filter((c) => c.rating >= ratingMin);
+    filtered = filtered.filter((c) => ((c as any).rating ?? 4.0) >= ratingMin);
   }
 
   // Availability filtering (mock - all centers are available)
@@ -499,13 +519,40 @@ function applyCenterFilters(all: Center[], query: CentersListQuery) {
 export async function fetchCentersList(query: CentersListQuery = {}): Promise<CentersListResponse> {
   const { sort = "newest", page = 1, pageSize = 12 } = query;
 
-  let filtered = applyCenterFilters(centers, query);
+  // Merge with localStorage centers
+  let allCenters = [...centers];
+  if (typeof window !== "undefined") {
+    try {
+      const stored = localStorage.getItem("autozone.carCenters");
+      if (stored) {
+        const storedCenters = JSON.parse(stored);
+        allCenters = [...allCenters, ...storedCenters];
+      }
+    } catch {
+      // ignore
+    }
+  }
+
+  let filtered = applyCenterFilters(allCenters, query);
 
   filtered.sort((a, b) => {
-    if (sort === "ratingDesc") return b.rating - a.rating;
-    if (sort === "ratingAsc") return a.rating - b.rating;
+    if (sort === "ratingDesc") {
+      const ratingA = (a as any).rating ?? 4.0;
+      const ratingB = (b as any).rating ?? 4.0;
+      return ratingB - ratingA;
+    }
+    if (sort === "ratingAsc") {
+      const ratingA = (a as any).rating ?? 4.0;
+      const ratingB = (b as any).rating ?? 4.0;
+      return ratingA - ratingB;
+    }
     if (sort === "nameAsc") return a.name.localeCompare(b.name);
-    // Default: newest (by id)
+    // Default: newest (by createdAt or id)
+    const createdAtA = (a as any).createdAt;
+    const createdAtB = (b as any).createdAt;
+    if (createdAtA && createdAtB) {
+      return new Date(createdAtB).getTime() - new Date(createdAtA).getTime();
+    }
     return b.id.localeCompare(a.id);
   });
 
@@ -514,7 +561,13 @@ export async function fetchCentersList(query: CentersListQuery = {}): Promise<Ce
   const safePage = Math.min(Math.max(1, page), totalPages);
   const start = (safePage - 1) * pageSize;
 
-  const items = filtered.slice(start, start + pageSize).map(toCenterDTO);
+  const items = filtered.slice(start, start + pageSize).map((c) => {
+    // Check if it's a stored center (has createdAt) or mock center
+    if ((c as any).createdAt) {
+      return toCenterDTOFromStored(c);
+    }
+    return toCenterDTO(c as Center);
+  });
 
   return await mockApi({ items, total, page: safePage, pageSize, totalPages }, 300, 600);
 }
@@ -845,6 +898,30 @@ function toCenterDTO(c: Center): CenterDTO {
     ...(c as any).location ? { location: (c as any).location } : null,
     ...(c as any).phoneNumbers ? { phoneNumbers: (c as any).phoneNumbers } : null,
     ...(c as any).operatingHours ? { operatingHours: (c as any).operatingHours } : null,
+  };
+}
+
+function toCenterDTOFromStored(stored: any): CenterDTO {
+  const prices = (stored.serviceItems || []).map((item: any) => item.priceMnt || 0);
+  const minPrice = prices.length > 0 ? Math.min(...prices) : undefined;
+  const maxPrice = prices.length > 0 ? Math.max(...prices) : undefined;
+  
+  return {
+    id: stored.id,
+    name: stored.name,
+    regionLabel: stored.region || "Ulaanbaatar",
+    address: stored.address,
+    phone: stored.phone1,
+    rating: 4.0, // Default rating for new centers
+    services: stored.services || [],
+    imageUrl: stored.images?.[0] || "/samples/cars/car-01.svg",
+    minPriceMnt: minPrice,
+    maxPriceMnt: maxPrice,
+    operatingHours: stored.hours,
+    images: stored.images || [],
+    serviceItems: stored.serviceItems || [],
+    location: { address: stored.address, lat: stored.lat, lng: stored.lng },
+    phoneNumbers: stored.phone2 ? [stored.phone1, stored.phone2] : [stored.phone1],
   };
 }
 

@@ -63,6 +63,14 @@ export default function SellCategorySelectPage() {
       iconColor: "text-rose-600",
       iconBg: "bg-rose-50",
     },
+    {
+      href: "/sell/car-center",
+      title: t("sell.carCenter.title"),
+      description: t("sell.carCenter.description"),
+      icon: <CarCenterIcon />,
+      iconColor: "text-indigo-600",
+      iconBg: "bg-indigo-50",
+    },
   ];
 
   return (
@@ -176,6 +184,20 @@ function KeyIcon() {
       <path d="M18 5l-1-1" />
       <path d="M15 8l-1-1" />
       <path d="M12 11l-1-1" />
+    </svg>
+  );
+}
+
+function CarCenterIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M3 21h18" />
+      <path d="M5 21V7l8-4v18" />
+      <path d="M19 21V11l-6-4" />
+      <path d="M9 9v0" />
+      <path d="M9 12v0" />
+      <path d="M9 15v0" />
+      <path d="M9 18v0" />
     </svg>
   );
 }
