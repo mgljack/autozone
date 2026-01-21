@@ -94,8 +94,10 @@ export default function MediaDetailClient({ id }: { id: string }) {
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")} ${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
   };
 
-  const images = news.images && news.images.length > 0 ? news.images : [news.thumbnailUrl];
+  const coverImage = news.coverImage || news.thumbnailUrl;
+  const images = news.images && news.images.length > 0 ? news.images : [coverImage];
   const content = news.content || news.excerpt;
+  const author = news.author || news.reporterName || "관리자";
 
   return (
     <div className="grid gap-6">
@@ -111,7 +113,7 @@ export default function MediaDetailClient({ id }: { id: string }) {
 
           {/* Meta */}
           <div className="text-sm text-zinc-600">
-            {news.reporterName || "관리자"} · {formatPublishedAt(news.publishedAt || news.createdAt)}
+            {author} · {formatPublishedAt(news.publishedAt || news.createdAt)}
           </div>
 
           {/* Main Image - Single representative image only */}
@@ -119,7 +121,7 @@ export default function MediaDetailClient({ id }: { id: string }) {
             <div className="mb-6 w-full overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100">
               <div className="relative w-full" style={{ aspectRatio: "16/9", maxHeight: "480px" }}>
                 <Image
-                  src={images[0]!}
+                  src={coverImage}
                   alt={news.title}
                   fill
                   className="object-cover"

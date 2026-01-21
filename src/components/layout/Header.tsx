@@ -46,6 +46,24 @@ function PlusIcon({ className }: { className?: string }) {
   );
 }
 
+function BellIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+    </svg>
+  );
+}
+
 export function Header() {
   const { t } = useI18n();
   const { session, logout } = useAuth();
@@ -222,6 +240,20 @@ export function Header() {
               </Link>
             </>
           ) : null}
+          {/* Notification Icon - Always rightmost */}
+          <button
+            type="button"
+            onClick={() => {
+              // Placeholder handler
+              console.log("Notifications clicked");
+            }}
+            className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-rose-600 transition-all duration-200 hover:scale-105 hover:bg-rose-600/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-600/50 focus-visible:ring-offset-2"
+            aria-label={tt("common.notifications")}
+            title={tt("common.notifications")}
+            suppressHydrationWarning
+          >
+            <BellIcon className="h-[20px] w-[20px] sm:h-[22px] sm:w-[22px]" />
+          </button>
         </div>
       </div>
 

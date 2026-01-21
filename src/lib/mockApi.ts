@@ -64,7 +64,7 @@ export async function fetchHomeSections(): Promise<HomeSections> {
     {
       goldCars,
       silverCars,
-      media: media.slice(0, 2).map(toMediaDTO),
+      media: media.slice(0, 4).map(toMediaDTO), // Show 4 media items for home page
       recentGeneralCars,
     },
     300,
@@ -953,7 +953,13 @@ function toMediaDTO(m: MediaItem): MediaDTO {
     createdAt: m.createdAt,
     thumbnailUrl: m.thumbnail,
     excerpt: m.excerpt,
-    reporterName,
+    // Home page card fields
+    subtitle: m.subtitle,
+    category: m.category,
+    coverImage: m.thumbnail, // Use thumbnail as coverImage (can be overridden)
+    author: m.author ?? reporterName, // Use author if provided, fallback to reporterName
+    // Detail page fields
+    reporterName: m.author ?? reporterName,
     publishedAt,
     images,
     content,

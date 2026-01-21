@@ -58,6 +58,11 @@ export type MediaDTO = {
   createdAt: string; // ISO
   thumbnailUrl: string;
   excerpt: string;
+  // Home page card fields
+  subtitle?: string; // Short subtitle for card display
+  category?: string; // Category label (e.g., "Auction Guide", "Contact Guide")
+  coverImage?: string; // Cover image URL (fallback to thumbnailUrl)
+  author?: string; // Author name (fallback to reporterName)
   // Detail page fields
   reporterName?: string;
   publishedAt?: string; // ISO or "YYYY-MM-DD HH:mm"

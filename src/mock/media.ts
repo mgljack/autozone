@@ -5,6 +5,10 @@ export type MediaItem = {
   createdAt: string; // ISO
   thumbnail: string;
   excerpt: string;
+  // Optional fields for home page cards
+  subtitle?: string;
+  category?: string;
+  author?: string;
 };
 
 // Car center / auto repair service images for media cards (round-robin assignment)
@@ -32,7 +36,10 @@ export const media: MediaItem[] = [
   {
     id: "m_1",
     type: "news",
-    title: "2025 Car Market Trends: What to Expect",
+    title: "Start bidding",
+    subtitle: "We offer reliable vehicles at the most reasonable prices",
+    category: "Auction Guide",
+    author: "AutoZone Team",
     createdAt: "2025-12-21T09:00:00.000Z",
     thumbnail: getCarCenterImage(0),
     excerpt: "Explore the latest trends in Mongolia's car market for 2025. Discover new models, pricing strategies, and consumer preferences shaping the automotive industry.",
@@ -40,7 +47,10 @@ export const media: MediaItem[] = [
   {
     id: "m_2",
     type: "video",
-    title: "How to Inspect a Used Car Before Buying",
+    title: "GET IN TOUCH",
+    subtitle: "We are here to help you",
+    category: "Contact Guide",
+    author: "Support Team",
     createdAt: "2025-12-19T12:00:00.000Z",
     thumbnail: getCarCenterImage(1),
     excerpt: "Learn essential tips and techniques for inspecting used vehicles. This comprehensive guide covers engine checks, body condition, and important red flags to watch for.",
@@ -48,7 +58,10 @@ export const media: MediaItem[] = [
   {
     id: "m_3",
     type: "event",
-    title: "Weekend Auto Expo 2025",
+    title: "Best Way",
+    subtitle: "to export your cars",
+    category: "Seller's Guide",
+    author: "Sales Team",
     createdAt: "2025-12-18T16:30:00.000Z",
     thumbnail: getCarCenterImage(2),
     excerpt: "Join us for the biggest automotive expo of the year. Featuring new car launches, test drives, special discounts, and expert consultations.",
@@ -56,7 +69,10 @@ export const media: MediaItem[] = [
   {
     id: "m_4",
     type: "news",
-    title: "Electric Vehicles Gain Popularity in Mongolia",
+    title: "How to Buy a Used Car",
+    subtitle: "You don't have to struggle with other sites",
+    category: "Buyer's Guide",
+    author: "Editorial Team",
     createdAt: "2025-12-17T10:00:00.000Z",
     thumbnail: getCarCenterImage(3),
     excerpt: "Electric vehicles are becoming increasingly popular in Mongolia. Learn about the benefits, charging infrastructure, and available EV models in the market.",

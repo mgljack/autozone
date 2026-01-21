@@ -798,18 +798,65 @@ export default function MainHomePage() {
             {t("common.viewAll")}
           </Link>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          {(homeQuery.data?.media ?? []).slice(0, 2).map((m) => (
-            <div key={m.id} className="overflow-hidden rounded-2xl border border-zinc-200 bg-white">
-              <div className="relative h-40 w-full bg-zinc-100">
-                <Image src={m.thumbnailUrl} alt={m.title} fill className="object-cover" />
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {(homeQuery.data?.media ?? []).slice(0, 4).map((m) => (
+            <Link
+              key={m.id}
+              href={`/media/${m.id}`}
+              className="group relative overflow-hidden rounded-2xl bg-zinc-900 transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl"
+              aria-label={m.title}
+            >
+              {/* Background Image */}
+              <div className="relative h-[360px] w-full bg-zinc-800 sm:h-[380px] lg:h-[400px]">
+                <Image
+                  src={m.coverImage ?? m.thumbnailUrl}
+                  alt={m.title}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                />
+                {/* Dark Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/35 to-black/70 transition-opacity duration-300 group-hover:from-black/5 group-hover:via-black/25 group-hover:to-black/60" aria-hidden="true" />
               </div>
-              <div className="p-4">
-                <div className="text-xs font-normal text-zinc-600">{m.type.toUpperCase()}</div>
-                <div className="mt-1 text-base font-normal">{m.title}</div>
-                <div className="mt-1 text-sm text-zinc-600">{m.excerpt}</div>
+
+              {/* Content Overlay */}
+              <div className="absolute inset-0 flex flex-col justify-between p-6 text-white">
+                {/* Top Section - Title and Subtitle */}
+                <div className="flex flex-col gap-2">
+                  <h3 className="text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl">
+                    {m.title}
+                  </h3>
+                  {m.subtitle && (
+                    <p className="text-sm font-normal leading-relaxed text-white/90 sm:text-base">
+                      {m.subtitle}
+                    </p>
+                  )}
+                </div>
+
+                {/* Bottom Section - Category and Arrow */}
+                <div className="flex items-center justify-between">
+                  {m.category && (
+                    <span className="inline-block rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-medium backdrop-blur-sm sm:text-sm">
+                      {m.category}
+                    </span>
+                  )}
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-transform duration-300 group-hover:translate-x-1 group-hover:bg-white/20">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="h-5 w-5"
+                      aria-hidden="true"
+                    >
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
