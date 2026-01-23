@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import React from "react";
+import { useI18n } from "@/context/I18nContext";
 
 function ChevronLeftIcon({ className }: { className?: string }) {
   return (
@@ -38,6 +39,7 @@ function ChevronRightIcon({ className }: { className?: string }) {
 }
 
 export function CenterGallery({ images, title }: { images: string[]; title: string }) {
+  const { t } = useI18n();
   const safe = images?.length ? images : ["/samples/cars/car-01.svg"];
   const [activeIndex, setActiveIndex] = React.useState(0);
   const canNavigate = safe.length > 1;
@@ -80,7 +82,7 @@ export function CenterGallery({ images, title }: { images: string[]; title: stri
             <>
               <button
                 type="button"
-                aria-label="Previous photo"
+                aria-label={t("service.gallery.previousPhoto")}
                 onClick={() => setActiveIndex((i) => i - 1)}
                 disabled={isFirst}
                 className={[
@@ -94,7 +96,7 @@ export function CenterGallery({ images, title }: { images: string[]; title: stri
               </button>
               <button
                 type="button"
-                aria-label="Next photo"
+                aria-label={t("service.gallery.nextPhoto")}
                 onClick={() => setActiveIndex((i) => i + 1)}
                 disabled={isLast}
                 className={[
@@ -119,7 +121,7 @@ export function CenterGallery({ images, title }: { images: string[]; title: stri
               <button
                 key={`thumb-${src}-${idx}`}
                 type="button"
-                aria-label={`View image ${idx + 1}`}
+                aria-label={t("service.gallery.viewImage", { index: idx + 1 })}
                 onClick={() => setActiveIndex(idx)}
                 className={[
                   "relative h-16 w-16 sm:h-20 sm:w-20 flex-shrink-0 overflow-hidden rounded-lg border-2 transition-all",

@@ -260,16 +260,17 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
             ) : null}
 
             {draft.category === "car" ? (
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="grid gap-2">
-                  <Label>{t("sell.vehicle.steering")}</Label>
-                  <Select value={draft.steering} onChange={(e) => setField("steering", e.target.value as any)}>
-                    <option value="">{t("sell.common.select")}</option>
-                    <option value="left">{t("sell.vehicle.steering.left")}</option>
-                    <option value="right">{t("sell.vehicle.steering.right")}</option>
-                  </Select>
-                  {errors.steering ? <div className="text-xs text-red-600">{errors.steering}</div> : null}
-                </div>
+              <>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="grid gap-2">
+                    <Label>{t("sell.vehicle.steering")}</Label>
+                    <Select value={draft.steering} onChange={(e) => setField("steering", e.target.value as any)}>
+                      <option value="">{t("sell.common.select")}</option>
+                      <option value="left">{t("sell.vehicle.steering.left")}</option>
+                      <option value="right">{t("sell.vehicle.steering.right")}</option>
+                    </Select>
+                    {errors.steering ? <div className="text-xs text-red-600">{errors.steering}</div> : null}
+                  </div>
 
                 <div className="grid gap-2">
                   <Label>{t("sell.vehicle.fuel")}</Label>
@@ -314,12 +315,55 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
                   <Input value={draft.color} onChange={(e) => setField("color", e.target.value as any)} placeholder={t("sell.vehicle.colorPlaceholder")} />
                   {errors.color ? <div className="text-xs text-red-600">{errors.color}</div> : null}
                 </div>
-                <div className="grid gap-2">
-                  <Label>{t("sell.vehicle.vin")}</Label>
-                  <Input value={draft.vin} onChange={(e) => setField("vin", e.target.value as any)} placeholder={t("sell.vehicle.vinPlaceholder")} />
-                  {errors.vin ? <div className="text-xs text-red-600">{errors.vin}</div> : null}
+                  <div className="grid gap-2">
+                    <Label>{t("sell.vehicle.vin")}</Label>
+                    <Input value={draft.vin} onChange={(e) => setField("vin", e.target.value as any)} placeholder={t("sell.vehicle.vinPlaceholder")} />
+                    {errors.vin ? <div className="text-xs text-red-600">{errors.vin}</div> : null}
+                  </div>
                 </div>
-              </div>
+
+                {/* Options */}
+                <div className="grid gap-3">
+                  <Label>{t("carDetail.options.title")}</Label>
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    {[
+                      { key: "sunroof", label: t("carDetail.options.sunroof") },
+                      { key: "sensors", label: t("carDetail.options.sensors") },
+                      { key: "smartKey", label: t("carDetail.options.smartKey") },
+                      { key: "heatedSeat", label: t("carDetail.options.heatedSeat") },
+                      { key: "ventilatedSeat", label: t("carDetail.options.ventilatedSeat") },
+                      { key: "leatherSeat", label: t("carDetail.options.leatherSeat") },
+                      { key: "heatedSteering", label: t("carDetail.options.heatedSteering") },
+                    ].map((opt) => {
+                      const options = draft.options || {
+                        sunroof: false,
+                        sensors: false,
+                        smartKey: false,
+                        heatedSeat: false,
+                        ventilatedSeat: false,
+                        leatherSeat: false,
+                        heatedSteering: false,
+                      };
+                      return (
+                        <label key={opt.key} className="flex cursor-pointer items-center gap-2 rounded-xl border border-zinc-200 bg-white px-3 py-2 hover:bg-zinc-50">
+                          <input
+                            type="checkbox"
+                            checked={options[opt.key as keyof typeof options] || false}
+                            onChange={(e) => {
+                              setField("options", {
+                                ...options,
+                                [opt.key]: e.target.checked,
+                              });
+                            }}
+                            className="h-4 w-4 rounded border-zinc-300 text-rose-600 focus:ring-rose-500"
+                          />
+                          <span className="text-sm font-normal text-zinc-700">{opt.label}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+              </>
             ) : null}
 
             {draft.category === "motorcycle" ? (

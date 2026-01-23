@@ -45,6 +45,16 @@ export type CarDetailDTO = {
     vin: string;
   };
 
+  options?: {
+    sunroof: boolean;
+    sensors: boolean;
+    smartKey: boolean;
+    heatedSeat: boolean;
+    ventilatedSeat: boolean;
+    leatherSeat: boolean;
+    heatedSteering: boolean;
+  };
+
   seller: {
     name: string;
     phone: string;

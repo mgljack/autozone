@@ -416,6 +416,7 @@ function getPublishedCarsFromLocalStorage(): Car[] {
       steering: (d.steering || "left") as Steering,
       vin: d.vin || `VIN_${x.id}`,
       hasPlate: d.hasPlate === "yes",
+      options: d.options || undefined,
     };
   });
 }
@@ -784,7 +785,7 @@ function toCarListItemDTO(c: Car): CarListItemDTO {
   };
 }
 
-function toCarDetailDTO(c: Car): CarDetailDTO {
+function toCarDetailDTO(c: Car & { options?: any }): CarDetailDTO {
   return {
     id: c.id,
     title: carTitleFromMock(c),
@@ -807,6 +808,7 @@ function toCarDetailDTO(c: Car): CarDetailDTO {
       hasPlate: c.hasPlate,
       vin: c.vin,
     },
+    options: c.options,
     seller: {
       name: c.sellerName,
       phone: c.sellerPhone,

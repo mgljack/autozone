@@ -19,11 +19,23 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
       href={href}
       suppressHydrationWarning
       className={cn(
-        "rounded-lg px-2 py-1 text-sm font-normal text-zinc-700 hover:text-zinc-900",
+        "group relative inline-flex items-center rounded-lg px-2 py-1 text-sm font-normal text-zinc-700 hover:text-zinc-900",
         active && "bg-zinc-100 text-zinc-900",
       )}
     >
       {children}
+      <svg
+        className="ml-1 h-3 w-3 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="m6 9 6 6 6-6" />
+      </svg>
     </Link>
   );
 }
@@ -127,11 +139,23 @@ export function Header() {
                   router.push("/buy/all");
                 }}
                 className={cn(
-                  "rounded-lg px-2 py-1 text-sm font-normal text-zinc-700 hover:text-zinc-900",
+                  "group/link relative inline-flex items-center rounded-lg px-2 py-1 text-sm font-normal text-zinc-700 hover:text-zinc-900",
                   (pathname === "/buy" || (pathname && pathname.startsWith("/buy"))) && "bg-zinc-100 text-zinc-900",
                 )}
               >
                 {tt("nav.buy")}
+                <svg
+                  className="ml-1 h-3 w-3 opacity-0 transition-opacity duration-200 group-hover/link:opacity-100"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
               </Link>
               <div className="invisible absolute left-0 top-full mt-2 w-64 rounded-2xl border border-zinc-200 bg-white p-2 opacity-0 shadow-lg transition-all group-hover:visible group-hover:opacity-100">
                 <Link className="block rounded-xl px-3 py-2 text-sm hover:bg-zinc-50" href="/buy/all" suppressHydrationWarning>
@@ -149,7 +173,7 @@ export function Header() {
               </div>
             </div>
             <div
-              className="relative"
+              className="group relative"
               onMouseEnter={openRent}
               onMouseLeave={closeRent}
               onFocusCapture={openRent}
@@ -173,13 +197,25 @@ export function Header() {
                   }
                 }}
                 className={cn(
-                  "rounded-lg px-2 py-1 text-sm font-normal text-zinc-700 hover:text-zinc-900",
+                  "group/btn relative rounded-lg px-2 py-1 text-sm font-normal text-zinc-700 hover:text-zinc-900",
                   pathname?.startsWith("/rent") && "bg-zinc-100 text-zinc-900",
                 )}
                 aria-expanded={rentOpen}
                 suppressHydrationWarning
               >
                 {tt("nav.rent")}
+                <svg
+                  className="ml-1 inline-block h-3 w-3 opacity-0 transition-opacity duration-200 group-hover/btn:opacity-100"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
               </button>
               {rentOpen ? (
                 <div

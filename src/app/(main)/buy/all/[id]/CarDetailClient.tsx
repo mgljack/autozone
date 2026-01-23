@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { CarGallery } from "@/components/cars/CarGallery";
 import { EncarDiagnosticMock } from "@/components/cars/EncarDiagnosticMock";
 import { VehiclePriceComparison } from "@/components/cars/VehiclePriceComparison";
+import { OptionInfoSection } from "@/components/cars/OptionInfoSection";
 import { useFavorites } from "@/features/favorites/favorites";
 import { useRecentCars } from "@/features/recent/recent";
 import { formatMnt } from "@/lib/format";
@@ -215,6 +216,10 @@ export default function CarDetailClient({ id }: { id: string }) {
         </div>
       </div>
 
+      {/* Options Section */}
+      {!isMotorcycle ? <OptionInfoSection options={car.options} /> : null}
+
+      {/* Vehicle Status Section */}
       {!isMotorcycle ? <EncarDiagnosticMock carId={car.id} title={t("vehicleStatus.title")} /> : null}
 
       {/* Options */}

@@ -26,6 +26,15 @@ export function createDefaultDraft(category: SellCategory): SellDraft {
         color: "",
         vin: "",
         priceMnt: "",
+        options: {
+          sunroof: false,
+          sensors: false,
+          smartKey: false,
+          heatedSeat: false,
+          ventilatedSeat: false,
+          leatherSeat: false,
+          heatedSteering: false,
+        },
       };
     case "motorcycle":
       return {

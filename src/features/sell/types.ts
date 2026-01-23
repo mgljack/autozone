@@ -23,6 +23,15 @@ export type SellDraftCar = SellDraftBase & {
   color: string;
   vin: string;
   priceMnt: string;
+  options?: {
+    sunroof: boolean;
+    sensors: boolean;
+    smartKey: boolean;
+    heatedSeat: boolean;
+    ventilatedSeat: boolean;
+    leatherSeat: boolean;
+    heatedSteering: boolean;
+  };
 };
 
 export type SellDraftMotorcycle = SellDraftBase & {

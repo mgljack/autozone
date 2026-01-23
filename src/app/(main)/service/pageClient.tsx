@@ -79,39 +79,39 @@ export function ServiceCentersClient({ searchParams }: { searchParams: Record<st
       <div className="grid gap-4 lg:grid-cols-[320px_1fr] items-start">
         {/* LEFT: Filters */}
         <aside className="rounded-2xl border border-zinc-200 bg-white p-4 h-auto self-start">
-          <div className="text-sm font-normal text-zinc-900">필터</div>
+          <div className="text-sm font-normal text-zinc-900">{t("service.filter")}</div>
 
           <div className="mt-3 grid gap-3">
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">검색</span>
+              <span className="text-xs font-normal text-zinc-600">{t("service.filter.search")}</span>
               <Input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder={t("service.searchPlaceholder")} />
             </label>
 
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">서비스 타입</span>
+              <span className="text-xs font-normal text-zinc-600">{t("service.filter.serviceType")}</span>
               <Select value={serviceType} onChange={(e) => setServiceType(e.target.value)}>
-                <option value="all">전체</option>
-                <option value="Engine Repair">엔진 수리</option>
-                <option value="Tire Service">타이어 서비스</option>
-                <option value="Oil Change">오일 교환</option>
-                <option value="Brake Service">브레이크 서비스</option>
-                <option value="General Maintenance">일반 정비</option>
-                <option value="Diagnostics">진단</option>
-                <option value="Electrical">전기</option>
-                <option value="AC service">에어컨 서비스</option>
-                <option value="Suspension">서스펜션</option>
-                <option value="Battery">배터리</option>
+                <option value="all">{t("service.filter.serviceType.all")}</option>
+                <option value="Engine Repair">{t("service.filter.serviceType.engineRepair")}</option>
+                <option value="Tire Service">{t("service.filter.serviceType.tireService")}</option>
+                <option value="Oil Change">{t("service.filter.serviceType.oilChange")}</option>
+                <option value="Brake Service">{t("service.filter.serviceType.brakeService")}</option>
+                <option value="General Maintenance">{t("service.filter.serviceType.generalMaintenance")}</option>
+                <option value="Diagnostics">{t("service.filter.serviceType.diagnostics")}</option>
+                <option value="Electrical">{t("service.filter.serviceType.electrical")}</option>
+                <option value="AC service">{t("service.filter.serviceType.acService")}</option>
+                <option value="Suspension">{t("service.filter.serviceType.suspension")}</option>
+                <option value="Battery">{t("service.filter.serviceType.battery")}</option>
               </Select>
             </label>
 
             <label className="grid gap-1">
               <span className="text-xs font-normal text-zinc-600">{t("buyAll.filters.region")}</span>
               <Select value={regionGroup} onChange={(e) => setRegionGroup(e.target.value)}>
-                <option value="">전체</option>
-                <option value="Ulaanbaatar">울란바토르</option>
-                <option value="Darkhan">다르항</option>
-                <option value="Erdenet">에르데네트</option>
-                <option value="Other">기타</option>
+                <option value="">{t("service.filter.region.all")}</option>
+                <option value="Ulaanbaatar">{t("service.filter.region.ulaanbaatar")}</option>
+                <option value="Darkhan">{t("service.filter.region.darkhan")}</option>
+                <option value="Erdenet">{t("service.filter.region.erdenet")}</option>
+                <option value="Other">{t("service.filter.region.other")}</option>
               </Select>
             </label>
 
@@ -127,11 +127,11 @@ export function ServiceCentersClient({ searchParams }: { searchParams: Record<st
             </div>
 
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">가용성</span>
+              <span className="text-xs font-normal text-zinc-600">{t("service.filter.availability")}</span>
               <Select value={availability} onChange={(e) => setAvailability(e.target.value as any)}>
-                <option value="all">전체</option>
-                <option value="now">지금 가능</option>
-                <option value="next-week">다음 주</option>
+                <option value="all">{t("service.filter.availability.all")}</option>
+                <option value="now">{t("service.filter.availability.now")}</option>
+                <option value="next-week">{t("service.filter.availability.nextWeek")}</option>
               </Select>
             </label>
           </div>
@@ -147,7 +147,7 @@ export function ServiceCentersClient({ searchParams }: { searchParams: Record<st
               <span className="text-xs font-normal text-zinc-600">{t("buyAll.sort.label")}</span>
               <Select value={sort} onChange={(e) => setSort(e.target.value as CentersSort)} className="w-44">
                 <option value="newest">{t("common.sort.newest")}</option>
-                <option value="nameAsc">이름순</option>
+                <option value="nameAsc">{t("service.sort.nameAsc")}</option>
               </Select>
             </label>
           </div>

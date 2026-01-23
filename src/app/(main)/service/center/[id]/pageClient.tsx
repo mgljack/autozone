@@ -8,19 +8,25 @@ import dynamic from "next/dynamic";
 import { SectionTitle } from "@/components/common/SectionTitle";
 import { CenterGallery } from "@/components/service/CenterGallery";
 import { Button } from "@/components/ui/button";
+import { useI18n } from "@/context/I18nContext";
+
+// Map loading component
+function MapLoading() {
+  const { t } = useI18n();
+  return (
+    <div className="relative h-56 w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-50">
+      <div className="absolute inset-0 grid place-items-center">
+        <div className="text-sm text-zinc-600">{t("service.detail.mapLoading")}</div>
+      </div>
+    </div>
+  );
+}
 
 // Dynamic import for Leaflet map (SSR incompatible)
 const CenterMap = dynamic(() => import("@/components/service/CenterMap").then((mod) => ({ default: mod.CenterMap })), {
   ssr: false,
-  loading: () => (
-    <div className="relative h-56 w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-50">
-      <div className="absolute inset-0 grid place-items-center">
-        <div className="text-sm text-zinc-600">지도를 불러오는 중...</div>
-      </div>
-    </div>
-  ),
+  loading: () => <MapLoading />,
 });
-import { useI18n } from "@/context/I18nContext";
 import { fetchCenterById } from "@/lib/mockApi";
 import { formatMnt } from "@/lib/format";
 import type { CenterDTO } from "@/lib/apiTypes";
@@ -67,7 +73,7 @@ export default function ServiceCenterDetailClient({ id }: { id: string }) {
     center.phoneNumbers?.length === 2
       ? center.phoneNumbers
       : ["1533-6451", center.phone || "010-0000-0000"];
-  const operatingHours = center.operatingHours ?? "평일 09:00 - 18:00";
+  const operatingHours = center.operatingHours ?? "";
 
   const telHref = (raw: string) => `tel:${raw.replace(/[^\d+]/g, "")}`;
   const primaryPhone = phoneNumbers[0] ?? center.phone;
@@ -88,9 +94,11 @@ export default function ServiceCenterDetailClient({ id }: { id: string }) {
       {/* Contact bar under photos (horizontal like reference) */}
       <div className="pt-4">
         <div className="flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-          <div className="text-sm text-zinc-600">
-            운영시간 <span className="font-medium text-zinc-900">{operatingHours}</span>
-          </div>
+          {operatingHours && (
+            <div className="text-sm text-zinc-600">
+              {t("service.detail.operatingHours")} <span className="font-medium text-zinc-900">{operatingHours}</span>
+            </div>
+          )}
           <a href={telHref(primaryPhone)} className="block">
             <Button size="lg" className="h-12 w-full px-6 sm:w-auto sm:min-w-[240px]">
               <span className="mr-2 inline-flex">
@@ -113,7 +121,7 @@ export default function ServiceCenterDetailClient({ id }: { id: string }) {
 
       {/* Services */}
       <div className="rounded-3xl border border-zinc-200 bg-white p-6">
-        <div className="text-sm font-normal text-zinc-900">서비스 / 가격</div>
+        <div className="text-sm font-normal text-zinc-900">{t("service.detail.servicesAndPrice")}</div>
         <div className="mt-4 grid gap-2">
           {serviceItems.map((s) => (
             <div key={s.name} className="flex items-center justify-between rounded-xl bg-zinc-50 px-4 py-3">
@@ -127,9 +135,9 @@ export default function ServiceCenterDetailClient({ id }: { id: string }) {
       {/* Location */}
       <div className="rounded-3xl border border-zinc-200 bg-white p-6">
         <div className="flex items-center justify-between gap-3">
-          <div className="text-sm font-normal text-zinc-900">위치</div>
+          <div className="text-sm font-normal text-zinc-900">{t("service.detail.location")}</div>
           <a href={mapsHref} target="_blank" rel="noreferrer noopener">
-            <Button variant="outline">지도에서 보기</Button>
+            <Button variant="outline">{t("service.detail.viewOnMap")}</Button>
           </a>
         </div>
 
