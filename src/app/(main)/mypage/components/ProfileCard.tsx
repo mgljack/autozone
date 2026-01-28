@@ -44,7 +44,7 @@ export function ProfileCard() {
           {/* Actions */}
           <div className="w-full space-y-2">
             <Button variant="primary" className="w-full" onClick={() => router.push("/mypage?tab=profile")}>
-              {t("mypage.profile.title")}
+              {t("mypage_profile_title")}
             </Button>
             <Button
               variant="outline"
@@ -55,7 +55,7 @@ export function ProfileCard() {
                 router.push("/");
               }}
             >
-              {t("mypage.logout")}
+              {t("mypage_logout")}
             </Button>
           </div>
         </div>

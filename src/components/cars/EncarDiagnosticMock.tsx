@@ -34,11 +34,11 @@ function pickReplacedParts(carId: string): ReplaceablePart[] {
 }
 
 function labelForPart(p: ReplaceablePart, t: (key: string) => string) {
-  if (p === "front_bumper") return t("vehicleStatus.parts.frontBumper");
-  if (p === "hood") return t("vehicleStatus.parts.hood");
-  if (p === "left_door") return t("vehicleStatus.parts.leftDoor");
-  if (p === "right_door") return t("vehicleStatus.parts.rightDoor");
-  return t("vehicleStatus.parts.trunk");
+  if (p === "front_bumper") return t("vehicleStatus_parts_frontBumper");
+  if (p === "hood") return t("vehicleStatus_parts_hood");
+  if (p === "left_door") return t("vehicleStatus_parts_leftDoor");
+  if (p === "right_door") return t("vehicleStatus_parts_rightDoor");
+  return t("vehicleStatus_parts_trunk");
 }
 
 export function EncarDiagnosticMock({ carId, title }: { carId: string; title?: string }) {
@@ -51,17 +51,17 @@ export function EncarDiagnosticMock({ carId, title }: { carId: string; title?: s
 
   const rows = React.useMemo(
     () => [
-      { label: t("vehicleStatus.parts.frameInspection"), status: t("vehicleStatus.status.normal") as string, tone: "ok" as const },
-      { label: t("vehicleStatus.parts.exteriorPanel"), status: hasReplaced ? (t("vehicleStatus.status.replaced") as string) : (t("vehicleStatus.status.normal") as string), tone: hasReplaced ? ("warn" as const) : ("ok" as const) },
-      { label: t("vehicleStatus.parts.mainStructure"), status: t("vehicleStatus.status.normal") as string, tone: "ok" as const },
-      { label: t("vehicleStatus.parts.paintSurface"), status: hasReplaced ? (t("vehicleStatus.status.replaced") as string) : (t("vehicleStatus.status.normal") as string), tone: hasReplaced ? ("warn" as const) : ("ok" as const) },
+      { label: t("vehicleStatus_parts_frameInspection"), status: t("vehicleStatus_status_normal") as string, tone: "ok" as const },
+      { label: t("vehicleStatus_parts_exteriorPanel"), status: hasReplaced ? (t("vehicleStatus_status_replaced") as string) : (t("vehicleStatus_status_normal") as string), tone: hasReplaced ? ("warn" as const) : ("ok" as const) },
+      { label: t("vehicleStatus_parts_mainStructure"), status: t("vehicleStatus_status_normal") as string, tone: "ok" as const },
+      { label: t("vehicleStatus_parts_paintSurface"), status: hasReplaced ? (t("vehicleStatus_status_replaced") as string) : (t("vehicleStatus_status_normal") as string), tone: hasReplaced ? ("warn" as const) : ("ok" as const) },
     ],
     [hasReplaced, t],
   );
 
   return (
     <section className="rounded-2xl border border-zinc-200 bg-white p-6">
-      <div className="text-sm font-normal text-zinc-900">{title ?? t("vehicleStatus.title")}</div>
+      <div className="text-sm font-normal text-zinc-900">{title ?? t("vehicleStatus_title")}</div>
 
       <div className="mt-4 grid gap-6 lg:grid-cols-[1fr_420px] lg:items-start">
         {/* Left: summary */}
@@ -80,7 +80,7 @@ export function EncarDiagnosticMock({ carId, title }: { carId: string; title?: s
               </svg>
             </div>
             <div className="min-w-0">
-              <div className="text-sm font-normal text-zinc-900">{t("vehicleStatus.diagnostic.completed")}</div>
+              <div className="text-sm font-normal text-zinc-900">{t("vehicleStatus_diagnostic_completed")}</div>
             </div>
           </div>
 
@@ -108,15 +108,15 @@ export function EncarDiagnosticMock({ carId, title }: { carId: string; title?: s
             className="inline-flex w-full items-center justify-center rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm font-normal text-zinc-900 hover:bg-zinc-50"
             onClick={() => setIsOpen((v) => !v)}
           >
-            {t("vehicleStatus.diagnostic.viewDetails")}
+            {t("vehicleStatus_diagnostic_viewDetails")}
           </button>
 
           {isOpen ? (
             <div className="rounded-2xl border border-zinc-200 bg-white p-4 text-sm text-zinc-700">
-              <div className="font-normal text-zinc-900">{t("vehicleStatus.diagnostic.details")}</div>
+              <div className="font-normal text-zinc-900">{t("vehicleStatus_diagnostic_details")}</div>
               <div className="mt-2 grid gap-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-zinc-600">{t("vehicleStatus.diagnostic.replacedParts")}</span>
+                  <span className="text-zinc-600">{t("vehicleStatus_diagnostic_replacedParts")}</span>
                   <span className={hasReplaced ? "font-normal text-orange-700" : "font-normal text-emerald-700"}>
                     {hasReplaced ? replacedParts.length : 0}
                   </span>
@@ -125,15 +125,15 @@ export function EncarDiagnosticMock({ carId, title }: { carId: string; title?: s
                   <ul className="list-disc pl-5">
                     {replacedParts.map((p) => (
                       <li key={p}>
-                        <span className="font-normal">{labelForPart(p, t)}</span> — {t("vehicleStatus.diagnostic.markedAs")} <span className="text-orange-700 font-normal">{t("vehicleStatus.status.replaced")}</span>
+                        <span className="font-normal">{labelForPart(p, t)}</span> — {t("vehicleStatus_diagnostic_markedAs")} <span className="text-orange-700 font-normal">{t("vehicleStatus_status_replaced")}</span>
                       </li>
                     ))}
                   </ul>
                 ) : (
-                  <div className="text-zinc-600">{t("vehicleStatus.diagnostic.noReplacedParts")}</div>
+                  <div className="text-zinc-600">{t("vehicleStatus_diagnostic_noReplacedParts")}</div>
                 )}
                 <div className="pt-1 text-xs text-zinc-500">
-                  {t("vehicleStatus.diagnostic.simulationNote")}
+                  {t("vehicleStatus_diagnostic_simulationNote")}
                 </div>
               </div>
             </div>
@@ -148,9 +148,9 @@ export function EncarDiagnosticMock({ carId, title }: { carId: string; title?: s
           </div>
 
           <div className="relative p-6">
-            <div className="text-xs font-normal text-white/70">{t("vehicleStatus.scan.diagnostic")}</div>
+            <div className="text-xs font-normal text-white/70">{t("vehicleStatus_scan_diagnostic")}</div>
             <div className="mt-1 text-sm font-normal text-white">
-              {t("vehicleStatus.scan.scanningText")} {hasReplaced ? t("vehicleStatus.scan.replacedDetected") : t("vehicleStatus.scan.noReplacedDetected")}
+              {t("vehicleStatus_scan_scanningText")} {hasReplaced ? t("vehicleStatus_scan_replacedDetected") : t("vehicleStatus_scan_noReplacedDetected")}
             </div>
 
             <div className="relative mt-4 aspect-[16/10] w-full rounded-2xl border border-white/10 bg-black/35">
@@ -162,9 +162,9 @@ export function EncarDiagnosticMock({ carId, title }: { carId: string; title?: s
               <div className="absolute left-4 right-4 top-4 flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-[11px] text-white/70">
                 <div className="flex items-center gap-2">
                   <span className="inline-flex h-2 w-2 rounded-full bg-emerald-400/90" />
-                  <span className="font-normal text-white/80">{t("vehicleStatus.scan.live")}</span>
+                  <span className="font-normal text-white/80">{t("vehicleStatus_scan_live")}</span>
                   <span className="text-white/50">•</span>
-                  <span>{t("vehicleStatus.scan.blueprint")}</span>
+                  <span>{t("vehicleStatus_scan_blueprint")}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <span className="encar-bar h-2 w-8 rounded-sm" />

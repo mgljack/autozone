@@ -14,31 +14,31 @@ export function Footer() {
           <div className="grid gap-4">
             <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-zinc-800">
               <Link className="hover:underline" href="/about">
-                {t("footer.about")}
+                {t("footer_about")}
               </Link>
               <Link className="hover:underline" href="/terms">
-                {t("footer.terms")}
+                {t("footer_terms")}
               </Link>
               <Link className="hover:underline" href="/notice">
-                {t("footer.notice")}
+                {t("footer_notice")}
               </Link>
               <Link className="hover:underline" href="#">
-                {t("footer.guide")}
+                {t("footer_guide")}
               </Link>
             </div>
 
             <div className="text-xs text-zinc-500">
-              <div>© {new Date().getFullYear()} AutoZone.mn ({t("app.prototype")})</div>
-              <div className="mt-1">{t("footer.companyDisclaimer")}</div>
+              <div>© {new Date().getFullYear()} AutoZone.mn ({t("app_prototype")})</div>
+              <div className="mt-1">{t("footer_companyDisclaimer")}</div>
             </div>
           </div>
 
           {/* Right block */}
           <div className="grid gap-4 md:justify-items-end">
             <div className="grid gap-2">
-              <div className="text-sm font-normal text-zinc-900">{t("footer.customerCenter")}</div>
+              <div className="text-sm font-normal text-zinc-900">{t("footer_customerCenter")}</div>
               <div className="text-sm text-zinc-600">
-                {t("footer.hoursLabel")} {t("footer.hoursValue")}
+                {t("footer_hoursLabel")} {t("footer_hoursValue")}
               </div>
               <div className="text-3xl font-normal tracking-tight text-zinc-900">1533-6451</div>
             </div>

@@ -230,7 +230,7 @@ export function TirePageClient({ searchParams }: { searchParams: Record<string, 
 
             {/* Region (optional, matching All Cars) */}
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">{t("buyAll.filters.region")}</span>
+              <span className="text-xs font-normal text-zinc-600">{t("buyAll_filters_region")}</span>
               <Select value={regionGroup} onChange={(e) => setRegionGroup(e.target.value)}>
                 <option value="">전체</option>
                 <option value="Ulaanbaatar">Улаанбаатар</option>
@@ -245,14 +245,14 @@ export function TirePageClient({ searchParams }: { searchParams: Record<string, 
         <section className="grid gap-3">
           <div className="flex items-center justify-between rounded-2xl border border-zinc-200 bg-white p-4">
             <div className="text-sm font-normal text-zinc-900">
-              {listQuery.data ? t("common.total", { count: listQuery.data.total }) : t("common.loading")}
+              {listQuery.data ? t("common_total", { count: listQuery.data.total }) : t("common_loading")}
             </div>
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">{t("buyAll.sort.label")}</span>
+              <span className="text-xs font-normal text-zinc-600">{t("buyAll_sort_label")}</span>
               <Select value={sort} onChange={(e) => setSort(e.target.value as any)} className="w-44">
-                <option value="newest">{t("common.sort.newest")}</option>
-                <option value="priceAsc">{t("buyAll.sort.priceAsc")}</option>
-                <option value="priceDesc">{t("buyAll.sort.priceDesc")}</option>
+                <option value="newest">{t("common_sort_newest")}</option>
+                <option value="priceAsc">{t("buyAll_sort_priceAsc")}</option>
+                <option value="priceDesc">{t("buyAll_sort_priceDesc")}</option>
               </Select>
             </label>
           </div>

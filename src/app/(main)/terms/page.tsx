@@ -8,8 +8,8 @@ export default function TermsPage() {
   const { t } = useI18n();
   return (
     <div className="grid gap-6">
-      <SectionTitle title={t("footer.terms")} subtitle={t("stub.subtitle")} />
-      <EmptyState title={t("common.comingSoon")} description={t("stub.terms.desc")} />
+      <SectionTitle title={t("footer_terms")} subtitle={t("stub_subtitle")} />
+      <EmptyState title={t("common_comingSoon")} description={t("stub_terms_desc")} />
     </div>
   );
 }

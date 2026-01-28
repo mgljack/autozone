@@ -1,0 +1,200 @@
+# AutoZone.mn (Turbo.mn) - Project Rules
+
+## 프로젝트 개요
+- **프로젝트명**: AutoZone.mn (Turbo.mn)
+- **설명**: 몽골 자동차 통합 플랫폼 (중고차 매매, 렌탈, 부품/타이어, 서비스 센터)
+- **타겟 시장**: 몽골 (울란바토르, 에르데네트, 다르항)
+
+## 기술 스택 (필수 준수)
+- **Framework**: Next.js 16+ (App Router 사용, Pages Router 사용 금지)
+- **React**: 19.x (Server Components 적극 활용)
+- **언어**: TypeScript (strict mode)
+- **스타일링**: Tailwind CSS 4 (CSS-in-JS 사용 금지)
+- **상태 관리**: TanStack Query (React Query) v5
+- **지도**: Leaflet + react-leaflet
+- **폰트**: Geist (next/font)
+
+## 코딩 컨벤션
+
+### 파일 구조
+```
+src/
+├── app/           # Next.js App Router 페이지
+│   ├── (auth)/    # 인증 관련 (Header/Footer 없음)
+│   └── (main)/    # 메인 레이아웃
+├── components/    # 재사용 컴포넌트
+│   └── ui/        # 기본 UI 컴포넌트
+├── context/       # React Context
+├── features/      # 도메인별 비즈니스 로직
+├── i18n/          # 다국어 사전
+├── lib/           # 유틸리티 함수
+└── mock/          # Mock 데이터 (추후 API로 대체)
+```
+
+### 네이밍 규칙
+- **컴포넌트**: PascalCase (예: `CarCard.tsx`, `FiltersSidebar.tsx`)
+- **페이지**: `page.tsx` (Next.js App Router 규칙)
+- **클라이언트 페이지**: `pageClient.tsx` (use client 분리 시)
+- **유틸 함수**: camelCase (예: `formatMnt`, `formatKm`)
+- **타입/인터페이스**: PascalCase + DTO 접미사 (예: `CarListItemDTO`)
+- **Context**: PascalCase + Context (예: `AuthContext`, `I18nContext`)
+
+### 컴포넌트 규칙
+1. **Server Component 우선**: 가능하면 서버 컴포넌트 사용
+2. **"use client"**: 클릭 이벤트, useState, useEffect 필요 시만 사용
+3. **props 타입**: 인라인 타입 또는 별도 interface 정의
+4. **기본 export**: `export default function ComponentName()`
+
+### 스타일링 규칙
+1. **Tailwind CSS만 사용**: inline style 최소화
+2. **반응형**: `sm:`, `md:`, `lg:`, `xl:` 브레이크포인트 사용
+3. **다크모드 준비**: 필요 시 `dark:` 접두사 사용
+4. **컬러 팔레트**: zinc (회색), rose (강조), emerald (성공), amber (경고)
+5. **둥근 모서리**: `rounded-2xl`, `rounded-3xl` 선호
+
+## 다국어 지원 (i18n)
+
+### 지원 언어
+- `mn`: 몽골어 (기본)
+- `ko`: 한국어
+- `en`: 영어
+
+### 사용법
+```tsx
+import { useI18n } from "@/context/I18nContext";
+
+function MyComponent() {
+  const { t } = useI18n();
+  return <h1>{t("home.title")}</h1>;
+}
+```
+
+### 번역 키 추가 시
+1. `src/i18n/dictionaries.ts` 파일 수정
+2. **3개 언어 모두** 동시에 추가 (mn, ko, en)
+3. 키 네이밍: `섹션.서브섹션.키` (예: `carDetail.specs.price`)
+
+## 주요 기능별 경로
+
+### 구매 (Buy)
+- `/buy` - 구매 랜딩
+- `/buy/all` - 전체 차량 목록
+- `/buy/all/[id]` - 차량 상세
+- `/buy/motorcycle` - 오토바이
+- `/buy/tire` - 타이어
+- `/buy/parts` - 부품
+
+### 판매 (Sell)
+- `/sell` - 카테고리 선택
+- `/sell/[category]` - 등록 폼
+- `/sell/[category]/payment` - 결제
+- `/sell/rent` - 렌탈 등록
+- `/sell/car-center` - 서비스 센터 등록
+
+### 렌탈 (Rent)
+- `/rent` - 렌탈 랜딩
+- `/rent/small` - 소형차
+- `/rent/large` - 대형차
+- `/rent/truck` - 화물차
+
+### 서비스 (Service)
+- `/service` - 서비스 센터 목록
+- `/service/center/[id]` - 센터 상세
+
+## 데이터 페칭 패턴
+
+### TanStack Query 사용
+```tsx
+import { useQuery } from "@tanstack/react-query";
+import { fetchCars } from "@/lib/mockApi";
+
+const { data, isLoading } = useQuery({
+  queryKey: ["cars", "list", filters],
+  queryFn: () => fetchCars(filters),
+});
+```
+
+### Mock API → 실제 API 전환 준비
+- `src/lib/mockApi.ts`의 함수들을 실제 API 호출로 대체 예정
+- 인터페이스는 `src/lib/apiTypes.ts`에 정의
+
+## 통화/단위 포맷
+
+### 몽골 투그릭 (MNT)
+```tsx
+import { formatMnt } from "@/lib/format";
+formatMnt(15000000); // "15,000,000₮"
+```
+
+### 거리 (km)
+```tsx
+import { formatKm } from "@/lib/format";
+formatKm(85000); // "85,000km"
+```
+
+## UI 컴포넌트
+
+### 사용 가능한 UI 컴포넌트 (src/components/ui/)
+- `Button` - 버튼
+- `Card` - 카드
+- `Dialog` - 모달
+- `Input` - 입력 필드
+- `Select` - 셀렉트박스
+- `Checkbox` - 체크박스
+- `Switch` - 토글 스위치
+- `Tabs` - 탭
+- `Sheet` - 사이드 시트
+
+## 개발 시 주의사항
+
+### 절대 하지 말 것
+1. ❌ `pages/` 디렉토리 사용 (App Router만 사용)
+2. ❌ CSS 모듈 또는 styled-components 사용
+3. ❌ `any` 타입 사용 (명확한 타입 정의)
+4. ❌ 하드코딩된 텍스트 (다국어 키 사용)
+5. ❌ console.log 커밋 (개발 중 사용 후 제거)
+6. ❌ 이미지 직접 `<img>` 태그 (Next.js `<Image>` 사용)
+
+### 항상 해야 할 것
+1. ✅ 모든 UI 텍스트는 i18n 키 사용
+2. ✅ 새 컴포넌트는 반응형으로 제작
+3. ✅ 로딩 상태 표시 (`isLoading` 처리)
+4. ✅ 에러 상태 처리 (`isError` 처리)
+5. ✅ 접근성 고려 (`aria-label`, `alt` 등)
+6. ✅ 빈 상태 UI 제공 (데이터 없을 때)
+
+## 비즈니스 로직
+
+### 차량 등급 (Tier)
+- `gold`: 프리미엄 (상단 노출, GOLD 배지)
+- `silver`: 추천 (SILVER 배지)
+- `general`: 일반 (무료)
+
+### 차량 상태 (Status)
+- `draft`: 임시저장
+- `reviewing`: 검토중
+- `published`: 게시됨
+- `rejected`: 거절됨
+- `expired`: 만료됨
+- `deleted`: 삭제됨
+
+### 지역 코드
+- `ulaanbaatar`: 울란바토르
+- `erdenet`: 에르데네트
+- `darkhan`: 다르항
+- `other`: 기타
+
+## Git 커밋 메시지 규칙
+```
+feat: 새 기능 추가
+fix: 버그 수정
+style: 스타일/UI 변경
+refactor: 코드 리팩토링
+docs: 문서 수정
+chore: 기타 작업
+```
+
+## 응답 언어
+- 항상 **한국어**로 응답
+- 코드 주석은 영어로 작성 가능
+

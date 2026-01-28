@@ -8,8 +8,8 @@ export default function ContactPage() {
   const { t } = useI18n();
   return (
     <div className="grid gap-6">
-      <SectionTitle title={t("footer.contact")} subtitle={t("stub.subtitle")} />
-      <EmptyState title={t("common.comingSoon")} description={t("stub.contact.desc")} />
+      <SectionTitle title={t("footer_contact")} subtitle={t("stub_subtitle")} />
+      <EmptyState title={t("common_comingSoon")} description={t("stub_contact_desc")} />
     </div>
   );
 }

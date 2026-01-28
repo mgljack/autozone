@@ -120,13 +120,13 @@ export function Header() {
             type="button"
             className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-200 bg-white hover:bg-zinc-50 sm:hidden"
             onClick={() => setMobileOpen(true)}
-            aria-label={tt("common.openMenu")}
+            aria-label={tt("common_openMenu")}
             suppressHydrationWarning
           >
             ☰
           </button>
           <Link href="/" className="text-lg font-extrabold tracking-tight text-zinc-900">
-            {t("app.name")}
+            {t("app_name")}
           </Link>
 
           <nav className="hidden items-center gap-1 sm:flex">
@@ -143,7 +143,7 @@ export function Header() {
                   (pathname === "/buy" || (pathname && pathname.startsWith("/buy"))) && "bg-zinc-100 text-zinc-900",
                 )}
               >
-                {tt("nav.buy")}
+                {tt("nav_buy")}
                 <svg
                   className="ml-1 h-3 w-3 opacity-0 transition-opacity duration-200 group-hover/link:opacity-100"
                   viewBox="0 0 24 24"
@@ -159,16 +159,16 @@ export function Header() {
               </Link>
               <div className="invisible absolute left-0 top-full mt-2 w-64 rounded-2xl border border-zinc-200 bg-white p-2 opacity-0 shadow-lg transition-all group-hover:visible group-hover:opacity-100">
                 <Link className="block rounded-xl px-3 py-2 text-sm hover:bg-zinc-50" href="/buy/all" suppressHydrationWarning>
-                  {tt("nav.allVehicles")}
+                  {tt("nav_allVehicles")}
                 </Link>
                 <Link className="block rounded-xl px-3 py-2 text-sm hover:bg-zinc-50" href="/buy/motorcycle" suppressHydrationWarning>
-                  {tt("nav.motorcycle")}
+                  {tt("nav_motorcycle")}
                 </Link>
                 <Link className="block rounded-xl px-3 py-2 text-sm hover:bg-zinc-50" href="/buy/tire" suppressHydrationWarning>
-                  {tt("nav.tire")}
+                  {tt("nav_tire")}
                 </Link>
                 <Link className="block rounded-xl px-3 py-2 text-sm hover:bg-zinc-50" href="/buy/parts" suppressHydrationWarning>
-                  {tt("nav.parts")}
+                  {tt("nav_parts")}
                 </Link>
               </div>
             </div>
@@ -203,7 +203,7 @@ export function Header() {
                 aria-expanded={rentOpen}
                 suppressHydrationWarning
               >
-                {tt("nav.rent")}
+                {tt("nav_rent")}
                 <svg
                   className="ml-1 inline-block h-3 w-3 opacity-0 transition-opacity duration-200 group-hover/btn:opacity-100"
                   viewBox="0 0 24 24"
@@ -228,19 +228,19 @@ export function Header() {
                   }}
                 >
                   <Link className="block rounded-xl px-3 py-2 text-sm hover:bg-zinc-50" href="/rent/small" onClick={() => setRentOpen(false)} suppressHydrationWarning>
-                    {tt("rent.small")}
+                    {tt("rent_small")}
                   </Link>
                   <Link className="block rounded-xl px-3 py-2 text-sm hover:bg-zinc-50" href="/rent/large" onClick={() => setRentOpen(false)} suppressHydrationWarning>
-                    {tt("rent.large")}
+                    {tt("rent_large")}
                   </Link>
                   <Link className="block rounded-xl px-3 py-2 text-sm hover:bg-zinc-50" href="/rent/truck" onClick={() => setRentOpen(false)} suppressHydrationWarning>
-                    {tt("rent.truck")}
+                    {tt("rent_truck")}
                   </Link>
                 </div>
               ) : null}
             </div>
-            <NavLink href="/service">{tt("nav.service")}</NavLink>
-            <NavLink href="/media">{tt("nav.media")}</NavLink>
+            <NavLink href="/service">{tt("nav_service")}</NavLink>
+            <NavLink href="/media">{tt("nav_media")}</NavLink>
             <Link
               href="/sell"
               suppressHydrationWarning
@@ -250,7 +250,7 @@ export function Header() {
               )}
             >
               <PlusIcon className="h-4 w-4" />
-              {tt("header.addListing")}
+              {tt("header_addListing")}
             </Link>
           </nav>
         </div>
@@ -260,19 +260,19 @@ export function Header() {
           {mounted && session ? (
             <>
               <Link href="/mypage" className="hidden sm:inline-flex">
-                <Button variant="outline">{tt("nav.mypage")}</Button>
+                <Button variant="outline">{tt("nav_mypage")}</Button>
               </Link>
               <Button variant="outline" className="hidden sm:inline-flex" onClick={logout}>
-                {tt("auth.logout")}
+                {tt("auth_logout")}
               </Button>
             </>
           ) : mounted ? (
             <>
               <Link href="/login" className="hidden sm:inline-flex">
-                <Button>{tt("auth.login")}</Button>
+                <Button>{tt("auth_login")}</Button>
               </Link>
               <Link href="/signup" className="hidden sm:inline-flex">
-                <Button variant="outline">{tt("auth.signup")}</Button>
+                <Button variant="outline">{tt("auth_signup")}</Button>
               </Link>
             </>
           ) : null}
@@ -284,8 +284,8 @@ export function Header() {
               console.log("Notifications clicked");
             }}
             className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-rose-600 transition-all duration-200 hover:scale-105 hover:bg-rose-600/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-600/50 focus-visible:ring-offset-2"
-            aria-label={tt("common.notifications")}
-            title={tt("common.notifications")}
+            aria-label={tt("common_notifications")}
+            title={tt("common_notifications")}
             suppressHydrationWarning
           >
             <BellIcon className="h-[20px] w-[20px] sm:h-[22px] sm:w-[22px]" />
@@ -296,58 +296,58 @@ export function Header() {
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
         <SheetContent className="p-0">
           <SheetHeader>
-            <SheetTitle>{t("app.name")}</SheetTitle>
+            <SheetTitle>{t("app_name")}</SheetTitle>
             <button
               type="button"
               className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-normal hover:bg-zinc-50"
               onClick={() => setMobileOpen(false)}
             >
-              {tt("common.close")}
+              {tt("common_close")}
             </button>
           </SheetHeader>
           <div className="grid gap-4 p-4">
             <div className="grid gap-2">
-              <div className="text-xs font-normal text-zinc-600">{tt("nav.buy")}</div>
+              <div className="text-xs font-normal text-zinc-600">{tt("nav_buy")}</div>
               <div className="grid gap-1">
                 <Link className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-normal" href="/buy/all" onClick={() => setMobileOpen(false)}>
-                  {tt("nav.allVehicles")}
+                  {tt("nav_allVehicles")}
                 </Link>
                 <Link className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-normal" href="/buy/motorcycle" onClick={() => setMobileOpen(false)}>
-                  {tt("nav.motorcycle")}
+                  {tt("nav_motorcycle")}
                 </Link>
                 <Link className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-normal" href="/buy/tire" onClick={() => setMobileOpen(false)}>
-                  {tt("nav.tire")}
+                  {tt("nav_tire")}
                 </Link>
                 <Link className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-normal" href="/buy/parts" onClick={() => setMobileOpen(false)}>
-                  {tt("nav.parts")}
+                  {tt("nav_parts")}
                 </Link>
               </div>
             </div>
 
             <div className="grid gap-2">
-              <div className="text-xs font-normal text-zinc-600">{tt("nav.rent")}</div>
+              <div className="text-xs font-normal text-zinc-600">{tt("nav_rent")}</div>
               <div className="grid gap-1">
                 <Link className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-normal" href="/rent/small" onClick={() => setMobileOpen(false)}>
-                  {tt("rent.small")}
+                  {tt("rent_small")}
                 </Link>
                 <Link className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-normal" href="/rent/large" onClick={() => setMobileOpen(false)}>
-                  {tt("rent.large")}
+                  {tt("rent_large")}
                 </Link>
                 <Link className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-normal" href="/rent/truck" onClick={() => setMobileOpen(false)}>
-                  {tt("rent.truck")}
+                  {tt("rent_truck")}
                 </Link>
               </div>
             </div>
 
             <div className="grid gap-2">
               <Link className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-normal" href="/service" onClick={() => setMobileOpen(false)}>
-                {t("nav.service")}
+                {t("nav_service")}
               </Link>
               <Link className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-normal" href="/media" onClick={() => setMobileOpen(false)}>
-                {t("nav.media")}
+                {t("nav_media")}
               </Link>
               <Link className="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm font-normal" href="/sell" onClick={() => setMobileOpen(false)}>
-                {t("nav.sell")}
+                {t("nav_sell")}
               </Link>
             </div>
 
@@ -357,21 +357,21 @@ export function Header() {
                 <div className="grid grid-cols-2 gap-2">
                   <Link href="/mypage" onClick={() => setMobileOpen(false)}>
                     <Button className="w-full" variant="outline">
-                      {tt("nav.mypage")}
+                      {tt("nav_mypage")}
                     </Button>
                   </Link>
                   <Button className="w-full" variant="outline" onClick={() => (logout(), setMobileOpen(false))}>
-                    {tt("auth.logout")}
+                    {tt("auth_logout")}
                   </Button>
                 </div>
               ) : mounted ? (
                 <div className="grid grid-cols-2 gap-2">
                   <Link href="/login" onClick={() => setMobileOpen(false)}>
-                    <Button className="w-full">{tt("auth.login")}</Button>
+                    <Button className="w-full">{tt("auth_login")}</Button>
                   </Link>
                   <Link href="/signup" onClick={() => setMobileOpen(false)}>
                     <Button className="w-full" variant="outline">
-                      {tt("auth.signup")}
+                      {tt("auth_signup")}
                     </Button>
                   </Link>
                 </div>

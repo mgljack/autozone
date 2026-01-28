@@ -151,35 +151,35 @@ export default function MainHomePage() {
     () => [
       {
         id: "s1",
-        badge: t("app.prototype"),
-        title: t("home.title"),
-        subtitle: t("home.subtitle"),
+        badge: t("app_prototype"),
+        title: t("home_title"),
+        subtitle: t("home_subtitle"),
         primaryHref: "/buy/all",
-        primaryText: t("nav.allVehicles"),
+        primaryText: t("nav_allVehicles"),
         secondaryHref: "/sell",
-        secondaryText: t("nav.sell"),
+        secondaryText: t("nav_sell"),
         bgClass: "bg-zinc-950",
       },
       {
         id: "s2",
-        badge: t("app.prototype"),
-        title: t("home.sections.goldTitle"),
-        subtitle: t("home.sections.goldDesc"),
+        badge: t("app_prototype"),
+        title: t("home_sections_goldTitle"),
+        subtitle: t("home_sections_goldDesc"),
         primaryHref: "/buy/all?tier=gold",
-        primaryText: t("common.viewAll"),
+        primaryText: t("common_viewAll"),
         secondaryHref: "/buy/all",
-        secondaryText: t("nav.allVehicles"),
+        secondaryText: t("nav_allVehicles"),
         bgClass: "bg-zinc-950",
       },
       {
         id: "s3",
-        badge: t("app.prototype"),
-        title: t("home.sections.silverTitle"),
-        subtitle: t("home.sections.silverDesc"),
+        badge: t("app_prototype"),
+        title: t("home_sections_silverTitle"),
+        subtitle: t("home_sections_silverDesc"),
         primaryHref: "/buy/all?tier=silver",
-        primaryText: t("common.viewAll"),
+        primaryText: t("common_viewAll"),
         secondaryHref: "/sell",
-        secondaryText: t("nav.sell"),
+        secondaryText: t("nav_sell"),
         bgClass: "bg-zinc-950",
       },
     ],
@@ -635,8 +635,8 @@ export default function MainHomePage() {
       {/* 3) GOLD */}
       <section className="grid gap-3">
         <HomeTierCarousel
-          title={t("home.sections.goldTitle")}
-          subtitle={t("home.sections.goldDesc")}
+          title={t("home_sections_goldTitle")}
+          subtitle={t("home_sections_goldDesc")}
           viewAllHref="/buy/all?tier=gold"
           cars={homeQuery.data?.goldCars ?? []}
         />
@@ -646,11 +646,11 @@ export default function MainHomePage() {
       <section className="overflow-hidden rounded-3xl border border-zinc-200 bg-gradient-to-r from-emerald-50 to-indigo-50 p-6">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <div className="text-lg font-normal">{t("home.sections.promoTitle")}</div>
-            <div className="text-sm text-zinc-600">{t("home.sections.promoDesc")}</div>
+            <div className="text-lg font-normal">{t("home_sections_promoTitle")}</div>
+            <div className="text-sm text-zinc-600">{t("home_sections_promoDesc")}</div>
           </div>
           <Link href="/sell">
-            <Button variant="outline">{t("home.sections.sellCta")}</Button>
+            <Button variant="outline">{t("home_sections_sellCta")}</Button>
           </Link>
         </div>
       </section>
@@ -658,8 +658,8 @@ export default function MainHomePage() {
       {/* 5) SILVER */}
       <section className="grid gap-3">
         <HomeTierCarousel
-          title={t("home.sections.silverTitle")}
-          subtitle={t("home.sections.silverDesc")}
+          title={t("home_sections_silverTitle")}
+          subtitle={t("home_sections_silverDesc")}
           viewAllHref="/buy/all?tier=silver"
           cars={homeQuery.data?.silverCars ?? []}
         />
@@ -669,11 +669,11 @@ export default function MainHomePage() {
       <section className="grid gap-3">
         <div className="flex items-end justify-between">
           <div>
-            <div className="text-lg font-normal">{t("nav.media")}</div>
-            <div className="text-sm text-zinc-600">{t("home.media.desc")}</div>
+            <div className="text-lg font-normal">{t("nav_media")}</div>
+            <div className="text-sm text-zinc-600">{t("home_media_desc")}</div>
           </div>
           <Link href="/media" className="text-sm font-normal text-zinc-900 hover:underline">
-            {t("common.viewAll")}
+            {t("common_viewAll")}
           </Link>
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
@@ -696,15 +696,15 @@ export default function MainHomePage() {
       <section className="grid gap-3">
         <div className="flex items-end justify-between">
           <div>
-            <div className="text-lg font-normal">{t("home.sections.recentTitle")}</div>
-            <div className="text-sm text-zinc-600">{t("home.sections.recentDesc")}</div>
+            <div className="text-lg font-normal">{t("home_sections_recentTitle")}</div>
+            <div className="text-sm text-zinc-600">{t("home_sections_recentDesc")}</div>
           </div>
           <Link href="/buy/all?tier=general" className="text-sm font-normal text-zinc-900 hover:underline">
-            {t("common.viewAll")}
+            {t("common_viewAll")}
           </Link>
         </div>
         {homeQuery.isLoading ? (
-          <div className="text-sm text-zinc-600">{t("common.loading")}</div>
+          <div className="text-sm text-zinc-600">{t("common_loading")}</div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {(homeQuery.data?.recentGeneralCars ?? []).map((c) => (
@@ -718,11 +718,11 @@ export default function MainHomePage() {
       <section className="overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-r from-emerald-50 to-indigo-50 p-6">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <div className="text-lg font-normal">{t("home.sections.promoTitle")}</div>
-            <div className="text-sm text-zinc-600">{t("home.sections.promoDesc")}</div>
+            <div className="text-lg font-normal">{t("home_sections_promoTitle")}</div>
+            <div className="text-sm text-zinc-600">{t("home_sections_promoDesc")}</div>
           </div>
           <Link href="/sell">
-            <Button variant="outline">{t("home.sections.sellCta")}</Button>
+            <Button variant="outline">{t("home_sections_sellCta")}</Button>
           </Link>
         </div>
       </section>
@@ -754,7 +754,7 @@ function CarCard({ car }: { car: CarListItemDTO }) {
 
 function HorizontalSnapSlider({ cars }: { cars: CarListItemDTO[] }) {
   const { t } = useI18n();
-  if (!cars.length) return <div className="text-sm text-zinc-600">{t("home.empty")}</div>;
+  if (!cars.length) return <div className="text-sm text-zinc-600">{t("home_empty")}</div>;
   return (
     <div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {cars.slice(0, 6).map((c) => (
@@ -813,7 +813,7 @@ function HomeLeftFloatingMenu() {
             onClick={() => setPanel((p) => (p === "recent" ? null : "recent"))}
           >
             <CarIcon className="h-6 w-6 text-zinc-700 transition-colors group-hover:text-zinc-900" />
-            <div className="text-[11px] font-normal text-zinc-700">{t("home.left.recent")}</div>
+            <div className="text-[11px] font-normal text-zinc-700">{t("home_left_recent")}</div>
           </button>
           <div className="mx-3 h-px bg-zinc-100" />
           <button
@@ -829,7 +829,7 @@ function HomeLeftFloatingMenu() {
                 </span>
               ) : null}
             </div>
-            <div className="text-[11px] font-normal text-zinc-700">{t("home.left.favorites")}</div>
+            <div className="text-[11px] font-normal text-zinc-700">{t("home_left_favorites")}</div>
           </button>
           {showTop ? (
             <>
@@ -840,7 +840,7 @@ function HomeLeftFloatingMenu() {
                 onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               >
                 <TopIcon className="h-6 w-6 text-zinc-700 transition-colors group-hover:text-zinc-900" />
-                <div className="text-[11px] font-normal text-zinc-700">{t("home.left.top")}</div>
+                <div className="text-[11px] font-normal text-zinc-700">{t("home_left_top")}</div>
               </button>
             </>
           ) : null}
@@ -851,7 +851,7 @@ function HomeLeftFloatingMenu() {
         <div className="absolute right-full top-1/2 mr-3 w-80 -translate-y-1/2 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-lg">
           <div className="flex items-center justify-between border-b border-zinc-200 px-4 py-3">
             <div className="text-sm font-normal text-zinc-900">
-              {panel === "recent" ? t("home.left.recent") : t("home.left.favorites")}
+              {panel === "recent" ? t("home_left_recent") : t("home_left_favorites")}
             </div>
             {panel === "recent" ? (
               <button
@@ -859,7 +859,7 @@ function HomeLeftFloatingMenu() {
                 className="text-xs font-normal text-zinc-700 hover:underline"
                 onClick={clearRecent}
               >
-                {t("home.left.clear")}
+                {t("home_left_clear")}
               </button>
             ) : null}
           </div>
@@ -883,7 +883,7 @@ function HomeLeftFloatingMenu() {
                 ))}
               </div>
             ) : (
-              <div className="p-4 text-sm text-zinc-600">{t("home.left.none")}</div>
+              <div className="p-4 text-sm text-zinc-600">{t("home_left_none")}</div>
             )}
           </div>
         </div>

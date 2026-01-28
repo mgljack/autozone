@@ -37,18 +37,18 @@ export function RentClient({ type }: { type: string | null }) {
 
   return (
     <div className="grid gap-6">
-      <SectionTitle title={t("rent.title")} subtitle={t("app.prototype")} />
+      <SectionTitle title={t("rent_title")} subtitle={t("app_prototype")} />
 
       <Tabs value={activeType} onValueChange={(v) => setType(v as RentType)}>
         <TabsList className="max-w-md">
-          <TabsTrigger value="small">{t("rent.small")}</TabsTrigger>
-          <TabsTrigger value="large">{t("rent.large")}</TabsTrigger>
-          <TabsTrigger value="truck">{t("rent.truck")}</TabsTrigger>
+          <TabsTrigger value="small">{t("rent_small")}</TabsTrigger>
+          <TabsTrigger value="large">{t("rent_large")}</TabsTrigger>
+          <TabsTrigger value="truck">{t("rent_truck")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value={activeType} className="p-0 border-0 bg-transparent">
           {listQuery.isLoading ? (
-            <div className="text-sm text-zinc-600">{t("common.loading")}</div>
+            <div className="text-sm text-zinc-600">{t("common_loading")}</div>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {(listQuery.data ?? []).map((item) => (

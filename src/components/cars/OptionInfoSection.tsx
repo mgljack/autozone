@@ -35,12 +35,12 @@ export function OptionInfoSection({ options }: OptionInfoSectionProps) {
     <div className="rounded-2xl border border-zinc-200 bg-white p-6">
       {/* Header */}
       <div className="flex items-center gap-2">
-        <h3 className="text-lg font-bold text-zinc-900">{t("carDetail.options.title")}</h3>
+        <h3 className="text-lg font-bold text-zinc-900">{t("carDetail_options_title")}</h3>
         <InfoIcon />
       </div>
 
       {/* Sublabel */}
-      <div className="mt-6 text-sm font-semibold text-zinc-700">{t("carDetail.options.sublabel")}</div>
+      <div className="mt-6 text-sm font-semibold text-zinc-700">{t("carDetail_options_sublabel")}</div>
 
       {/* Options Grid */}
       <div className="mt-6 grid grid-cols-7 justify-items-center gap-x-6 overflow-x-auto scrollbar-hide">

@@ -3,9 +3,21 @@
 import React from "react";
 
 import { readLocalStorage, writeLocalStorage } from "@/lib/storage";
-import { dictionaries } from "@/i18n/dictionaries";
+
+// Import locale JSON files
+import mnLocale from "../../locales/mn.json";
+import koLocale from "../../locales/ko.json";
+import enLocale from "../../locales/en.json";
 
 export type Locale = "mn" | "ko" | "en";
+
+type Dictionaries = Record<Locale, Record<string, string>>;
+
+const dictionaries: Dictionaries = {
+  mn: mnLocale,
+  ko: koLocale,
+  en: enLocale,
+};
 
 type I18nContextValue = {
   // Preferred names (per spec)
@@ -55,5 +67,3 @@ export function useI18n() {
   if (!ctx) throw new Error("useI18n must be used within I18nProvider");
   return ctx;
 }
-
-

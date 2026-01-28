@@ -48,7 +48,7 @@ export default function LoginPage() {
     const res = sendPhoneCode(phone);
     if (!res.ok) return setMessage({ type: "error", text: res.error });
     setCodeSent(true);
-    setMessage({ type: "success", text: t("login.otpHint") });
+    setMessage({ type: "success", text: t("login_otpHint") });
   };
 
   const onPhoneLogin = () => {
@@ -60,49 +60,49 @@ export default function LoginPage() {
 
   return (
     <div className="mx-auto grid w-full max-w-md gap-6 px-4 py-10">
-      <SectionTitle title={t("login.title")} />
+      <SectionTitle title={t("login_title")} />
 
       <Card>
         <CardHeader>
-          <CardTitle>{t("login.cardTitle")}</CardTitle>
+          <CardTitle>{t("login_cardTitle")}</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4">
           {message ? (
             <Alert variant={message.type === "error" ? "destructive" : "success"}>
-              <AlertTitle>{message.type === "error" ? t("common.error") : t("common.success")}</AlertTitle>
+              <AlertTitle>{message.type === "error" ? t("common_error") : t("common_success")}</AlertTitle>
               <AlertDescription>{message.text}</AlertDescription>
             </Alert>
           ) : null}
 
           <Tabs value={tab} onValueChange={(v) => setTab(v as "idpw" | "phone")}>
             <TabsList>
-              <TabsTrigger value="idpw">{t("login.tab.idpw")}</TabsTrigger>
-              <TabsTrigger value="phone">{t("login.tab.phone")}</TabsTrigger>
+              <TabsTrigger value="idpw">{t("login_tab_idpw")}</TabsTrigger>
+              <TabsTrigger value="phone">{t("login_tab_phone")}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="idpw" className="grid gap-3">
-              <Input value={id} onChange={(e) => setId(e.target.value)} placeholder={t("login.placeholder.id")} />
-              <Input value={pw} onChange={(e) => setPw(e.target.value)} placeholder={t("login.placeholder.password")} type="password" />
-              <Button variant="primary" onClick={onIdPwLogin}>{t("auth.login")}</Button>
+              <Input value={id} onChange={(e) => setId(e.target.value)} placeholder={t("login_placeholder_id")} />
+              <Input value={pw} onChange={(e) => setPw(e.target.value)} placeholder={t("login_placeholder_password")} type="password" />
+              <Button variant="primary" onClick={onIdPwLogin}>{t("auth_login")}</Button>
             </TabsContent>
 
             <TabsContent value="phone" className="grid gap-3">
-              <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder={t("login.placeholder.phone")} />
+              <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder={t("login_placeholder_phone")} />
               {!codeSent ? (
                 <Button variant="secondary" onClick={onSendCode}>
-                  {t("login.sendOtp")}
+                  {t("login_sendOtp")}
                 </Button>
               ) : (
                 <>
-                  <Input value={otp} onChange={(e) => setOtp(e.target.value)} placeholder={t("login.placeholder.otp")} />
-                  <Button variant="primary" onClick={onPhoneLogin}>{t("login.verifyAndLogin")}</Button>
+                  <Input value={otp} onChange={(e) => setOtp(e.target.value)} placeholder={t("login_placeholder_otp")} />
+                  <Button variant="primary" onClick={onPhoneLogin}>{t("login_verifyAndLogin")}</Button>
                 </>
               )}
             </TabsContent>
           </Tabs>
 
           <div className="grid gap-2">
-            <div className="text-xs font-normal text-zinc-600">{t("login.socialTitle")}</div>
+            <div className="text-xs font-normal text-zinc-600">{t("login_socialTitle")}</div>
             <div className="grid grid-cols-3 gap-2">
               <Button variant="outline" onClick={() => (loginWithSocial("google"), router.push(returnUrl || "/"))}>
                 Google
@@ -118,19 +118,19 @@ export default function LoginPage() {
 
           <div className="flex items-center justify-between text-sm text-zinc-700">
             <Link className="hover:underline" href={returnUrl ? `/signup?returnUrl=${encodeURIComponent(returnUrl)}` : "/signup"}>
-              {t("login.links.signup")}
+              {t("login_links_signup")}
             </Link>
             <Link className="hover:underline" href="/find-id">
-              {t("login.links.findId")}
+              {t("login_links_findId")}
             </Link>
             <Link className="hover:underline" href="/find-password">
-              {t("login.links.findPassword")}
+              {t("login_links_findPassword")}
             </Link>
           </div>
 
           <div className="text-sm">
             <Link className="font-normal text-zinc-900 hover:underline" href="/">
-              ← {t("common.backToHome")}
+              ← {t("common_backToHome")}
             </Link>
           </div>
         </CardContent>

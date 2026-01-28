@@ -7,6 +7,7 @@ import React from "react";
 import { formatMnt } from "@/lib/format";
 import { formatRelativeTimeKo } from "@/lib/formatRelativeTime";
 import { useFavorites, type FavoriteItem } from "@/features/favorites/favorites";
+import { PremiumTierBadge } from "@/components/badges/PremiumTierBadge";
 import type { CarListItemDTO } from "@/lib/apiTypes";
 
 export function CarCardHorizontal({ car, href }: { car: CarListItemDTO; href?: string }) {
@@ -72,8 +73,14 @@ export function CarCardHorizontal({ car, href }: { car: CarListItemDTO; href?: s
         </div>
 
         {/* CENTER: Title + meta + tags */}
-        <div className="min-w-0">
+        <div className="min-w-0 flex flex-col">
+          {/* Header row: Title + Badge */}
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0 flex-1">
           <div className="text-lg font-normal text-zinc-900">{car.title}</div>
+            </div>
+          </div>
+          
           {metaLine ? (
             <div className="mt-1 text-sm text-zinc-600">{metaLine}</div>
           ) : null}
@@ -83,12 +90,12 @@ export function CarCardHorizontal({ car, href }: { car: CarListItemDTO; href?: s
             </div>
           )}
           
-          {/* Tags row */}
-          <div className="mt-2 flex flex-wrap gap-2">
-            <span className="rounded-full border border-zinc-200 px-2 py-1 text-xs font-normal text-zinc-600">
-              {car.tier.toUpperCase()}
-            </span>
+          {/* Tier Badge - only for GOLD/SILVER */}
+          {(car.tier === "gold" || car.tier === "silver") && (
+            <div className="mt-2">
+              <PremiumTierBadge tier={car.tier} placement="right" />
           </div>
+          )}
         </div>
 
         {/* RIGHT: Price */}

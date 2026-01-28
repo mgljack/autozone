@@ -24,8 +24,8 @@ export default function RentDetailClient({ type, id }: { type: string; id: strin
     queryFn: () => fetchRentById(rentType, id),
   });
 
-  if (rentQuery.isLoading) return <div className="text-sm text-zinc-600">{t("common.loading")}</div>;
-  if (!rentQuery.data) return <div className="text-sm text-zinc-600">{t("common.notFound")}</div>;
+  if (rentQuery.isLoading) return <div className="text-sm text-zinc-600">{t("common_loading")}</div>;
+  if (!rentQuery.data) return <div className="text-sm text-zinc-600">{t("common_notFound")}</div>;
 
   const rent = rentQuery.data;
   const favored = isFavorite(rent.id);
@@ -95,9 +95,9 @@ export default function RentDetailClient({ type, id }: { type: string; id: strin
             toggleFavorite(rent.id);
             upsertFavoriteItem(!favored);
           }}
-          moreLabel={t("carDetail.more")}
-          galleryTitle={t("carDetail.gallery.title")}
-          selectLabel={t("carDetail.gallery.select")}
+          moreLabel={t("carDetail_more")}
+          galleryTitle={t("carDetail_gallery_title")}
+          selectLabel={t("carDetail_gallery_select")}
         />
 
         <aside className="lg:block">
@@ -113,7 +113,7 @@ export default function RentDetailClient({ type, id }: { type: string; id: strin
                 className="w-full"
                 onClick={() => setSellerOpen((v) => !v)}
               >
-                {t("carDetail.sellerContact")}
+                {t("carDetail_sellerContact")}
               </Button>
               {sellerOpen ? (
                 <div className="mt-3 rounded-2xl border border-zinc-200 bg-white p-4 text-sm">
@@ -136,15 +136,15 @@ export default function RentDetailClient({ type, id }: { type: string; id: strin
 
       {/* Options */}
       <div className="rounded-2xl border border-zinc-200 bg-white p-6">
-        <div className="text-sm font-normal text-zinc-900">{t("carDetail.specs.title")}</div>
+        <div className="text-sm font-normal text-zinc-900">{t("carDetail_specs_title")}</div>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <Row label="일일 렌트 가격" value={formatMnt(rent.pricePerDayMnt)} />
           <Row label="차량 유형" value={typeLabel} />
           {rent.yearMade && <Row label="제조년" value={String(rent.yearMade)} />}
           {rent.mileageKm && <Row label="총거리수" value={`${rent.mileageKm.toLocaleString("ko-KR")}km`} />}
           <Row label="지역" value={rent.region} />
-          {fuelLabel && <Row label={t("carDetail.specs.fuel")} value={fuelLabel} />}
-          {transmissionLabel && <Row label={t("carDetail.specs.transmission")} value={transmissionLabel} />}
+          {fuelLabel && <Row label={t("carDetail_specs_fuel")} value={fuelLabel} />}
+          {transmissionLabel && <Row label={t("carDetail_specs_transmission")} value={transmissionLabel} />}
           {rent.manufacturer && <Row label="제조사" value={rent.manufacturer} />}
           {rent.model && <Row label="모델" value={rent.model} />}
         </div>
@@ -153,7 +153,7 @@ export default function RentDetailClient({ type, id }: { type: string; id: strin
       {/* Memo / description */}
       {rent.description && (
         <div className="rounded-2xl border border-zinc-200 bg-white p-6">
-          <div className="text-sm font-normal text-zinc-900">{t("carDetail.desc")}</div>
+          <div className="text-sm font-normal text-zinc-900">{t("carDetail_desc")}</div>
           <div className="mt-3 whitespace-pre-line text-sm text-zinc-600">{rent.description}</div>
         </div>
       )}

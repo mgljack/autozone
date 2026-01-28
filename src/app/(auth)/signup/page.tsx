@@ -35,40 +35,40 @@ export default function SignupPage() {
 
   const onSubmit = () => {
     setMessage(null);
-    if (password !== confirm) return setMessage({ type: "error", text: t("signup.passwordMismatch") });
+    if (password !== confirm) return setMessage({ type: "error", text: t("signup_passwordMismatch") });
     const res = signupAndLogin({ name, email, phone, id, password });
     if (!res.ok) return setMessage({ type: "error", text: res.error });
-    setMessage({ type: "success", text: t("signup.success") });
+    setMessage({ type: "success", text: t("signup_success") });
     router.push(returnUrl || "/");
   };
 
   return (
     <div className="mx-auto grid w-full max-w-md gap-6 px-4 py-10">
-      <SectionTitle title={t("signup.title")} subtitle={t("signup.subtitle")} />
+      <SectionTitle title={t("signup_title")} subtitle={t("signup_subtitle")} />
       <Card>
         <CardHeader>
-          <CardTitle>{t("signup.cardTitle")}</CardTitle>
+          <CardTitle>{t("signup_cardTitle")}</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-3">
           {message ? (
             <Alert variant={message.type === "error" ? "destructive" : "success"}>
-              <AlertTitle>{message.type === "error" ? t("common.error") : t("common.success")}</AlertTitle>
+              <AlertTitle>{message.type === "error" ? t("common_error") : t("common_success")}</AlertTitle>
               <AlertDescription>{message.text}</AlertDescription>
             </Alert>
           ) : null}
 
-          <Input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("signup.placeholder.name")} />
-          <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t("signup.placeholder.email")} />
-          <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder={t("signup.placeholder.phone")} />
-          <Input value={id} onChange={(e) => setId(e.target.value)} placeholder={t("signup.placeholder.id")} />
-          <Input value={password} onChange={(e) => setPassword(e.target.value)} placeholder={t("signup.placeholder.password")} type="password" />
-          <Input value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder={t("signup.placeholder.confirm")} type="password" />
+          <Input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("signup_placeholder_name")} />
+          <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t("signup_placeholder_email")} />
+          <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder={t("signup_placeholder_phone")} />
+          <Input value={id} onChange={(e) => setId(e.target.value)} placeholder={t("signup_placeholder_id")} />
+          <Input value={password} onChange={(e) => setPassword(e.target.value)} placeholder={t("signup_placeholder_password")} type="password" />
+          <Input value={confirm} onChange={(e) => setConfirm(e.target.value)} placeholder={t("signup_placeholder_confirm")} type="password" />
 
-          <Button variant="primary" onClick={onSubmit}>{t("signup.createMock")}</Button>
+          <Button variant="primary" onClick={onSubmit}>{t("signup_createMock")}</Button>
           <div className="text-sm text-zinc-600">
-            {t("signup.alreadyHave")}{" "}
+            {t("signup_alreadyHave")}{" "}
             <Link className="font-normal text-zinc-900 hover:underline" href="/login">
-              {t("auth.login")}
+              {t("auth_login")}
             </Link>
           </div>
         </CardContent>

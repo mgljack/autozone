@@ -72,7 +72,7 @@ export function MyListingsPage() {
     }
     if (x.draft.category === "tire") {
       const d = x.draft as any;
-      return `${t("mypage.tirePrefix")} ${d.radius ?? ""} ${d.width ?? ""}/${d.height ?? ""}`.trim();
+      return `${t("mypage_tirePrefix")} ${d.radius ?? ""} ${d.width ?? ""}/${d.height ?? ""}`.trim();
     }
     return x.draft.title || x.id;
   }, [t]);
@@ -122,11 +122,11 @@ export function MyListingsPage() {
   const getStatusBadge = React.useCallback((x: MyListing) => {
     const status = x.status === "published" && isExpired(x) ? "expired" : x.status;
     const statusLabels: Record<string, string> = {
-      published: t("mypage.status.published"),
-      reviewing: t("mypage.status.reviewing"),
-      expired: t("mypage.status.expired"),
-      rejected: t("mypage.status.rejected"),
-      deleted: t("mypage.status.deleted"),
+      published: t("mypage_status_published"),
+      reviewing: t("mypage_status_reviewing"),
+      expired: t("mypage_status_expired"),
+      rejected: t("mypage_status_rejected"),
+      deleted: t("mypage_status_deleted"),
     };
     const statusColors: Record<string, { color: string; bgColor: string }> = {
       published: { color: "text-emerald-700", bgColor: "bg-emerald-50" },
@@ -164,22 +164,22 @@ export function MyListingsPage() {
       {/* Page Header */}
       <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 flex-1">
-          <h1 className="text-[24px] font-bold text-zinc-900">{t("mypage.myListings.title")}</h1>
-          <p className="mt-2 text-sm text-zinc-600">{t("mypage.myListings.description")}</p>
+          <h1 className="text-[24px] font-bold text-zinc-900">{t("mypage_myListings_title")}</h1>
+          <p className="mt-2 text-sm text-zinc-600">{t("mypage_myListings_description")}</p>
         </div>
         <div className="flex shrink-0 items-center gap-4">
           {/* KPI Badges */}
             <div className="hidden items-center gap-3 sm:flex">
             <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2.5">
-              <div className="text-xs font-medium text-emerald-700">{t("mypage.myListings.kpi.published")}</div>
+              <div className="text-xs font-medium text-emerald-700">{t("mypage_myListings_kpi_published")}</div>
               <div className="mt-0.5 text-lg font-bold text-emerald-900">{counts.published}</div>
             </div>
             <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-2.5">
-              <div className="text-xs font-medium text-amber-700">{t("mypage.myListings.kpi.reviewing")}</div>
+              <div className="text-xs font-medium text-amber-700">{t("mypage_myListings_kpi_reviewing")}</div>
               <div className="mt-0.5 text-lg font-bold text-amber-900">{counts.reviewing}</div>
             </div>
             <div className="rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-2.5">
-              <div className="text-xs font-medium text-zinc-700">{t("mypage.myListings.kpi.expired")}</div>
+              <div className="text-xs font-medium text-zinc-700">{t("mypage_myListings_kpi_expired")}</div>
               <div className="mt-0.5 text-lg font-bold text-zinc-900">{counts.expired}</div>
             </div>
           </div>
@@ -187,7 +187,7 @@ export function MyListingsPage() {
           <Link href="/sell">
             <Button variant="primary" className="gap-2">
               <PlusIcon className="h-4 w-4" />
-              {t("mypage.myListings.registerNew")}
+              {t("mypage_myListings_registerNew")}
             </Button>
           </Link>
         </div>
@@ -197,31 +197,31 @@ export function MyListingsPage() {
       <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)}>
         <TabsList className="w-full justify-start overflow-x-auto">
           <TabsTrigger value="published" className="gap-2">
-            {t("mypage.tab.published")}
+            {t("mypage_tab_published")}
             {counts.published > 0 && (
               <span className="rounded-full bg-white/20 px-1.5 py-0.5 text-xs">{counts.published}</span>
             )}
           </TabsTrigger>
           <TabsTrigger value="reviewing" className="gap-2">
-            {t("mypage.tab.reviewing")}
+            {t("mypage_tab_reviewing")}
             {counts.reviewing > 0 && (
               <span className="rounded-full bg-white/20 px-1.5 py-0.5 text-xs">{counts.reviewing}</span>
             )}
           </TabsTrigger>
           <TabsTrigger value="expired" className="gap-2">
-            {t("mypage.tab.expired")}
+            {t("mypage_tab_expired")}
             {counts.expired > 0 && (
               <span className="rounded-full bg-white/20 px-1.5 py-0.5 text-xs">{counts.expired}</span>
             )}
           </TabsTrigger>
           <TabsTrigger value="rejected" className="gap-2">
-            {t("mypage.tab.rejected")}
+            {t("mypage_tab_rejected")}
             {counts.rejected > 0 && (
               <span className="rounded-full bg-white/20 px-1.5 py-0.5 text-xs">{counts.rejected}</span>
             )}
           </TabsTrigger>
           <TabsTrigger value="deleted" className="gap-2">
-            {t("mypage.tab.deleted")}
+            {t("mypage_tab_deleted")}
             {counts.deleted > 0 && (
               <span className="rounded-full bg-white/20 px-1.5 py-0.5 text-xs">{counts.deleted}</span>
             )}
@@ -232,7 +232,7 @@ export function MyListingsPage() {
         <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-1 flex-wrap items-center gap-3">
             <Input
-              placeholder={t("mypage.myListings.searchPlaceholder")}
+              placeholder={t("mypage_myListings_searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="max-w-sm"
@@ -357,11 +357,11 @@ function PremiumListingCard({
               <div className="flex items-center gap-2">
                 <Button variant="outline" size="sm" onClick={onView} className="gap-1.5 text-xs">
                   <EyeIcon className="h-3.5 w-3.5" />
-                  {t("mypage.myListings.viewDetails")}
+                  {t("mypage_myListings_viewDetails")}
                 </Button>
                 <Button variant="outline" size="sm" onClick={onEdit} className="gap-1.5 text-xs">
                   <Edit2Icon className="h-3.5 w-3.5" />
-                  {t("mypage.myListings.edit")}
+                  {t("mypage_myListings_edit")}
                 </Button>
               </div>
             </div>
@@ -386,11 +386,11 @@ function EmptyState({ onRegister }: { onRegister: () => void }) {
             <polyline points="10 9 9 9 8 9" />
           </svg>
         </div>
-        <h3 className="text-base font-semibold text-zinc-900">{t("mypage.myListings.emptyTitle")}</h3>
-        <p className="mt-1 text-sm text-zinc-600">{t("mypage.myListings.emptyDescription")}</p>
+        <h3 className="text-base font-semibold text-zinc-900">{t("mypage_myListings_emptyTitle")}</h3>
+        <p className="mt-1 text-sm text-zinc-600">{t("mypage_myListings_emptyDescription")}</p>
         <Button variant="primary" className="mt-6 gap-2" onClick={onRegister}>
           <PlusIcon className="h-4 w-4" />
-          {t("mypage.myListings.registerNew")}
+          {t("mypage_myListings_registerNew")}
         </Button>
       </CardContent>
     </Card>

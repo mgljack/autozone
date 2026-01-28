@@ -126,25 +126,25 @@ export default function RentRegistrationPage() {
   const validate = () => {
     const next: Record<string, string> = {};
 
-    if (images.length < 1) next.images = t("sell.error.imagesRequired");
-    if (draft.description.trim().length < 1) next.description = t("sell.error.memoRequired");
-    if (draft.description.length > 10_000) next.description = t("sell.error.memoMaxLength");
-    if (!draft.contactName.trim()) next.contactName = t("sell.error.nameRequired");
-    if (!draft.contactEmail.trim()) next.contactEmail = t("sell.error.emailRequired");
-    if (!draft.contactPhone.trim()) next.contactPhone = t("sell.error.phoneRequired");
+    if (images.length < 1) next.images = t("sell_error_imagesRequired");
+    if (draft.description.trim().length < 1) next.description = t("sell_error_memoRequired");
+    if (draft.description.length > 10_000) next.description = t("sell_error_memoMaxLength");
+    if (!draft.contactName.trim()) next.contactName = t("sell_error_nameRequired");
+    if (!draft.contactEmail.trim()) next.contactEmail = t("sell_error_emailRequired");
+    if (!draft.contactPhone.trim()) next.contactPhone = t("sell_error_phoneRequired");
 
     const require = (key: string, value: string) => {
-      if (!value.trim()) next[key] = t("sell.error.required");
+      if (!value.trim()) next[key] = t("sell_error_required");
     };
 
-    if (!draft.rentType) next.rentType = t("sell.error.rentTypeRequired");
+    if (!draft.rentType) next.rentType = t("sell_error_rentTypeRequired");
     require("manufacturer", draft.manufacturer);
     require("model", draft.model);
     require("yearMade", draft.yearMade);
     require("mileageKm", draft.mileageKm);
-    if (!draft.fuel) next.fuel = t("sell.error.fuelRequired");
-    if (!draft.transmission) next.transmission = t("sell.error.transmissionRequired");
-    if (!draft.region) next.region = t("sell.error.regionRequired");
+    if (!draft.fuel) next.fuel = t("sell_error_fuelRequired");
+    if (!draft.transmission) next.transmission = t("sell_error_transmissionRequired");
+    if (!draft.region) next.region = t("sell_error_regionRequired");
     require("pricePerDayMnt", draft.pricePerDayMnt);
     require("availabilityDate", draft.availabilityDate);
 
@@ -168,120 +168,120 @@ export default function RentRegistrationPage() {
     });
     localStorage.setItem("rentListings", JSON.stringify(rentListings));
 
-    alert(t("sell.rental.registered"));
+    alert(t("sell_rental_registered"));
     router.push("/rent/small");
   };
 
   return (
     <RequireAuth returnUrl="/sell/rent">
       <div className="grid gap-6">
-        <SectionTitle title={t("sell.rental.title")} subtitle={t("sell.rental.subtitle")} />
+        <SectionTitle title={t("sell_rental_title")} subtitle={t("sell_rental_subtitle")} />
 
         <Card>
           <CardHeader>
-            <CardTitle>{t("sell.common.basicInfo")}</CardTitle>
+            <CardTitle>{t("sell_common_basicInfo")}</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="grid gap-2">
-                <Label>{t("sell.rental.rentType")}</Label>
+                <Label>{t("sell_rental_rentType")}</Label>
                 <Select value={draft.rentType} onChange={(e) => setField("rentType", e.target.value as any)}>
-                  <option value="">{t("sell.common.select")}</option>
-                  <option value="small">{t("sell.rental.rentType.small")}</option>
-                  <option value="large">{t("sell.rental.rentType.large")}</option>
-                  <option value="truck">{t("sell.rental.rentType.truck")}</option>
+                  <option value="">{t("sell_common_select")}</option>
+                  <option value="small">{t("sell_rental_rentType_small")}</option>
+                  <option value="large">{t("sell_rental_rentType_large")}</option>
+                  <option value="truck">{t("sell_rental_rentType_truck")}</option>
                 </Select>
                 {errors.rentType ? <div className="text-xs text-red-600">{errors.rentType}</div> : null}
               </div>
 
               <div className="grid gap-2">
-                <Label>{t("sell.vehicle.manufacturer")}</Label>
+                <Label>{t("sell_vehicle_manufacturer")}</Label>
                 <Input
                   value={draft.manufacturer}
                   onChange={(e) => setField("manufacturer", e.target.value)}
-                  placeholder={t("sell.vehicle.manufacturerPlaceholder")}
+                  placeholder={t("sell_vehicle_manufacturerPlaceholder")}
                 />
                 {errors.manufacturer ? <div className="text-xs text-red-600">{errors.manufacturer}</div> : null}
               </div>
 
               <div className="grid gap-2">
-                <Label>{t("sell.vehicle.model")}</Label>
+                <Label>{t("sell_vehicle_model")}</Label>
                 <Input
                   value={draft.model}
                   onChange={(e) => setField("model", e.target.value)}
-                  placeholder={t("sell.vehicle.modelPlaceholder")}
+                  placeholder={t("sell_vehicle_modelPlaceholder")}
                 />
                 {errors.model ? <div className="text-xs text-red-600">{errors.model}</div> : null}
               </div>
 
               <div className="grid gap-2">
-                <Label>{t("sell.vehicle.yearMade")}</Label>
+                <Label>{t("sell_vehicle_yearMade")}</Label>
                 <Input
                   value={draft.yearMade}
                   onChange={(e) => setField("yearMade", e.target.value)}
-                  placeholder={t("sell.rental.yearMadePlaceholder")}
+                  placeholder={t("sell_rental_yearMadePlaceholder")}
                 />
                 {errors.yearMade ? <div className="text-xs text-red-600">{errors.yearMade}</div> : null}
               </div>
 
               <div className="grid gap-2">
-                <Label>{t("sell.rental.mileageKm")}</Label>
+                <Label>{t("sell_rental_mileageKm")}</Label>
                 <Input
                   value={draft.mileageKm}
                   onChange={(e) => setField("mileageKm", e.target.value.replace(/[^\d]/g, ""))}
-                  placeholder={t("sell.rental.mileageKmPlaceholder")}
+                  placeholder={t("sell_rental_mileageKmPlaceholder")}
                   inputMode="numeric"
                 />
                 {errors.mileageKm ? <div className="text-xs text-red-600">{errors.mileageKm}</div> : null}
               </div>
 
               <div className="grid gap-2">
-                <Label>{t("sell.vehicle.fuel")}</Label>
+                <Label>{t("sell_vehicle_fuel")}</Label>
                 <Select value={draft.fuel} onChange={(e) => setField("fuel", e.target.value as any)}>
-                  <option value="">{t("sell.common.select")}</option>
-                  <option value="gasoline">{t("sell.rental.fuel.gasoline")}</option>
-                  <option value="diesel">{t("sell.rental.fuel.diesel")}</option>
-                  <option value="electric">{t("sell.rental.fuel.electric")}</option>
-                  <option value="hybrid">{t("sell.rental.fuel.hybrid")}</option>
+                  <option value="">{t("sell_common_select")}</option>
+                  <option value="gasoline">{t("sell_rental_fuel_gasoline")}</option>
+                  <option value="diesel">{t("sell_rental_fuel_diesel")}</option>
+                  <option value="electric">{t("sell_rental_fuel_electric")}</option>
+                  <option value="hybrid">{t("sell_rental_fuel_hybrid")}</option>
                 </Select>
                 {errors.fuel ? <div className="text-xs text-red-600">{errors.fuel}</div> : null}
               </div>
 
               <div className="grid gap-2">
-                <Label>{t("sell.vehicle.transmission")}</Label>
+                <Label>{t("sell_vehicle_transmission")}</Label>
                 <Select value={draft.transmission} onChange={(e) => setField("transmission", e.target.value as any)}>
-                  <option value="">{t("sell.common.select")}</option>
-                  <option value="at">{t("sell.rental.transmission.at")}</option>
-                  <option value="mt">{t("sell.rental.transmission.mt")}</option>
+                  <option value="">{t("sell_common_select")}</option>
+                  <option value="at">{t("sell_rental_transmission_at")}</option>
+                  <option value="mt">{t("sell_rental_transmission_mt")}</option>
                 </Select>
                 {errors.transmission ? <div className="text-xs text-red-600">{errors.transmission}</div> : null}
               </div>
 
               <div className="grid gap-2">
-                <Label>{t("sell.vehicle.region")}</Label>
+                <Label>{t("sell_vehicle_region")}</Label>
                 <Select value={draft.region} onChange={(e) => setField("region", e.target.value as any)}>
-                  <option value="">{t("sell.common.select")}</option>
-                  <option value="Ulaanbaatar">{t("sell.rental.region.ulaanbaatar")}</option>
-                  <option value="Erdenet">{t("sell.rental.region.erdenet")}</option>
-                  <option value="Darkhan">{t("sell.rental.region.darkhan")}</option>
-                  <option value="Other">{t("sell.rental.region.other")}</option>
+                  <option value="">{t("sell_common_select")}</option>
+                  <option value="Ulaanbaatar">{t("sell_rental_region_ulaanbaatar")}</option>
+                  <option value="Erdenet">{t("sell_rental_region_erdenet")}</option>
+                  <option value="Darkhan">{t("sell_rental_region_darkhan")}</option>
+                  <option value="Other">{t("sell_rental_region_other")}</option>
                 </Select>
                 {errors.region ? <div className="text-xs text-red-600">{errors.region}</div> : null}
               </div>
 
               <div className="grid gap-2">
-                <Label>{t("sell.rental.pricePerDay")}</Label>
+                <Label>{t("sell_rental_pricePerDay")}</Label>
                 <Input
                   value={draft.pricePerDayMnt}
                   onChange={(e) => setField("pricePerDayMnt", e.target.value.replace(/[^\d]/g, ""))}
-                  placeholder={t("sell.rental.pricePerDayPlaceholder")}
+                  placeholder={t("sell_rental_pricePerDayPlaceholder")}
                   inputMode="numeric"
                 />
                 {errors.pricePerDayMnt ? <div className="text-xs text-red-600">{errors.pricePerDayMnt}</div> : null}
               </div>
 
               <div className="grid gap-2">
-                <Label>{t("sell.rental.availabilityDate")}</Label>
+                <Label>{t("sell_rental_availabilityDate")}</Label>
                 <Input
                   type="date"
                   value={draft.availabilityDate}
@@ -295,11 +295,11 @@ export default function RentRegistrationPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>{t("sell.common.photos")}</CardTitle>
+            <CardTitle>{t("sell_common_photos")}</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4">
             <div className="grid gap-2">
-              <Label>{t("sell.common.imageUpload")}</Label>
+              <Label>{t("sell_common_imageUpload")}</Label>
               <Input
                 type="file"
                 accept=".jpg,.jpeg,.png,.gif"
@@ -318,7 +318,7 @@ export default function RentRegistrationPage() {
                         onClick={() => removeImageAt(idx)}
                         className="absolute right-1 top-1 rounded-md bg-black/60 px-2 py-1 text-xs text-white"
                       >
-                        {t("sell.common.delete")}
+                        {t("sell_common_delete")}
                       </button>
                     </div>
                   ))}
@@ -330,14 +330,14 @@ export default function RentRegistrationPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>{t("sell.rental.description")}</CardTitle>
+            <CardTitle>{t("sell_rental_description")}</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-2">
             <Textarea
               value={draft.description}
               maxLength={10_000}
               onChange={(e) => setField("description", e.target.value)}
-              placeholder={t("sell.rental.descriptionPlaceholder")}
+              placeholder={t("sell_rental_descriptionPlaceholder")}
             />
             <div className="flex items-center justify-between text-xs text-zinc-600">
               <div>{errors.description ? <span className="text-red-600">{errors.description}</span> : null}</div>
@@ -350,33 +350,33 @@ export default function RentRegistrationPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>{t("sell.common.contact")}</CardTitle>
+            <CardTitle>{t("sell_common_contact")}</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4 sm:grid-cols-3">
             <div className="grid gap-2">
-              <Label>{t("sell.contact.name")}</Label>
+              <Label>{t("sell_contact_name")}</Label>
               <Input
                 value={draft.contactName}
                 onChange={(e) => setField("contactName", e.target.value)}
-                placeholder={t("sell.contact.namePlaceholder")}
+                placeholder={t("sell_contact_namePlaceholder")}
               />
               {errors.contactName ? <div className="text-xs text-red-600">{errors.contactName}</div> : null}
             </div>
             <div className="grid gap-2">
-              <Label>{t("sell.contact.email")}</Label>
+              <Label>{t("sell_contact_email")}</Label>
               <Input
                 value={draft.contactEmail}
                 onChange={(e) => setField("contactEmail", e.target.value)}
-                placeholder={t("sell.contact.emailPlaceholder")}
+                placeholder={t("sell_contact_emailPlaceholder")}
               />
               {errors.contactEmail ? <div className="text-xs text-red-600">{errors.contactEmail}</div> : null}
             </div>
             <div className="grid gap-2">
-              <Label>{t("sell.contact.phone")}</Label>
+              <Label>{t("sell_contact_phone")}</Label>
               <Input
                 value={draft.contactPhone}
                 onChange={(e) => setField("contactPhone", e.target.value)}
-                placeholder={t("sell.contact.phonePlaceholder")}
+                placeholder={t("sell_contact_phonePlaceholder")}
               />
               {errors.contactPhone ? <div className="text-xs text-red-600">{errors.contactPhone}</div> : null}
             </div>
@@ -385,7 +385,7 @@ export default function RentRegistrationPage() {
 
         <div className="flex items-center justify-between">
           <Link href="/sell">
-            <Button variant="outline">{t("common.back")}</Button>
+            <Button variant="outline">{t("common_back")}</Button>
           </Link>
           <div className="flex items-center gap-2">
             <Button
@@ -414,14 +414,14 @@ export default function RentRegistrationPage() {
                 setErrors({});
               }}
             >
-              {t("sell.common.reset")}
+              {t("sell_common_reset")}
             </Button>
-            <Button variant="primary" onClick={onSubmit}>{t("sell.rental.register")}</Button>
+            <Button variant="primary" onClick={onSubmit}>{t("sell_rental_register")}</Button>
           </div>
         </div>
 
         <div className="text-xs text-zinc-500">
-          {t("sell.common.draftAutoSave")}: <span className="font-mono">rentDraft</span>
+          {t("sell_common_draftAutoSave")}: <span className="font-mono">rentDraft</span>
         </div>
       </div>
     </RequireAuth>

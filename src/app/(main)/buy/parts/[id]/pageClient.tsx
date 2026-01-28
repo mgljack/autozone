@@ -46,8 +46,8 @@ export default function PartDetailClient({ id }: { id: string }) {
     enabled: !!partQuery.data,
   });
 
-  if (partQuery.isLoading) return <div className="text-sm text-zinc-600">{t("common.loading")}</div>;
-  if (!partQuery.data) return <div className="text-sm text-zinc-600">{t("common.notFound")}</div>;
+  if (partQuery.isLoading) return <div className="text-sm text-zinc-600">{t("common_loading")}</div>;
+  if (!partQuery.data) return <div className="text-sm text-zinc-600">{t("common_notFound")}</div>;
 
   const part = partQuery.data;
   const favored = isFavorite(part.id);
@@ -86,16 +86,16 @@ export default function PartDetailClient({ id }: { id: string }) {
       }
       // Fallback to clipboard
       await navigator.clipboard.writeText(url);
-      alert(t("common.linkCopied"));
+      alert(t("common_linkCopied"));
     } catch (err) {
       // User cancelled share or error occurred
       if (err instanceof Error && err.name !== "AbortError") {
         // If not user cancellation, try clipboard fallback
         try {
       await navigator.clipboard.writeText(url);
-          alert(t("common.linkCopied"));
+          alert(t("common_linkCopied"));
     } catch {
-          alert(t("common.shareFailed"));
+          alert(t("common_shareFailed"));
         }
       }
     }
@@ -127,9 +127,9 @@ export default function PartDetailClient({ id }: { id: string }) {
             toggleFavorite(part.id);
             upsertFavoriteItem(!favored);
           }}
-          moreLabel={t("carDetail.more")}
-          galleryTitle={t("carDetail.gallery.title")}
-          selectLabel={t("carDetail.gallery.select")}
+          moreLabel={t("carDetail_more")}
+          galleryTitle={t("carDetail_gallery_title")}
+          selectLabel={t("carDetail_gallery_select")}
         />
 
         <aside className="lg:block">
@@ -144,7 +144,7 @@ export default function PartDetailClient({ id }: { id: string }) {
                 className="w-full"
                 onClick={() => setSellerOpen((v) => !v)}
               >
-                {t("carDetail.sellerContact")}
+                {t("carDetail_sellerContact")}
               </Button>
               {sellerOpen && part.seller ? (
                 <div className="mt-3 rounded-2xl border border-zinc-200 bg-white p-4 text-sm">
@@ -167,21 +167,21 @@ export default function PartDetailClient({ id }: { id: string }) {
 
       {/* Options */}
       <div className="rounded-2xl border border-zinc-200 bg-white p-6">
-        <div className="text-sm font-normal text-zinc-900">{t("carDetail.specs.title")}</div>
+        <div className="text-sm font-normal text-zinc-900">{t("carDetail_specs_title")}</div>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          <Row label={t("parts.specs.price")} value={formatMnt(part.priceMnt)} />
-          <Row label={t("parts.specs.condition")} value={part.condition === "new" ? t("parts.specs.condition.new") : t("parts.specs.condition.used")} />
-          <Row label={t("parts.specs.registeredDate")} value={new Date(part.createdAt).toLocaleDateString("ko-KR")} />
-          <Row label={t("parts.specs.region")} value={part.regionLabel} />
-          {part.forManufacturer && <Row label={t("parts.specs.manufacturer")} value={part.forManufacturer} />}
-          {part.forModel && <Row label={t("parts.specs.compatibleModel")} value={part.forModel} />}
+          <Row label={t("parts_specs_price")} value={formatMnt(part.priceMnt)} />
+          <Row label={t("parts_specs_condition")} value={part.condition === "new" ? t("parts_specs_condition_new") : t("parts_specs_condition_used")} />
+          <Row label={t("parts_specs_registeredDate")} value={new Date(part.createdAt).toLocaleDateString("ko-KR")} />
+          <Row label={t("parts_specs_region")} value={part.regionLabel} />
+          {part.forManufacturer && <Row label={t("parts_specs_manufacturer")} value={part.forManufacturer} />}
+          {part.forModel && <Row label={t("parts_specs_compatibleModel")} value={part.forModel} />}
         </div>
       </div>
 
       {/* Memo / description */}
       {part.description && (
         <div className="rounded-2xl border border-zinc-200 bg-white p-6">
-          <div className="text-sm font-normal text-zinc-900">{t("carDetail.desc")}</div>
+          <div className="text-sm font-normal text-zinc-900">{t("carDetail_desc")}</div>
           <div className="mt-3 whitespace-pre-line text-sm text-zinc-600">{part.description}</div>
         </div>
       )}
@@ -189,7 +189,7 @@ export default function PartDetailClient({ id }: { id: string }) {
       {/* Similar Parts (동급매물) */}
       {similarPartsQuery.data && similarPartsQuery.data.items.length > 0 && (
         <div className="grid gap-4">
-          <h2 className="text-xl font-bold text-zinc-900">{t("carDetail.similarCars")}</h2>
+          <h2 className="text-xl font-bold text-zinc-900">{t("carDetail_similarCars")}</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {similarPartsQuery.data.items.map((similarPart) => (
               <SimilarPartCard key={similarPart.id} part={similarPart} />

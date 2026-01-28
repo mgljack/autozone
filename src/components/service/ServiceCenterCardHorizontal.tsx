@@ -55,7 +55,7 @@ export function ServiceCenterCardHorizontal({ center }: { center: CenterDTO }) {
 
           {/* Operating hours */}
           {center.operatingHours && (
-            <div className="mt-3 text-xs text-zinc-500">{t("service.card.operatingHours")} {center.operatingHours}</div>
+            <div className="mt-3 text-xs text-zinc-500">{t("service_card_operatingHours")} {center.operatingHours}</div>
           )}
         </div>
 
@@ -63,7 +63,7 @@ export function ServiceCenterCardHorizontal({ center }: { center: CenterDTO }) {
         <div className="flex flex-col items-end gap-3 md:items-end">
           {center.minPriceMnt && center.maxPriceMnt && (
             <div className="mt-auto text-right">
-              <div className="text-xs text-zinc-500">{t("service.card.servicePrice")}</div>
+              <div className="text-xs text-zinc-500">{t("service_card_servicePrice")}</div>
               <div className="mt-1 text-lg font-extrabold text-zinc-900">
                 {center.minPriceMnt === center.maxPriceMnt 
                   ? formatMnt(center.minPriceMnt)
@@ -72,7 +72,7 @@ export function ServiceCenterCardHorizontal({ center }: { center: CenterDTO }) {
             </div>
           )}
           <div className="text-right">
-            <div className="text-xs text-zinc-500">{t("service.card.contact")}</div>
+            <div className="text-xs text-zinc-500">{t("service_card_contact")}</div>
             <div className="mt-1 text-sm font-normal text-zinc-900">{center.phone}</div>
           </div>
         </div>

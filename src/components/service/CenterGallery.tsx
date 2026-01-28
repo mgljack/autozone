@@ -82,7 +82,7 @@ export function CenterGallery({ images, title }: { images: string[]; title: stri
             <>
               <button
                 type="button"
-                aria-label={t("service.gallery.previousPhoto")}
+                aria-label={t("service_gallery_previousPhoto")}
                 onClick={() => setActiveIndex((i) => i - 1)}
                 disabled={isFirst}
                 className={[
@@ -96,7 +96,7 @@ export function CenterGallery({ images, title }: { images: string[]; title: stri
               </button>
               <button
                 type="button"
-                aria-label={t("service.gallery.nextPhoto")}
+                aria-label={t("service_gallery_nextPhoto")}
                 onClick={() => setActiveIndex((i) => i + 1)}
                 disabled={isLast}
                 className={[

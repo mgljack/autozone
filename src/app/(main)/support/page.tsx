@@ -8,8 +8,8 @@ export default function SupportPage() {
   const { t } = useI18n();
   return (
     <div className="grid gap-6">
-      <SectionTitle title={t("footer.support")} subtitle={t("stub.subtitle")} />
-      <EmptyState title={t("common.comingSoon")} description={t("stub.support.desc")} />
+      <SectionTitle title={t("footer_support")} subtitle={t("stub_subtitle")} />
+      <EmptyState title={t("common_comingSoon")} description={t("stub_support_desc")} />
     </div>
   );
 }

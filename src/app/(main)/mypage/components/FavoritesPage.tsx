@@ -29,7 +29,7 @@ export function FavoritesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-zinc-900">{t("mypage.favorites.title")}</h1>
+        <h1 className="text-2xl font-bold text-zinc-900">{t("mypage_favorites_title")}</h1>
         <p className="mt-1 text-sm text-zinc-600">{favoriteIds.length}개의 관심 차량</p>
       </div>
 
@@ -79,7 +79,7 @@ export function FavoritesPage() {
       ) : (
         <Card>
           <CardContent className="py-12 text-center">
-            <p className="text-sm text-zinc-600">{t("home.left.none")}</p>
+            <p className="text-sm text-zinc-600">{t("home_left_none")}</p>
           </CardContent>
         </Card>
       )}

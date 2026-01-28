@@ -138,9 +138,9 @@ export function VehiclePriceComparison({
     };
   }, [mode, referencePrice, sellingPrice, savingsAmount, savingsRate, salePosition, prefersReducedMotion]);
 
-  const modeTitle = mode === "NEW" ? t("priceComparison.newCar.title") : t("priceComparison.import.title");
-  const modeSubtitle = t("priceComparison.basedOn");
-  const referenceLabel = mode === "NEW" ? t("priceComparison.newCarPrice") : t("priceComparison.importPrice");
+  const modeTitle = mode === "NEW" ? t("priceComparison_newCar_title") : t("priceComparison_import_title");
+  const modeSubtitle = t("priceComparison_basedOn");
+  const referenceLabel = mode === "NEW" ? t("priceComparison_newCarPrice") : t("priceComparison_importPrice");
 
   return (
     <div
@@ -159,7 +159,7 @@ export function VehiclePriceComparison({
         </div>
         <div className="flex shrink-0 items-center gap-2 rounded-full bg-gradient-to-r from-blue-500/10 to-emerald-500/10 px-4 py-2">
           <div className="h-2 w-2 rounded-full bg-gradient-to-r from-blue-500 to-emerald-500" />
-          <span className="text-xs font-semibold uppercase tracking-wider text-zinc-700">{t("priceComparison.badge")}</span>
+          <span className="text-xs font-semibold uppercase tracking-wider text-zinc-700">{t("priceComparison_badge")}</span>
         </div>
       </div>
 
@@ -178,7 +178,7 @@ export function VehiclePriceComparison({
                 : "text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50/50",
             ].join(" ")}
           >
-            {t("priceComparison.tab.newCar")}
+            {t("priceComparison_tab_newCar")}
           </button>
           <button
             type="button"
@@ -192,7 +192,7 @@ export function VehiclePriceComparison({
                 : "text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50/50",
             ].join(" ")}
           >
-            {t("priceComparison.tab.import")}
+            {t("priceComparison_tab_import")}
           </button>
         </div>
       </div>
@@ -262,7 +262,7 @@ export function VehiclePriceComparison({
             }}
           >
             <div className="rounded-lg bg-zinc-900 px-3 py-1.5 text-xs font-semibold text-white shadow-lg whitespace-nowrap">
-              {t("priceComparison.label.salePrice")} {formatMnt(Math.round(animatedSellingPrice))}
+              {t("priceComparison_label_salePrice")} {formatMnt(Math.round(animatedSellingPrice))}
             </div>
           </div>
         </div>
@@ -275,16 +275,16 @@ export function VehiclePriceComparison({
           value={formatMnt(Math.round(animatedReferencePrice))}
         />
         <MetricCard
-          label={t("priceComparison.salePrice")}
+          label={t("priceComparison_salePrice")}
           value={formatMnt(Math.round(animatedSellingPrice))}
         />
         <MetricCard
-          label={t("priceComparison.savingRate")}
+          label={t("priceComparison_savingRate")}
           value={`${Math.round(animatedSavingsRate)}%`}
           isSavingsRate
         />
         <MetricCard
-          label={t("priceComparison.savedAmount")}
+          label={t("priceComparison_savedAmount")}
           value={formatMnt(Math.round(animatedSavingsAmount))}
         />
       </div>
@@ -293,12 +293,12 @@ export function VehiclePriceComparison({
       <div className="mt-6 rounded-xl bg-zinc-50/50 p-4 text-xs leading-relaxed text-zinc-600">
         {mode === "NEW" ? (
           <>
-            {t("priceComparison.helper.newCar")}
+            {t("priceComparison_helper_newCar")}
             <br />
-            {t("priceComparison.helper.newCar2")}
+            {t("priceComparison_helper_newCar2")}
           </>
         ) : (
-          <>{t("priceComparison.helper.import")}</>
+          <>{t("priceComparison_helper_import")}</>
         )}
       </div>
     </div>

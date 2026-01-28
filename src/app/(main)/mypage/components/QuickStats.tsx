@@ -15,17 +15,17 @@ export function QuickStats() {
 
   const stats = [
     {
-      label: t("mypage.favorites.title"),
+      label: t("mypage_favorites_title"),
       value: favoriteIds.length,
       color: "text-rose-600",
     },
     {
-      label: t("mypage.recent.title"),
+      label: t("mypage_recent_title"),
       value: recent.length,
       color: "text-blue-600",
     },
     {
-      label: t("mypage.myListings.title"),
+      label: t("mypage_myListings_title"),
       value: listings.length,
       color: "text-emerald-600",
     },

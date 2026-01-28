@@ -77,8 +77,8 @@ export default function CarDetailClient({ id }: { id: string }) {
     }
   }, [carQuery.data?.id, addRecent]);
 
-  if (carQuery.isLoading) return <div className="text-sm text-zinc-600">{t("common.loading")}</div>;
-  if (!carQuery.data) return <div className="text-sm text-zinc-600">{t("common.notFound")}</div>;
+  if (carQuery.isLoading) return <div className="text-sm text-zinc-600">{t("common_loading")}</div>;
+  if (!carQuery.data) return <div className="text-sm text-zinc-600">{t("common_notFound")}</div>;
 
   const car = carQuery.data;
   const favored = isFavorite(car.id);
@@ -119,16 +119,16 @@ export default function CarDetailClient({ id }: { id: string }) {
       }
       // Fallback to clipboard
       await navigator.clipboard.writeText(url);
-      alert(t("common.linkCopied"));
+      alert(t("common_linkCopied"));
     } catch (err) {
       // User cancelled share or error occurred
       if (err instanceof Error && err.name !== "AbortError") {
         // If not user cancellation, try clipboard fallback
         try {
       await navigator.clipboard.writeText(url);
-          alert(t("common.linkCopied"));
+          alert(t("common_linkCopied"));
     } catch {
-          alert(t("common.shareFailed"));
+          alert(t("common_shareFailed"));
         }
       }
     }
@@ -138,7 +138,7 @@ export default function CarDetailClient({ id }: { id: string }) {
     <div className="grid gap-6">
       <div className="text-sm">
         <Link href="/buy/all" className="font-normal text-zinc-900 hover:underline">
-          ← {t("carDetail.backToList")}
+          ← {t("carDetail_backToList")}
         </Link>
       </div>
 
@@ -153,9 +153,9 @@ export default function CarDetailClient({ id }: { id: string }) {
             toggleFavorite(car.id);
             upsertFavoriteItem(!favored);
           }}
-          moreLabel={t("carDetail.more")}
-          galleryTitle={t("carDetail.gallery.title")}
-          selectLabel={t("carDetail.gallery.select")}
+          moreLabel={t("carDetail_more")}
+          galleryTitle={t("carDetail_gallery_title")}
+          selectLabel={t("carDetail_gallery_select")}
         />
 
         <aside className="lg:block">
@@ -193,7 +193,7 @@ export default function CarDetailClient({ id }: { id: string }) {
                 className="w-full"
                 onClick={() => setSellerOpen((v) => !v)}
               >
-                {t("carDetail.sellerContact")}
+                {t("carDetail_sellerContact")}
               </Button>
               {sellerOpen ? (
                 <div className="mt-3 rounded-2xl border border-zinc-200 bg-white p-4 text-sm">
@@ -220,32 +220,32 @@ export default function CarDetailClient({ id }: { id: string }) {
       {!isMotorcycle ? <OptionInfoSection options={car.options} /> : null}
 
       {/* Vehicle Status Section */}
-      {!isMotorcycle ? <EncarDiagnosticMock carId={car.id} title={t("vehicleStatus.title")} /> : null}
+      {!isMotorcycle ? <EncarDiagnosticMock carId={car.id} title={t("vehicleStatus_title")} /> : null}
 
       {/* Options */}
       <div className="rounded-2xl border border-zinc-200 bg-white p-6">
-        <div className="text-sm font-normal text-zinc-900">{t("carDetail.specs.title")}</div>
+        <div className="text-sm font-normal text-zinc-900">{t("carDetail_specs_title")}</div>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          <Row label={t("carDetail.specs.price")} value={formatMnt(car.priceMnt)} />
-          <Row label={t("carDetail.specs.tier")} value={car.tier.toUpperCase()} />
-          <Row label={t("carDetail.specs.registeredDate")} value={new Date(car.createdAt).toLocaleDateString("ko-KR")} />
-          <Row label={t("carDetail.specs.yearMade")} value={String(car.yearMade)} />
-          <Row label={t("carDetail.specs.yearImported")} value={String(car.yearImported)} />
-          <Row label={t("carDetail.specs.mileage")} value={`${car.mileageKm.toLocaleString("ko-KR")}km`} />
-          <Row label={t("carDetail.specs.region")} value={car.regionLabel} />
-          <Row label={t("carDetail.specs.fuel")} value={car.specs.fuel} />
-          <Row label={t("carDetail.specs.transmission")} value={car.specs.transmission} />
-          <Row label={t("carDetail.specs.color")} value={car.specs.color} />
-          <Row label={t("carDetail.specs.steering")} value={car.specs.steering} />
-          <Row label={t("carDetail.specs.accident")} value={car.specs.accident ? t("common.yes") : t("common.no")} />
-          <Row label={t("carDetail.specs.plate")} value={car.specs.hasPlate ? t("common.yes") : t("common.no")} />
-          <Row label={t("carDetail.specs.vin")} value={car.specs.vin} mono />
+          <Row label={t("carDetail_specs_price")} value={formatMnt(car.priceMnt)} />
+          <Row label={t("carDetail_specs_tier")} value={car.tier.toUpperCase()} />
+          <Row label={t("carDetail_specs_registeredDate")} value={new Date(car.createdAt).toLocaleDateString("ko-KR")} />
+          <Row label={t("carDetail_specs_yearMade")} value={String(car.yearMade)} />
+          <Row label={t("carDetail_specs_yearImported")} value={String(car.yearImported)} />
+          <Row label={t("carDetail_specs_mileage")} value={`${car.mileageKm.toLocaleString("ko-KR")}km`} />
+          <Row label={t("carDetail_specs_region")} value={car.regionLabel} />
+          <Row label={t("carDetail_specs_fuel")} value={car.specs.fuel} />
+          <Row label={t("carDetail_specs_transmission")} value={car.specs.transmission} />
+          <Row label={t("carDetail_specs_color")} value={car.specs.color} />
+          <Row label={t("carDetail_specs_steering")} value={car.specs.steering} />
+          <Row label={t("carDetail_specs_accident")} value={car.specs.accident ? t("common_yes") : t("common_no")} />
+          <Row label={t("carDetail_specs_plate")} value={car.specs.hasPlate ? t("common_yes") : t("common_no")} />
+          <Row label={t("carDetail_specs_vin")} value={car.specs.vin} mono />
         </div>
       </div>
 
       {/* Memo / description */}
       <div className="rounded-2xl border border-zinc-200 bg-white p-6">
-        <div className="text-sm font-normal text-zinc-900">{t("carDetail.desc")}</div>
+        <div className="text-sm font-normal text-zinc-900">{t("carDetail_desc")}</div>
         <div className="mt-3 whitespace-pre-line text-sm text-zinc-600">{car.description}</div>
       </div>
 
@@ -259,7 +259,7 @@ export default function CarDetailClient({ id }: { id: string }) {
       {/* Similar Cars (동급매물) */}
       {similarCarsQuery.data && similarCarsQuery.data.items.length > 0 && (
         <div className="grid gap-4">
-          <h2 className="text-xl font-bold text-zinc-900">{t("carDetail.similarCars")}</h2>
+          <h2 className="text-xl font-bold text-zinc-900">{t("carDetail_similarCars")}</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {similarCarsQuery.data.items.map((similarCar) => (
               <SimilarCarCard key={similarCar.id} car={similarCar} />

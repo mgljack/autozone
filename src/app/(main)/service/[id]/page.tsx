@@ -16,8 +16,8 @@ export default function ServiceCenterDetailPage({ params }: { params: { id: stri
     queryFn: () => fetchCenterById(params.id),
   });
 
-  if (centerQuery.isLoading) return <div className="text-sm text-zinc-600">{t("common.loading")}</div>;
-  if (!centerQuery.data) return <div className="text-sm text-zinc-600">{t("common.notFound")}</div>;
+  if (centerQuery.isLoading) return <div className="text-sm text-zinc-600">{t("common_loading")}</div>;
+  if (!centerQuery.data) return <div className="text-sm text-zinc-600">{t("common_notFound")}</div>;
 
   const center = centerQuery.data;
 
@@ -25,7 +25,7 @@ export default function ServiceCenterDetailPage({ params }: { params: { id: stri
     <div className="grid gap-6">
       <div className="text-sm">
         <Link className="font-normal text-zinc-900 hover:underline" href="/service">
-          ← {t("service.backToCenters")}
+          ← {t("service_backToCenters")}
         </Link>
       </div>
 
@@ -40,16 +40,16 @@ export default function ServiceCenterDetailPage({ params }: { params: { id: stri
               <SectionTitle title={center.name} subtitle={center.regionLabel} />
               <div className="mt-3 text-sm text-zinc-600">
                 <div>
-                  <span className="font-normal text-zinc-900">{t("service.phoneLabel")}:</span> {center.phone}
+                  <span className="font-normal text-zinc-900">{t("service_phoneLabel")}:</span> {center.phone}
                 </div>
                 <div className="mt-1">
-                  <span className="font-normal text-zinc-900">{t("service.addressLabel")}:</span> {center.address}
+                  <span className="font-normal text-zinc-900">{t("service_addressLabel")}:</span> {center.address}
                 </div>
               </div>
             </div>
 
             <a href={`tel:${center.phone.replace(/\s/g, "")}`} className="shrink-0">
-              <Button>{t("service.call")}</Button>
+              <Button>{t("service_call")}</Button>
             </a>
           </div>
 
@@ -68,9 +68,9 @@ export default function ServiceCenterDetailPage({ params }: { params: { id: stri
 
       {/* Map placeholder */}
       <div className="rounded-3xl border border-zinc-200 bg-white p-6">
-        <div className="text-sm font-normal text-zinc-900">{t("service.mapTitle")}</div>
+        <div className="text-sm font-normal text-zinc-900">{t("service_mapTitle")}</div>
         <div className="mt-3 grid h-56 place-items-center rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 text-sm text-zinc-600">
-          {t("service.mapPlaceholder")}
+          {t("service_mapPlaceholder")}
         </div>
       </div>
     </div>

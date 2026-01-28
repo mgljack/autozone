@@ -26,7 +26,7 @@ export function WithdrawPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-zinc-900">{t("mypage.withdraw")}</h1>
+        <h1 className="text-2xl font-bold text-zinc-900">{t("mypage_withdraw")}</h1>
         <p className="mt-1 text-sm text-zinc-600">계정을 영구적으로 삭제합니다.</p>
       </div>
 
@@ -34,11 +34,11 @@ export function WithdrawPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-rose-900">
             <AlertTriangleIcon className="h-5 w-5" />
-            {t("mypage.withdraw.title")}
+            {t("mypage_withdraw_title")}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="text-sm text-zinc-700">{t("mypage.withdraw.body")}</div>
+          <div className="text-sm text-zinc-700">{t("mypage_withdraw_body")}</div>
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -53,7 +53,7 @@ export function WithdrawPage() {
           </div>
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => router.push("/mypage?tab=listings")}>
-              {t("common.cancel")}
+              {t("common_cancel")}
             </Button>
             <Button
               variant="destructive"
@@ -63,7 +63,7 @@ export function WithdrawPage() {
                 router.push("/");
               }}
             >
-              {t("mypage.withdraw.confirm")}
+              {t("mypage_withdraw_confirm")}
             </Button>
           </div>
         </CardContent>

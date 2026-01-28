@@ -24,7 +24,7 @@ export default function CarCenterRegistrationPage() {
   return (
     <RequireAuth returnUrl="/sell/car-center">
       <div className="grid gap-6">
-        <SectionTitle title={t("carCenter.form.title")} subtitle={t("carCenter.form.subtitle")} />
+        <SectionTitle title={t("carCenter_form_title")} subtitle={t("carCenter_form_subtitle")} />
         <CarCenterForm />
       </div>
     </RequireAuth>

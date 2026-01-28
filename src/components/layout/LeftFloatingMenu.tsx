@@ -58,7 +58,7 @@ export function LeftFloatingMenu() {
             onClick={() => setPanel((p) => (p === "recent" ? null : "recent"))}
           >
             <CarIcon className="h-6 w-6 text-zinc-700 transition-colors group-hover:text-zinc-900" />
-            <div className="text-[11px] font-normal text-zinc-700">{t("home.left.recent")}</div>
+            <div className="text-[11px] font-normal text-zinc-700">{t("home_left_recent")}</div>
           </button>
           <div className="mx-3 h-px bg-zinc-100" />
           <button
@@ -74,7 +74,7 @@ export function LeftFloatingMenu() {
                 </span>
               ) : null}
             </div>
-            <div className="text-[11px] font-normal text-zinc-700">{t("home.left.favorites")}</div>
+            <div className="text-[11px] font-normal text-zinc-700">{t("home_left_favorites")}</div>
           </button>
           {showTop ? (
             <>
@@ -85,7 +85,7 @@ export function LeftFloatingMenu() {
                 onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               >
                 <TopIcon className="h-6 w-6 text-zinc-700 transition-colors group-hover:text-zinc-900" />
-                <div className="text-[11px] font-normal text-zinc-700">{t("home.left.top")}</div>
+                <div className="text-[11px] font-normal text-zinc-700">{t("home_left_top")}</div>
               </button>
             </>
           ) : null}
@@ -96,7 +96,7 @@ export function LeftFloatingMenu() {
         <div className="absolute right-full top-1/2 mr-3 w-80 -translate-y-1/2 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-lg">
           <div className="flex items-center justify-between border-b border-zinc-200 px-4 py-3">
             <div className="text-sm font-normal text-zinc-900">
-              {panel === "recent" ? t("home.left.recent") : t("home.left.favorites")}
+              {panel === "recent" ? t("home_left_recent") : t("home_left_favorites")}
             </div>
             {panel === "recent" ? (
               <button
@@ -104,7 +104,7 @@ export function LeftFloatingMenu() {
                 className="text-xs font-normal text-zinc-700 hover:underline"
                 onClick={clearRecent}
               >
-                {t("home.left.clear")}
+                {t("home_left_clear")}
               </button>
             ) : null}
           </div>
@@ -128,7 +128,7 @@ export function LeftFloatingMenu() {
                 ))}
               </div>
             ) : (
-              <div className="p-4 text-sm text-zinc-600">{t("home.left.none")}</div>
+              <div className="p-4 text-sm text-zinc-600">{t("home_left_none")}</div>
             )}
           </div>
         </div>

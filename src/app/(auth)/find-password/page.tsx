@@ -17,26 +17,26 @@ export default function FindPasswordPage() {
 
   const onSubmit = () => {
     // Prototype: no real reset
-    setResult(t("findPassword.resultMock"));
+    setResult(t("findPassword_resultMock"));
   };
   return (
     <div className="mx-auto grid w-full max-w-md gap-6 px-4 py-10">
-      <SectionTitle title={t("findPassword.title")} subtitle={t("findPassword.subtitle")} />
+      <SectionTitle title={t("findPassword_title")} subtitle={t("findPassword_subtitle")} />
       <Card>
         <CardHeader>
-          <CardTitle>{t("findPassword.cardTitle")}</CardTitle>
+          <CardTitle>{t("findPassword_cardTitle")}</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-3">
           {result ? (
             <Alert>
-              <AlertTitle>{t("findPassword.resultTitle")}</AlertTitle>
+              <AlertTitle>{t("findPassword_resultTitle")}</AlertTitle>
               <AlertDescription>{result}</AlertDescription>
             </Alert>
           ) : null}
-          <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t("findPassword.placeholder")} />
-          <Button onClick={onSubmit}>{t("findPassword.sendMock")}</Button>
+          <Input value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t("findPassword_placeholder")} />
+          <Button onClick={onSubmit}>{t("findPassword_sendMock")}</Button>
           <Link className="text-sm font-normal text-zinc-900 hover:underline" href="/login">
-            ← {t("common.back")} • {t("auth.login")}
+            ← {t("common_back")} • {t("auth_login")}
           </Link>
         </CardContent>
       </Card>

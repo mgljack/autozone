@@ -117,24 +117,24 @@ export default function SellPaymentPage({ params }: { params: { category: string
     <RequireAuth returnUrl={`/sell/${params.category}/payment`}>
       <div className="grid gap-6">
         <SectionTitle
-          title={`${t("payment.title")} ${params.category}`}
-          subtitle={t("payment.subtitle")}
+          title={`${t("payment_title")} ${params.category}`}
+          subtitle={t("payment_subtitle")}
         />
 
         {!listing ? (
           <Card>
             <CardHeader>
-              <CardTitle>{t("payment.draftNotFound")}</CardTitle>
+              <CardTitle>{t("payment_draftNotFound")}</CardTitle>
             </CardHeader>
             <CardContent className="text-sm text-zinc-600">
-              {t("payment.draftNotFoundDesc")}
+              {t("payment_draftNotFoundDesc")}
             </CardContent>
           </Card>
         ) : (
           <>
             <Card>
               <CardHeader>
-                <CardTitle>{t("payment.plan.title")}</CardTitle>
+                <CardTitle>{t("payment_plan_title")}</CardTitle>
               </CardHeader>
               <CardContent className="grid gap-4">
                 <div className="grid gap-3 sm:grid-cols-3">
@@ -151,7 +151,7 @@ export default function SellPaymentPage({ params }: { params: { category: string
                       >
                         <div className="text-base font-normal">{p.label}</div>
                         <div className={`mt-1 text-sm ${active ? "text-white/80" : "text-zinc-600"}`}>
-                          {p.tier === "general" ? t("payment.plan.freePlan") : t("payment.plan.featuredPlan")}
+                          {p.tier === "general" ? t("payment_plan_freePlan") : t("payment_plan_featuredPlan")}
                         </div>
                       </button>
                     );
@@ -159,7 +159,7 @@ export default function SellPaymentPage({ params }: { params: { category: string
                 </div>
 
                 <div className="grid gap-2">
-                  <Label>{t("payment.plan.duration")}</Label>
+                  <Label>{t("payment_plan_duration")}</Label>
                   <div className="grid gap-2 sm:grid-cols-2">
                     {selectedPlan.options.map((o) => (
                       <label
@@ -175,7 +175,7 @@ export default function SellPaymentPage({ params }: { params: { category: string
                             checked={durationDays === o.days}
                             onChange={() => setDurationDays(o.days)}
                           />
-                          <div className="font-normal">{o.days} {t("payment.plan.days")}</div>
+                          <div className="font-normal">{o.days} {t("payment_plan_days")}</div>
                         </div>
                         <div className="font-normal">{o.priceMnt.toLocaleString("mn-MN")} MNT</div>
                       </label>
@@ -185,8 +185,8 @@ export default function SellPaymentPage({ params }: { params: { category: string
 
                 <div className="flex items-center justify-between rounded-2xl border border-zinc-200 bg-white p-4">
                   <div className="text-sm text-zinc-600">
-                    {t("payment.plan.selectedInfo")}: <span className="font-normal text-zinc-900">{tier.toUpperCase()}</span> ·{" "}
-                    <span className="font-normal text-zinc-900">{durationDays} {t("payment.plan.days")}</span>
+                    {t("payment_plan_selectedInfo")}: <span className="font-normal text-zinc-900">{tier.toUpperCase()}</span> ·{" "}
+                    <span className="font-normal text-zinc-900">{durationDays} {t("payment_plan_days")}</span>
                   </div>
                   <div className="text-base font-extrabold">{amountMnt.toLocaleString("mn-MN")} MNT</div>
                 </div>
@@ -195,9 +195,9 @@ export default function SellPaymentPage({ params }: { params: { category: string
 
             <div className="flex items-center justify-between">
               <Link href={`/sell/${category}`}>
-                <Button variant="outline">{t("payment.backToForm")}</Button>
+                <Button variant="outline">{t("payment_backToForm")}</Button>
               </Link>
-              <Button onClick={() => setOpen(true)}>{t("payment.confirmRegister")}</Button>
+              <Button onClick={() => setOpen(true)}>{t("payment_confirmRegister")}</Button>
             </div>
           </>
         )}
@@ -205,67 +205,67 @@ export default function SellPaymentPage({ params }: { params: { category: string
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>{t("payment.method.title")}</DialogTitle>
+              <DialogTitle>{t("payment_method_title")}</DialogTitle>
             </DialogHeader>
             {paid ? (
               <div className="grid gap-4">
                 <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">
-                  <span dangerouslySetInnerHTML={{ __html: t("payment.success.completed") }} />
+                  <span dangerouslySetInnerHTML={{ __html: t("payment_success_completed") }} />
                 </div>
                 <div className="grid gap-2 text-sm text-zinc-700">
                   <div className="flex items-center justify-between">
-                    <div className="text-zinc-500">{t("payment.success.tier")}</div>
+                    <div className="text-zinc-500">{t("payment_success_tier")}</div>
                     <div className="font-normal">{tier.toUpperCase()}</div>
                   </div>
                   <div className="flex items-center justify-between">
-                    <div className="text-zinc-500">{t("payment.success.duration")}</div>
-                    <div className="font-normal">{durationDays} {t("payment.plan.days")}</div>
+                    <div className="text-zinc-500">{t("payment_success_duration")}</div>
+                    <div className="font-normal">{durationDays} {t("payment_plan_days")}</div>
                   </div>
                   <div className="flex items-center justify-between">
-                    <div className="text-zinc-500">{t("payment.success.amount")}</div>
+                    <div className="text-zinc-500">{t("payment_success_amount")}</div>
                     <div className="font-normal">{amountMnt.toLocaleString("mn-MN")} MNT</div>
                   </div>
                 </div>
                 <div className="flex justify-end gap-2">
                   <Button variant="outline" onClick={() => setOpen(false)}>
-                    {t("payment.success.close")}
+                    {t("payment_success_close")}
                   </Button>
                   <Link href={successHref}>
-                    <Button>{t("payment.success.viewListing")}</Button>
+                    <Button>{t("payment_success_viewListing")}</Button>
                   </Link>
                 </div>
               </div>
             ) : (
               <div className="grid gap-4">
                 <div className="text-sm text-zinc-600">
-                  <span dangerouslySetInnerHTML={{ __html: t("payment.method.description") }} />
+                  <span dangerouslySetInnerHTML={{ __html: t("payment_method_description") }} />
                 </div>
 
                 <div className="grid gap-2">
-                  <Label>{t("payment.method.choose")}</Label>
+                  <Label>{t("payment_method_choose")}</Label>
                   <div className="grid gap-2 sm:grid-cols-2">
                     <label className={`flex cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3 text-sm ${method === "card" ? "border-zinc-900 bg-zinc-50" : "border-zinc-200 bg-white hover:bg-zinc-50"}`}>
                       <input type="radio" name="method" checked={method === "card"} onChange={() => setMethod("card")} />
-                      <div className="font-normal">{t("payment.method.card")}</div>
+                      <div className="font-normal">{t("payment_method_card")}</div>
                     </label>
                     <label className={`flex cursor-pointer items-center gap-3 rounded-2xl border px-4 py-3 text-sm ${method === "qpay" ? "border-zinc-900 bg-zinc-50" : "border-zinc-200 bg-white hover:bg-zinc-50"}`}>
                       <input type="radio" name="method" checked={method === "qpay"} onChange={() => setMethod("qpay")} />
-                      <div className="font-normal">{t("payment.method.qpay")}</div>
+                      <div className="font-normal">{t("payment_method_qpay")}</div>
                     </label>
                   </div>
                 </div>
 
                 <div className="grid gap-2">
-                  <Label>{t("payment.method.amount")}</Label>
+                  <Label>{t("payment_method_amount")}</Label>
                   <Input readOnly value={`${amountMnt.toLocaleString("mn-MN")} MNT`} />
                 </div>
 
                 <div className="mt-2 flex justify-end gap-2">
                   <Button variant="outline" onClick={() => setOpen(false)} disabled={paying}>
-                    {t("common.cancel")}
+                    {t("common_cancel")}
                   </Button>
                   <Button onClick={onPay} disabled={paying || !listing}>
-                    {paying ? t("payment.method.paying") : t("payment.method.pay")}
+                    {paying ? t("payment_method_paying") : t("payment_method_pay")}
                   </Button>
                 </div>
               </div>

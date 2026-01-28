@@ -8,8 +8,8 @@ export default function NoticePage() {
   const { t } = useI18n();
   return (
     <div className="grid gap-6">
-      <SectionTitle title={t("footer.notice")} subtitle={t("stub.subtitle")} />
-      <EmptyState title={t("common.comingSoon")} description={t("stub.notice.desc")} />
+      <SectionTitle title={t("footer_notice")} subtitle={t("stub_subtitle")} />
+      <EmptyState title={t("common_comingSoon")} description={t("stub_notice_desc")} />
     </div>
   );
 }

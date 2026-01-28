@@ -92,52 +92,52 @@ export function carTitle(c: Pick<Car, "manufacturer" | "model" | "subModel">) {
   return `${c.manufacturer} ${c.model} ${c.subModel}`.trim();
 }
 
-// Black and white car images only (premium studio style)
+// Modern premium car images (2024 style - diverse high-quality photos)
 const BLACK_WHITE_CAR_IMAGES = [
-  "https://images.pexels.com/photos/3802508/pexels-photo-3802508.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black luxury car
-  "https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // White premium car
-  "https://images.pexels.com/photos/1149137/pexels-photo-1149137.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black sedan
-  "https://images.pexels.com/photos/3802508/pexels-photo-3802508.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black sports car
-  "https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // White SUV
-  "https://images.pexels.com/photos/1149137/pexels-photo-1149137.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black coupe
-  "https://images.pexels.com/photos/3802508/pexels-photo-3802508.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black luxury
-  "https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // White premium
-  "https://images.pexels.com/photos/1149137/pexels-photo-1149137.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black modern
-  "https://images.pexels.com/photos/3802508/pexels-photo-3802508.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black sedan
-  "https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // White SUV
-  "https://images.pexels.com/photos/1149137/pexels-photo-1149137.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black coupe
-  "https://images.pexels.com/photos/3802508/pexels-photo-3802508.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black luxury
-  "https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // White premium
-  "https://images.pexels.com/photos/1149137/pexels-photo-1149137.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black modern
-  "https://images.pexels.com/photos/3802508/pexels-photo-3802508.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black sedan
-  "https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // White SUV
-  "https://images.pexels.com/photos/1149137/pexels-photo-1149137.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black coupe
-  "https://images.pexels.com/photos/3802508/pexels-photo-3802508.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black luxury
-  "https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // White premium
+  "https://images.unsplash.com/photo-1617531653332-bd46c24f2068?w=800&h=600&fit=crop&auto=format", // Tesla Model 3 white
+  "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=800&h=600&fit=crop&auto=format", // BMW M4 black
+  "https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=800&h=600&fit=crop&auto=format", // Mercedes AMG white
+  "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&h=600&fit=crop&auto=format", // BMW 5 Series black
+  "https://images.unsplash.com/photo-1616422285623-13ff0162193c?w=800&h=600&fit=crop&auto=format", // Audi e-tron white
+  "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?w=800&h=600&fit=crop&auto=format", // Porsche 911 black
+  "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800&h=600&fit=crop&auto=format", // Mercedes S-Class white
+  "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&h=600&fit=crop&auto=format", // BMW M5 black
+  "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?w=800&h=600&fit=crop&auto=format", // Lexus LC white
+  "https://images.unsplash.com/photo-1542362567-b07e54358753?w=800&h=600&fit=crop&auto=format", // Mercedes AMG GT black
+  "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800&h=600&fit=crop&auto=format", // Corvette white
+  "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&h=600&fit=crop&auto=format", // Audi RS7 black
+  "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&h=600&fit=crop&auto=format", // Porsche 718 white
+  "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&h=600&fit=crop&auto=format", // Ford Mustang black
+  "https://images.unsplash.com/photo-1502877338535-766e1452684a?w=800&h=600&fit=crop&auto=format", // Mercedes CLA white
+  "https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800&h=600&fit=crop&auto=format", // Ferrari black
+  "https://images.unsplash.com/photo-1563720223185-11003d516935?w=800&h=600&fit=crop&auto=format", // Tesla Model S white
+  "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=800&h=600&fit=crop&auto=format", // BMW X5 black
+  "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=800&h=600&fit=crop&auto=format", // Range Rover white
+  "https://images.unsplash.com/photo-1617469767053-d3b523a0b982?w=800&h=600&fit=crop&auto=format", // Lamborghini black
 ];
 
-// SILVER tier exclusive car images (different from general/gold)
+// SILVER tier exclusive car images (premium SUVs and sedans)
 const SILVER_CAR_IMAGES = [
-  "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black sedan
-  "https://images.pexels.com/photos/1545743/pexels-photo-1545743.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // White luxury
-  "https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black SUV
-  "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black coupe
-  "https://images.pexels.com/photos/1545743/pexels-photo-1545743.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // White sedan
-  "https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black premium
-  "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black modern
-  "https://images.pexels.com/photos/1545743/pexels-photo-1545743.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // White SUV
-  "https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black luxury
-  "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black sedan
-  "https://images.pexels.com/photos/1545743/pexels-photo-1545743.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // White coupe
-  "https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black premium
-  "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black modern
-  "https://images.pexels.com/photos/1545743/pexels-photo-1545743.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // White sedan
-  "https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black SUV
-  "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black luxury
-  "https://images.pexels.com/photos/1545743/pexels-photo-1545743.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // White premium
-  "https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black coupe
-  "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Black sedan
-  "https://images.pexels.com/photos/1545743/pexels-photo-1545743.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // White modern
+  "https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=800&h=600&fit=crop&auto=format", // Toyota Land Cruiser
+  "https://images.unsplash.com/photo-1619682817481-e994891cd1f5?w=800&h=600&fit=crop&auto=format", // Hyundai Palisade
+  "https://images.unsplash.com/photo-1606611013016-969c19ba27bb?w=800&h=600&fit=crop&auto=format", // Kia Sorento
+  "https://images.unsplash.com/photo-1625395005224-0fce68a3cdc8?w=800&h=600&fit=crop&auto=format", // Toyota RAV4
+  "https://images.unsplash.com/photo-1612825173281-9a193378527e?w=800&h=600&fit=crop&auto=format", // Honda CR-V
+  "https://images.unsplash.com/photo-1606016159991-dfe4f2746ad5?w=800&h=600&fit=crop&auto=format", // Mazda CX-5
+  "https://images.unsplash.com/photo-1590362891991-f776e747a588?w=800&h=600&fit=crop&auto=format", // Subaru Outback
+  "https://images.unsplash.com/photo-1571127236794-81c0bbfe1ce3?w=800&h=600&fit=crop&auto=format", // Volkswagen Tiguan
+  "https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=800&h=600&fit=crop&auto=format", // Mercedes GLC
+  "https://images.unsplash.com/photo-1616788494707-ec28f08d05a1?w=800&h=600&fit=crop&auto=format", // Lexus RX
+  "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800&h=600&fit=crop&auto=format", // Porsche Cayenne
+  "https://images.unsplash.com/photo-1626668893632-6f3a4466d22f?w=800&h=600&fit=crop&auto=format", // Audi Q7
+  "https://images.unsplash.com/photo-1611016186353-9af58c69a533?w=800&h=600&fit=crop&auto=format", // BMW X3
+  "https://images.unsplash.com/photo-1614200187524-dc4b892acf16?w=800&h=600&fit=crop&auto=format", // Volvo XC90
+  "https://images.unsplash.com/photo-1619405399517-d7fce0f13302?w=800&h=600&fit=crop&auto=format", // Toyota Camry
+  "https://images.unsplash.com/photo-1622196645357-c8c62c42fcc5?w=800&h=600&fit=crop&auto=format", // Honda Accord
+  "https://images.unsplash.com/photo-1611859266238-4b98091d9d9b?w=800&h=600&fit=crop&auto=format", // Hyundai Sonata
+  "https://images.unsplash.com/photo-1619976215249-be88af12ce0e?w=800&h=600&fit=crop&auto=format", // Kia K5
+  "https://images.unsplash.com/photo-1617469767053-d3b523a0b982?w=800&h=600&fit=crop&auto=format", // Mazda 6
+  "https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?w=800&h=600&fit=crop&auto=format", // Nissan Altima
 ];
 
 export function sampleCarImage(n: number) {
@@ -150,14 +150,14 @@ export function sampleSilverCarImage(n: number) {
   return SILVER_CAR_IMAGES[index];
 }
 
-// Tire images from Pexels (high-quality tire photos)
+// Tire images (high-quality tire photos)
 const TIRE_IMAGES = [
-  "https://images.pexels.com/photos/3802508/pexels-photo-3802508.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Performance tire
-  "https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Tire close-up
-  "https://images.pexels.com/photos/1149137/pexels-photo-1149137.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Tire tread
-  "https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Tire sidewall
-  "https://images.pexels.com/photos/1545743/pexels-photo-1545743.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Tire detail
-  "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Tire stack
+  "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop&auto=format", // Performance tire
+  "https://images.unsplash.com/photo-1562911791-c7a97b729ec5?w=800&h=600&fit=crop&auto=format", // Tire close-up
+  "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800&h=600&fit=crop&auto=format", // Tire tread
+  "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=800&h=600&fit=crop&auto=format", // Tire sidewall
+  "https://images.unsplash.com/photo-1600712242805-5f78671b24da?w=800&h=600&fit=crop&auto=format", // Tire detail
+  "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=800&h=600&fit=crop&auto=format", // Tire stack
 ];
 
 // Brand-based tire image mapping

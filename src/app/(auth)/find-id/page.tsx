@@ -17,26 +17,26 @@ export default function FindIdPage() {
 
   const onSubmit = () => {
     // Prototype: no real lookup
-    setResult(t("findId.resultMock"));
+    setResult(t("findId_resultMock"));
   };
   return (
     <div className="mx-auto grid w-full max-w-md gap-6 px-4 py-10">
-      <SectionTitle title={t("findId.title")} subtitle={t("findId.subtitle")} />
+      <SectionTitle title={t("findId_title")} subtitle={t("findId_subtitle")} />
       <Card>
         <CardHeader>
-          <CardTitle>{t("findId.cardTitle")}</CardTitle>
+          <CardTitle>{t("findId_cardTitle")}</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-3">
           {result ? (
             <Alert>
-              <AlertTitle>{t("findId.resultTitle")}</AlertTitle>
+              <AlertTitle>{t("findId_resultTitle")}</AlertTitle>
               <AlertDescription>{result}</AlertDescription>
             </Alert>
           ) : null}
-          <Input value={value} onChange={(e) => setValue(e.target.value)} placeholder={t("findId.placeholder")} />
-          <Button onClick={onSubmit}>{t("findId.sendMock")}</Button>
+          <Input value={value} onChange={(e) => setValue(e.target.value)} placeholder={t("findId_placeholder")} />
+          <Button onClick={onSubmit}>{t("findId_sendMock")}</Button>
           <Link className="text-sm font-normal text-zinc-900 hover:underline" href="/login">
-            ← {t("common.back")} • {t("auth.login")}
+            ← {t("common_back")} • {t("auth_login")}
           </Link>
         </CardContent>
       </Card>

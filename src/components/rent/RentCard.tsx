@@ -11,8 +11,8 @@ export function RentCard({ item }: { item: RentItem }) {
   const { t } = useI18n();
   const imageUrl = item.image || "/samples/cars/car-01.svg";
 
-  const fuelLabel = item.fuel === "gasoline" ? t("rent.fuel.gasoline") : item.fuel === "diesel" ? t("rent.fuel.diesel") : item.fuel === "electric" ? t("rent.fuel.electric") : item.fuel === "hybrid" ? t("rent.fuel.hybrid") : "";
-  const transmissionLabel = item.transmission === "at" ? t("rent.transmission.at") : item.transmission === "mt" ? t("rent.transmission.mt") : "";
+  const fuelLabel = item.fuel === "gasoline" ? t("rent_fuel_gasoline") : item.fuel === "diesel" ? t("rent_fuel_diesel") : item.fuel === "electric" ? t("rent_fuel_electric") : item.fuel === "hybrid" ? t("rent_fuel_hybrid") : "";
+  const transmissionLabel = item.transmission === "at" ? t("rent_transmission_at") : item.transmission === "mt" ? t("rent_transmission_mt") : "";
 
   return (
     <Link
@@ -40,25 +40,25 @@ export function RentCard({ item }: { item: RentItem }) {
         <div className="mt-4 space-y-2.5 text-sm">
           {item.yearMade && (
             <div className="flex items-center justify-between">
-              <span className="text-zinc-500">{t("rent.card.yearMade")}</span>
-              <span className="font-normal text-zinc-900">{item.yearMade}{t("common.year")}</span>
+              <span className="text-zinc-500">{t("rent_card_yearMade")}</span>
+              <span className="font-normal text-zinc-900">{item.yearMade}{t("common_year")}</span>
             </div>
           )}
           {item.mileageKm && (
             <div className="flex items-center justify-between">
-              <span className="text-zinc-500">{t("rent.card.mileage")}</span>
+              <span className="text-zinc-500">{t("rent_card_mileage")}</span>
               <span className="font-normal text-zinc-900">{formatKm(item.mileageKm)}</span>
             </div>
           )}
           {fuelLabel && (
             <div className="flex items-center justify-between">
-              <span className="text-zinc-500">{t("rent.card.fuelType")}</span>
+              <span className="text-zinc-500">{t("rent_card_fuelType")}</span>
               <span className="font-normal text-zinc-900">{fuelLabel}</span>
             </div>
           )}
           {transmissionLabel && (
             <div className="flex items-center justify-between">
-              <span className="text-zinc-500">{t("rent.card.transmission")}</span>
+              <span className="text-zinc-500">{t("rent_card_transmission")}</span>
               <span className="font-normal text-zinc-900">{transmissionLabel}</span>
             </div>
           )}
@@ -70,11 +70,11 @@ export function RentCard({ item }: { item: RentItem }) {
         {/* Price and Location */}
         <div className="mt-auto flex items-end justify-between">
           <div>
-            <div className="text-xs font-medium text-zinc-500">{t("rent.card.location")}</div>
+            <div className="text-xs font-medium text-zinc-500">{t("rent_card_location")}</div>
             <div className="mt-1 text-sm font-normal text-zinc-700">{item.region}</div>
           </div>
           <div className="text-right">
-            <div className="text-xs font-medium text-zinc-500">{t("rent.card.dailyRent")}</div>
+            <div className="text-xs font-medium text-zinc-500">{t("rent_card_dailyRent")}</div>
             <div className="mt-1 text-2xl font-extrabold text-zinc-900">{formatMnt(item.pricePerDayMnt)}</div>
           </div>
         </div>

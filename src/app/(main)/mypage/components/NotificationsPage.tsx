@@ -24,18 +24,18 @@ export function NotificationsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-zinc-900">{t("mypage.notifications.title")}</h1>
+        <h1 className="text-2xl font-bold text-zinc-900">{t("mypage_notifications_title")}</h1>
         <p className="mt-1 text-sm text-zinc-600">알림 설정을 관리할 수 있습니다.</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>{t("mypage.notifications.title")}</CardTitle>
+          <CardTitle>{t("mypage_notifications_title")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <div className="flex items-center justify-between rounded-xl border border-zinc-200 bg-white px-4 py-4">
             <div>
-              <div className="font-medium text-zinc-900">{t("mypage.notifications.marketing")}</div>
+              <div className="font-medium text-zinc-900">{t("mypage_notifications_marketing")}</div>
               <div className="mt-0.5 text-xs text-zinc-600">프로모션 및 마케팅 정보를 받습니다</div>
             </div>
             <Switch
@@ -45,7 +45,7 @@ export function NotificationsPage() {
           </div>
           <div className="flex items-center justify-between rounded-xl border border-zinc-200 bg-white px-4 py-4">
             <div>
-              <div className="font-medium text-zinc-900">{t("mypage.notifications.email")}</div>
+              <div className="font-medium text-zinc-900">{t("mypage_notifications_email")}</div>
               <div className="mt-0.5 text-xs text-zinc-600">이메일 알림을 받습니다</div>
             </div>
             <Switch
@@ -55,7 +55,7 @@ export function NotificationsPage() {
           </div>
           <div className="flex items-center justify-between rounded-xl border border-zinc-200 bg-white px-4 py-4">
             <div>
-              <div className="font-medium text-zinc-900">{t("mypage.notifications.push")}</div>
+              <div className="font-medium text-zinc-900">{t("mypage_notifications_push")}</div>
               <div className="mt-0.5 text-xs text-zinc-600">푸시 알림을 받습니다</div>
             </div>
             <Switch

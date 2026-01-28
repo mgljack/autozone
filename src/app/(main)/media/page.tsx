@@ -40,18 +40,18 @@ export default function MediaPage() {
 
   return (
     <div className="grid gap-6">
-      <SectionTitle title={t("media.title")} subtitle={t("media.subtitle")} />
+      <SectionTitle title={t("media_title")} subtitle={t("media_subtitle")} />
 
       <Tabs value={tab} onValueChange={(v) => setTab(v as MediaDTO["type"])}>
         <TabsList className="max-w-md">
-          <TabsTrigger value="news">{t("media.tab.news")}</TabsTrigger>
-          <TabsTrigger value="video">{t("media.tab.video")}</TabsTrigger>
-          <TabsTrigger value="event">{t("media.tab.event")}</TabsTrigger>
+          <TabsTrigger value="news">{t("media_tab_news")}</TabsTrigger>
+          <TabsTrigger value="video">{t("media_tab_video")}</TabsTrigger>
+          <TabsTrigger value="event">{t("media_tab_event")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value={tab} className="p-0 border-0 bg-transparent">
           {listQuery.isLoading ? (
-            <div className="text-sm text-zinc-600">{t("common.loading")}</div>
+            <div className="text-sm text-zinc-600">{t("common_loading")}</div>
           ) : currentItems.length > 0 ? (
             <>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -138,7 +138,7 @@ export default function MediaPage() {
             </>
           ) : (
             <div className="rounded-2xl border border-zinc-200 bg-white p-6 text-sm text-zinc-600">
-              {t("common.noMedia")}
+              {t("common_noMedia")}
             </div>
           )}
         </TabsContent>

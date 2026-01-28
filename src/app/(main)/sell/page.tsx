@@ -25,48 +25,48 @@ export default function SellCategorySelectPage() {
   const cards: CategoryCard[] = [
     {
       href: "/sell/car",
-      title: t("sell.category.car"),
-      description: t("sell.goToForm"),
+      title: t("sell_category_car"),
+      description: t("sell_goToForm"),
       icon: <CarIcon />,
       iconColor: "text-blue-600",
       iconBg: "bg-blue-50",
     },
     {
       href: "/sell/motorcycle",
-      title: t("sell.category.motorcycle"),
-      description: t("sell.goToForm"),
+      title: t("sell_category_motorcycle"),
+      description: t("sell_goToForm"),
       icon: <BikeIcon />,
       iconColor: "text-emerald-600",
       iconBg: "bg-emerald-50",
     },
     {
       href: "/sell/tire",
-      title: t("sell.category.tire"),
-      description: t("sell.goToForm"),
+      title: t("sell_category_tire"),
+      description: t("sell_goToForm"),
       icon: <TireIcon />,
       iconColor: "text-purple-600",
       iconBg: "bg-purple-50",
     },
     {
       href: "/sell/parts",
-      title: t("sell.category.parts"),
-      description: t("sell.goToForm"),
+      title: t("sell_category_parts"),
+      description: t("sell_goToForm"),
       icon: <WrenchIcon />,
       iconColor: "text-orange-600",
       iconBg: "bg-orange-50",
     },
     {
       href: "/sell/rent",
-      title: t("sell.carRental.title"),
-      description: t("sell.carRental.register"),
+      title: t("sell_carRental_title"),
+      description: t("sell_carRental_register"),
       icon: <KeyIcon />,
       iconColor: "text-rose-600",
       iconBg: "bg-rose-50",
     },
     {
       href: "/sell/car-center",
-      title: t("sell.carCenter.title"),
-      description: t("sell.carCenter.description"),
+      title: t("sell_carCenter_title"),
+      description: t("sell_carCenter_description"),
       icon: <CarCenterIcon />,
       iconColor: "text-indigo-600",
       iconBg: "bg-indigo-50",
@@ -79,8 +79,8 @@ export default function SellCategorySelectPage() {
         {/* Page Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0 flex-1">
-            <h1 className="text-[24px] font-bold text-zinc-900">{t("sell.title")}</h1>
-            <p className="mt-2 text-sm text-zinc-600">{t("sell.subtitle")}</p>
+            <h1 className="text-[24px] font-bold text-zinc-900">{t("sell_title")}</h1>
+            <p className="mt-2 text-sm text-zinc-600">{t("sell_subtitle")}</p>
           </div>
           <Link href="/mypage?tab=listings">
             <Button variant="outline" size="sm" className="gap-2">
@@ -90,7 +90,7 @@ export default function SellCategorySelectPage() {
                 <line x1="16" y1="13" x2="8" y2="13" />
                 <line x1="16" y1="17" x2="8" y2="17" />
               </svg>
-              {t("sell.manageListings")}
+              {t("sell_manageListings")}
             </Button>
           </Link>
         </div>

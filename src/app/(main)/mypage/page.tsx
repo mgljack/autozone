@@ -29,16 +29,16 @@ function MyPageContent() {
     return (
       <div className="min-h-screen bg-zinc-50">
         <div className="mx-auto w-full max-w-[1400px] px-4 py-8">
-          <SectionTitle title={t("mypage.title")} subtitle={t("mypage.subtitle")} />
+          <SectionTitle title={t("mypage_title")} subtitle={t("mypage_subtitle")} />
           <Card className="mt-6">
             <CardContent className="p-6">
-              <div className="text-sm text-zinc-600">{t("mypage.notSignedIn")}</div>
+              <div className="text-sm text-zinc-600">{t("mypage_notSignedIn")}</div>
               <div className="mt-4 flex flex-wrap gap-2">
                 <Link href="/login">
-                  <Button>{t("mypage.goLogin")}</Button>
+                  <Button>{t("mypage_goLogin")}</Button>
                 </Link>
                 <Link href="/buy/all">
-                  <Button variant="outline">{t("mypage.browse")}</Button>
+                  <Button variant="outline">{t("mypage_browse")}</Button>
                 </Link>
               </div>
             </CardContent>

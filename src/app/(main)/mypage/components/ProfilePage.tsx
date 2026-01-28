@@ -28,13 +28,13 @@ export function ProfilePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-zinc-900">{t("mypage.profile.title")}</h1>
+        <h1 className="text-2xl font-bold text-zinc-900">{t("mypage_profile_title")}</h1>
         <p className="mt-1 text-sm text-zinc-600">계정 정보를 수정할 수 있습니다.</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>{t("mypage.profile.title")}</CardTitle>
+          <CardTitle>{t("mypage_profile_title")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {profileMsg && (
@@ -42,15 +42,15 @@ export function ProfilePage() {
           )}
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label>{t("mypage.profile.name")}</Label>
+              <Label>{t("mypage_profile_name")}</Label>
               <Input value={profileName} onChange={(e) => setProfileName(e.target.value)} />
             </div>
             <div className="space-y-2">
-              <Label>{t("mypage.profile.email")}</Label>
+              <Label>{t("mypage_profile_email")}</Label>
               <Input type="email" value={profileEmail} onChange={(e) => setProfileEmail(e.target.value)} />
             </div>
             <div className="space-y-2 sm:col-span-2">
-              <Label>{t("mypage.profile.phone")}</Label>
+              <Label>{t("mypage_profile_phone")}</Label>
               <Input value={profilePhone} onChange={(e) => setProfilePhone(e.target.value)} />
             </div>
           </div>
@@ -65,10 +65,10 @@ export function ProfilePage() {
                   phone: profilePhone || undefined,
                 });
                 if (!res.ok) return setProfileMsg(res.error);
-                setProfileMsg(t("mypage.profile.saved"));
+                setProfileMsg(t("mypage_profile_saved"));
               }}
             >
-              {t("mypage.profile.save")}
+              {t("mypage_profile_save")}
             </Button>
           </div>
         </CardContent>

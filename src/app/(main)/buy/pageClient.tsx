@@ -21,26 +21,26 @@ export function BuyLandingClient({ type }: { type: string | null }) {
 
   return (
     <div className="grid gap-6">
-      <SectionTitle title={t("buy.title")} subtitle={t("buy.subtitle")} />
+      <SectionTitle title={t("buy_title")} subtitle={t("buy_subtitle")} />
 
       <div className="rounded-2xl border border-zinc-200 bg-white p-6">
-        <div className="text-sm text-zinc-600">{t("buy.hoverHint")}</div>
+        <div className="text-sm text-zinc-600">{t("buy_hoverHint")}</div>
 
         <div className="mt-4 inline-block">
           <div className="group relative">
-            <Button>{t("home.card.buy")}</Button>
+            <Button>{t("home_card_buy")}</Button>
             <div className="invisible absolute left-0 top-full mt-2 w-56 rounded-2xl border border-zinc-200 bg-white p-2 opacity-0 shadow-lg transition-all group-hover:visible group-hover:opacity-100">
               <Link className="block rounded-xl px-3 py-2 text-sm hover:bg-zinc-50" href="/buy/all">
-                {t("nav.allVehicles")}
+                {t("nav_allVehicles")}
               </Link>
               <Link className="block rounded-xl px-3 py-2 text-sm hover:bg-zinc-50" href="/buy?type=motorcycle">
-                {t("nav.motorcycle")}
+                {t("nav_motorcycle")}
               </Link>
               <Link className="block rounded-xl px-3 py-2 text-sm hover:bg-zinc-50" href="/buy?type=tire">
-                {t("nav.tire")}
+                {t("nav_tire")}
               </Link>
               <Link className="block rounded-xl px-3 py-2 text-sm hover:bg-zinc-50" href="/buy?type=parts">
-                {t("nav.parts")}
+                {t("nav_parts")}
               </Link>
             </div>
           </div>
@@ -51,10 +51,10 @@ export function BuyLandingClient({ type }: { type: string | null }) {
         <div className="rounded-2xl border border-zinc-200 bg-white p-6">
           <div className="text-sm font-normal">
             {type === "motorcycle"
-              ? t("nav.motorcycle")
+              ? t("nav_motorcycle")
               : type === "tire"
-                ? t("nav.tire")
-                : t("nav.parts")}
+                ? t("nav_tire")
+                : t("nav_parts")}
           </div>
           <div className="mt-3 grid gap-2 text-sm text-zinc-700">
             {list.map((item) => (

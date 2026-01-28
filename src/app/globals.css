@@ -8,7 +8,7 @@
   --accent-orange-light: lab(8.30603% 0.618212 -2.16573 / 0.1);
   --slider-track: lab(8.30603% 0.618212 -2.16573);
   --slider-thumb: lab(8.30603% 0.618212 -2.16573);
-  --color-rose-600: #e11d48;
+  --color-rose-600: #b70f28;
 }
 
 @theme inline {

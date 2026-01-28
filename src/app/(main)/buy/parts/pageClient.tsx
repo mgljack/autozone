@@ -131,11 +131,11 @@ export function PartsClient({ searchParams }: { searchParams: Record<string, str
 
             <div className="grid grid-cols-2 gap-3">
               <label className="grid gap-1">
-                <span className="text-xs font-normal text-zinc-600">{t("buyAll.filters.priceMin")}</span>
+                <span className="text-xs font-normal text-zinc-600">{t("buyAll_filters_priceMin")}</span>
                 <Input value={priceMinMnt} onChange={(e) => setPriceMinMnt(e.target.value.replace(/[^\d]/g, ""))} inputMode="numeric" />
               </label>
               <label className="grid gap-1">
-                <span className="text-xs font-normal text-zinc-600">{t("buyAll.filters.priceMax")}</span>
+                <span className="text-xs font-normal text-zinc-600">{t("buyAll_filters_priceMax")}</span>
                 <Input value={priceMaxMnt} onChange={(e) => setPriceMaxMnt(e.target.value.replace(/[^\d]/g, ""))} inputMode="numeric" />
               </label>
             </div>
@@ -145,14 +145,14 @@ export function PartsClient({ searchParams }: { searchParams: Record<string, str
         <section className="grid gap-3">
           <div className="flex items-center justify-between rounded-2xl border border-zinc-200 bg-white p-4">
             <div className="text-sm font-normal text-zinc-900">
-              {listQuery.data ? t("common.total", { count: listQuery.data.total }) : t("common.loading")}
+              {listQuery.data ? t("common_total", { count: listQuery.data.total }) : t("common_loading")}
             </div>
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">{t("buyAll.sort.label")}</span>
+              <span className="text-xs font-normal text-zinc-600">{t("buyAll_sort_label")}</span>
               <Select value={sort} onChange={(e) => setSort(e.target.value as PartsSort)} className="w-44">
-                <option value="newest">{t("common.sort.newest")}</option>
-                <option value="priceAsc">{t("buyAll.sort.priceAsc")}</option>
-                <option value="priceDesc">{t("buyAll.sort.priceDesc")}</option>
+                <option value="newest">{t("common_sort_newest")}</option>
+                <option value="priceAsc">{t("buyAll_sort_priceAsc")}</option>
+                <option value="priceDesc">{t("buyAll_sort_priceDesc")}</option>
               </Select>
             </label>
           </div>

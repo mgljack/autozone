@@ -167,7 +167,7 @@ export function CarGallery({
           <button
             type="button"
             className="group relative inline-flex h-8 w-8 items-center justify-center rounded-full border border-black/6 bg-white/85 text-[#6B7280] shadow-[0_2px_6px_rgba(0,0,0,0.08)] backdrop-blur-[6px] transition-all duration-180 ease-out hover:scale-104 hover:bg-white hover:text-[#111827] hover:shadow-[0_6px_18px_rgba(0,0,0,0.12)] active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#111827]/20 focus-visible:ring-offset-2"
-            aria-label={t("common.share")}
+            aria-label={t("common_share")}
             onClick={onShare}
             onMouseEnter={() => setShareHovered(true)}
             onMouseLeave={() => setShareHovered(false)}

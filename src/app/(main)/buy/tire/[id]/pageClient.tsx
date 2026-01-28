@@ -46,8 +46,8 @@ export default function TireDetailClient({ id }: { id: string }) {
     enabled: !!tireQuery.data,
   });
 
-  if (tireQuery.isLoading) return <div className="text-sm text-zinc-600">{t("common.loading")}</div>;
-  if (!tireQuery.data) return <div className="text-sm text-zinc-600">{t("common.notFound")}</div>;
+  if (tireQuery.isLoading) return <div className="text-sm text-zinc-600">{t("common_loading")}</div>;
+  if (!tireQuery.data) return <div className="text-sm text-zinc-600">{t("common_notFound")}</div>;
 
   const tire = tireQuery.data;
   const favored = isFavorite(tire.id);
@@ -86,16 +86,16 @@ export default function TireDetailClient({ id }: { id: string }) {
       }
       // Fallback to clipboard
       await navigator.clipboard.writeText(url);
-      alert(t("common.linkCopied"));
+      alert(t("common_linkCopied"));
     } catch (err) {
       // User cancelled share or error occurred
       if (err instanceof Error && err.name !== "AbortError") {
         // If not user cancellation, try clipboard fallback
         try {
       await navigator.clipboard.writeText(url);
-          alert(t("common.linkCopied"));
+          alert(t("common_linkCopied"));
     } catch {
-          alert(t("common.shareFailed"));
+          alert(t("common_shareFailed"));
         }
       }
     }
@@ -134,9 +134,9 @@ export default function TireDetailClient({ id }: { id: string }) {
             toggleFavorite(tire.id);
             upsertFavoriteItem(!favored);
           }}
-          moreLabel={t("carDetail.more")}
-          galleryTitle={t("carDetail.gallery.title")}
-          selectLabel={t("carDetail.gallery.select")}
+          moreLabel={t("carDetail_more")}
+          galleryTitle={t("carDetail_gallery_title")}
+          selectLabel={t("carDetail_gallery_select")}
         />
 
         <aside className="lg:block">
@@ -151,7 +151,7 @@ export default function TireDetailClient({ id }: { id: string }) {
                 className="w-full"
                 onClick={() => setSellerOpen((v) => !v)}
               >
-                {t("carDetail.sellerContact")}
+                {t("carDetail_sellerContact")}
               </Button>
               {sellerOpen && tire.seller ? (
                 <div className="mt-3 rounded-2xl border border-zinc-200 bg-white p-4 text-sm">
@@ -174,25 +174,25 @@ export default function TireDetailClient({ id }: { id: string }) {
 
       {/* Options */}
       <div className="rounded-2xl border border-zinc-200 bg-white p-6">
-        <div className="text-sm font-normal text-zinc-900">{t("carDetail.specs.title")}</div>
+        <div className="text-sm font-normal text-zinc-900">{t("carDetail_specs_title")}</div>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          <Row label={t("tire.specs.price")} value={formatMnt(tire.priceMnt)} />
-          <Row label={t("tire.specs.brand")} value={tire.brand} />
-          <Row label={t("tire.specs.size")} value={tire.size} />
-          <Row label={t("tire.specs.season")} value={seasonLabel} />
-          <Row label={t("tire.specs.yearMade")} value={`${tire.dotYear}${t("common.year")}`} />
-          <Row label={t("tire.specs.quantity")} value={`${tire.qty}${t("common.unit")}`} />
-          <Row label={t("tire.specs.condition")} value={tire.condition === "new" ? t("tire.specs.condition.new") : t("tire.specs.condition.used")} />
-          <Row label={t("tire.specs.installationIncluded")} value={tire.installationIncluded ? t("tire.specs.installationIncluded.yes") : t("tire.specs.installationIncluded.no")} />
-          <Row label={t("tire.specs.registeredDate")} value={new Date(tire.createdAt).toLocaleDateString("ko-KR")} />
-          <Row label={t("tire.specs.region")} value={tire.regionLabel} />
+          <Row label={t("tire_specs_price")} value={formatMnt(tire.priceMnt)} />
+          <Row label={t("tire_specs_brand")} value={tire.brand} />
+          <Row label={t("tire_specs_size")} value={tire.size} />
+          <Row label={t("tire_specs_season")} value={seasonLabel} />
+          <Row label={t("tire_specs_yearMade")} value={`${tire.dotYear}${t("common_year")}`} />
+          <Row label={t("tire_specs_quantity")} value={`${tire.qty}${t("common_unit")}`} />
+          <Row label={t("tire_specs_condition")} value={tire.condition === "new" ? t("tire_specs_condition_new") : t("tire_specs_condition_used")} />
+          <Row label={t("tire_specs_installationIncluded")} value={tire.installationIncluded ? t("tire_specs_installationIncluded_yes") : t("tire_specs_installationIncluded_no")} />
+          <Row label={t("tire_specs_registeredDate")} value={new Date(tire.createdAt).toLocaleDateString("ko-KR")} />
+          <Row label={t("tire_specs_region")} value={tire.regionLabel} />
         </div>
       </div>
 
       {/* Memo / description */}
       {tire.description && (
         <div className="rounded-2xl border border-zinc-200 bg-white p-6">
-          <div className="text-sm font-normal text-zinc-900">{t("carDetail.desc")}</div>
+          <div className="text-sm font-normal text-zinc-900">{t("carDetail_desc")}</div>
           <div className="mt-3 whitespace-pre-line text-sm text-zinc-600">{tire.description}</div>
         </div>
       )}
@@ -200,7 +200,7 @@ export default function TireDetailClient({ id }: { id: string }) {
       {/* Similar Tires (동급매물) */}
       {similarTiresQuery.data && similarTiresQuery.data.items.length > 0 && (
         <div className="grid gap-4">
-          <h2 className="text-xl font-bold text-zinc-900">{t("carDetail.similarCars")}</h2>
+          <h2 className="text-xl font-bold text-zinc-900">{t("carDetail_similarCars")}</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {similarTiresQuery.data.items.map((similarTire) => (
               <SimilarTireCard key={similarTire.id} tire={similarTire} />

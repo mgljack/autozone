@@ -96,26 +96,26 @@ export function RentTypeClient({
       }),
   });
 
-  const typeLabel = type === "small" ? t("rent.small") : type === "large" ? t("rent.large") : t("rent.truck");
+  const typeLabel = type === "small" ? t("rent_small") : type === "large" ? t("rent_large") : t("rent_truck");
 
   return (
     <div className="grid gap-6">
-      <SectionTitle title={typeLabel} subtitle={t("rent.subtitle")} />
+      <SectionTitle title={typeLabel} subtitle={t("rent_subtitle")} />
 
       <div className="grid gap-4 lg:grid-cols-[320px_1fr] items-start">
         <aside className="rounded-2xl border border-zinc-200 bg-white p-4 h-auto self-start">
-          <div className="text-sm font-normal text-zinc-900">{t("rent.filter")}</div>
+          <div className="text-sm font-normal text-zinc-900">{t("rent_filter")}</div>
 
           <div className="mt-3 grid gap-3">
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">{t("rent.search")}</span>
-              <Input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder={t("rent.searchPlaceholder")} />
+              <span className="text-xs font-normal text-zinc-600">{t("rent_search")}</span>
+              <Input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder={t("rent_searchPlaceholder")} />
             </label>
 
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">{t("rent.allModels")}</span>
+              <span className="text-xs font-normal text-zinc-600">{t("rent_allModels")}</span>
               <Select value={model} onChange={(e) => setModel(e.target.value)}>
-                <option value="all">{t("rent.allModels")}</option>
+                <option value="all">{t("rent_allModels")}</option>
                 {(modelsQuery.data ?? []).map((m) => (
                   <option key={m} value={m}>
                     {m}
@@ -125,43 +125,43 @@ export function RentTypeClient({
             </label>
 
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">{t("rent.fuel")}</span>
+              <span className="text-xs font-normal text-zinc-600">{t("rent_fuel")}</span>
               <Select value={fuel} onChange={(e) => setFuel(e.target.value as any)}>
-                <option value="all">{t("common.all")}</option>
-                <option value="gasoline">{t("rent.fuel.gasoline")}</option>
-                <option value="diesel">{t("rent.fuel.diesel")}</option>
-                <option value="electric">{t("rent.fuel.electric")}</option>
-                <option value="hybrid">{t("rent.fuel.hybrid")}</option>
+                <option value="all">{t("common_all")}</option>
+                <option value="gasoline">{t("rent_fuel_gasoline")}</option>
+                <option value="diesel">{t("rent_fuel_diesel")}</option>
+                <option value="electric">{t("rent_fuel_electric")}</option>
+                <option value="hybrid">{t("rent_fuel_hybrid")}</option>
               </Select>
             </label>
 
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">{t("rent.transmission")}</span>
+              <span className="text-xs font-normal text-zinc-600">{t("rent_transmission")}</span>
               <Select value={transmission} onChange={(e) => setTransmission(e.target.value as any)}>
-                <option value="all">{t("common.all")}</option>
-                <option value="at">{t("rent.transmission.at")}</option>
-                <option value="mt">{t("rent.transmission.mt")}</option>
+                <option value="all">{t("common_all")}</option>
+                <option value="at">{t("rent_transmission_at")}</option>
+                <option value="mt">{t("rent_transmission_mt")}</option>
               </Select>
             </label>
 
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">{t("rent.region")}</span>
+              <span className="text-xs font-normal text-zinc-600">{t("rent_region")}</span>
               <Select value={regionGroup} onChange={(e) => setRegionGroup(e.target.value)}>
-                <option value="">{t("common.all")}</option>
-                <option value="Ulaanbaatar">{t("rent.region.ulaanbaatar")}</option>
-                <option value="Erdenet">{t("rent.region.erdenet")}</option>
-                <option value="Darkhan">{t("rent.region.darkhan")}</option>
-                <option value="Other">{t("rent.region.other")}</option>
+                <option value="">{t("common_all")}</option>
+                <option value="Ulaanbaatar">{t("rent_region_ulaanbaatar")}</option>
+                <option value="Erdenet">{t("rent_region_erdenet")}</option>
+                <option value="Darkhan">{t("rent_region_darkhan")}</option>
+                <option value="Other">{t("rent_region_other")}</option>
               </Select>
             </label>
 
             <div className="grid grid-cols-2 gap-3">
               <label className="grid gap-1">
-                <span className="text-xs font-normal text-zinc-600">{t("rent.priceMin")}</span>
+                <span className="text-xs font-normal text-zinc-600">{t("rent_priceMin")}</span>
                 <Input value={priceMinMnt} onChange={(e) => setPriceMinMnt(e.target.value.replace(/[^\d]/g, ""))} inputMode="numeric" />
               </label>
               <label className="grid gap-1">
-                <span className="text-xs font-normal text-zinc-600">{t("rent.priceMax")}</span>
+                <span className="text-xs font-normal text-zinc-600">{t("rent_priceMax")}</span>
                 <Input value={priceMaxMnt} onChange={(e) => setPriceMaxMnt(e.target.value.replace(/[^\d]/g, ""))} inputMode="numeric" />
               </label>
             </div>
@@ -171,14 +171,14 @@ export function RentTypeClient({
         <section className="grid gap-3">
           <div className="flex items-center justify-between rounded-2xl border border-zinc-200 bg-white p-4">
             <div className="text-sm font-normal text-zinc-900">
-              {listQuery.data ? t("rent.total", { count: listQuery.data.total }) : t("common.loading")}
+              {listQuery.data ? t("rent_total", { count: listQuery.data.total }) : t("common_loading")}
             </div>
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">{t("rent.sort")}</span>
+              <span className="text-xs font-normal text-zinc-600">{t("rent_sort")}</span>
               <Select value={sort} onChange={(e) => setSort(e.target.value as RentSort)} className="w-44">
-                <option value="newest">{t("rent.sort.newest")}</option>
-                <option value="priceAsc">{t("rent.sort.priceAsc")}</option>
-                <option value="priceDesc">{t("rent.sort.priceDesc")}</option>
+                <option value="newest">{t("rent_sort_newest")}</option>
+                <option value="priceAsc">{t("rent_sort_priceAsc")}</option>
+                <option value="priceDesc">{t("rent_sort_priceDesc")}</option>
               </Select>
             </label>
           </div>
@@ -200,7 +200,7 @@ export function RentTypeClient({
               ) : null}
             </>
           ) : (
-            <EmptyState title={t("rent.noVehicles")} />
+            <EmptyState title={t("rent_noVehicles")} />
           )}
         </section>
       </div>

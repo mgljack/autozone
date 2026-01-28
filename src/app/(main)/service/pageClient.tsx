@@ -74,64 +74,64 @@ export function ServiceCentersClient({ searchParams }: { searchParams: Record<st
 
   return (
     <div className="grid gap-6">
-      <SectionTitle title={t("service.title")} subtitle={t("service.subtitle")} />
+      <SectionTitle title={t("service_title")} subtitle={t("service_subtitle")} />
 
       <div className="grid gap-4 lg:grid-cols-[320px_1fr] items-start">
         {/* LEFT: Filters */}
         <aside className="rounded-2xl border border-zinc-200 bg-white p-4 h-auto self-start">
-          <div className="text-sm font-normal text-zinc-900">{t("service.filter")}</div>
+          <div className="text-sm font-normal text-zinc-900">{t("service_filter")}</div>
 
           <div className="mt-3 grid gap-3">
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">{t("service.filter.search")}</span>
-              <Input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder={t("service.searchPlaceholder")} />
+              <span className="text-xs font-normal text-zinc-600">{t("service_filter_search")}</span>
+              <Input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder={t("service_searchPlaceholder")} />
             </label>
 
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">{t("service.filter.serviceType")}</span>
+              <span className="text-xs font-normal text-zinc-600">{t("service_filter_serviceType")}</span>
               <Select value={serviceType} onChange={(e) => setServiceType(e.target.value)}>
-                <option value="all">{t("service.filter.serviceType.all")}</option>
-                <option value="Engine Repair">{t("service.filter.serviceType.engineRepair")}</option>
-                <option value="Tire Service">{t("service.filter.serviceType.tireService")}</option>
-                <option value="Oil Change">{t("service.filter.serviceType.oilChange")}</option>
-                <option value="Brake Service">{t("service.filter.serviceType.brakeService")}</option>
-                <option value="General Maintenance">{t("service.filter.serviceType.generalMaintenance")}</option>
-                <option value="Diagnostics">{t("service.filter.serviceType.diagnostics")}</option>
-                <option value="Electrical">{t("service.filter.serviceType.electrical")}</option>
-                <option value="AC service">{t("service.filter.serviceType.acService")}</option>
-                <option value="Suspension">{t("service.filter.serviceType.suspension")}</option>
-                <option value="Battery">{t("service.filter.serviceType.battery")}</option>
+                <option value="all">{t("service_filter_serviceType_all")}</option>
+                <option value="Engine Repair">{t("service_filter_serviceType_engineRepair")}</option>
+                <option value="Tire Service">{t("service_filter_serviceType_tireService")}</option>
+                <option value="Oil Change">{t("service_filter_serviceType_oilChange")}</option>
+                <option value="Brake Service">{t("service_filter_serviceType_brakeService")}</option>
+                <option value="General Maintenance">{t("service_filter_serviceType_generalMaintenance")}</option>
+                <option value="Diagnostics">{t("service_filter_serviceType_diagnostics")}</option>
+                <option value="Electrical">{t("service_filter_serviceType_electrical")}</option>
+                <option value="AC service">{t("service_filter_serviceType_acService")}</option>
+                <option value="Suspension">{t("service_filter_serviceType_suspension")}</option>
+                <option value="Battery">{t("service_filter_serviceType_battery")}</option>
               </Select>
             </label>
 
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">{t("buyAll.filters.region")}</span>
+              <span className="text-xs font-normal text-zinc-600">{t("buyAll_filters_region")}</span>
               <Select value={regionGroup} onChange={(e) => setRegionGroup(e.target.value)}>
-                <option value="">{t("service.filter.region.all")}</option>
-                <option value="Ulaanbaatar">{t("service.filter.region.ulaanbaatar")}</option>
-                <option value="Darkhan">{t("service.filter.region.darkhan")}</option>
-                <option value="Erdenet">{t("service.filter.region.erdenet")}</option>
-                <option value="Other">{t("service.filter.region.other")}</option>
+                <option value="">{t("service_filter_region_all")}</option>
+                <option value="Ulaanbaatar">{t("service_filter_region_ulaanbaatar")}</option>
+                <option value="Darkhan">{t("service_filter_region_darkhan")}</option>
+                <option value="Erdenet">{t("service_filter_region_erdenet")}</option>
+                <option value="Other">{t("service_filter_region_other")}</option>
               </Select>
             </label>
 
             <div className="grid grid-cols-2 gap-3">
               <label className="grid gap-1">
-                <span className="text-xs font-normal text-zinc-600">{t("buyAll.filters.priceMin")}</span>
+                <span className="text-xs font-normal text-zinc-600">{t("buyAll_filters_priceMin")}</span>
                 <Input value={priceMinMnt} onChange={(e) => setPriceMinMnt(e.target.value.replace(/[^\d]/g, ""))} inputMode="numeric" />
               </label>
               <label className="grid gap-1">
-                <span className="text-xs font-normal text-zinc-600">{t("buyAll.filters.priceMax")}</span>
+                <span className="text-xs font-normal text-zinc-600">{t("buyAll_filters_priceMax")}</span>
                 <Input value={priceMaxMnt} onChange={(e) => setPriceMaxMnt(e.target.value.replace(/[^\d]/g, ""))} inputMode="numeric" />
               </label>
             </div>
 
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">{t("service.filter.availability")}</span>
+              <span className="text-xs font-normal text-zinc-600">{t("service_filter_availability")}</span>
               <Select value={availability} onChange={(e) => setAvailability(e.target.value as any)}>
-                <option value="all">{t("service.filter.availability.all")}</option>
-                <option value="now">{t("service.filter.availability.now")}</option>
-                <option value="next-week">{t("service.filter.availability.nextWeek")}</option>
+                <option value="all">{t("service_filter_availability_all")}</option>
+                <option value="now">{t("service_filter_availability_now")}</option>
+                <option value="next-week">{t("service_filter_availability_nextWeek")}</option>
               </Select>
             </label>
           </div>
@@ -141,13 +141,13 @@ export function ServiceCentersClient({ searchParams }: { searchParams: Record<st
         <section className="grid gap-3">
           <div className="flex items-center justify-between rounded-2xl border border-zinc-200 bg-white p-4">
             <div className="text-sm font-normal text-zinc-900">
-              {listQuery.data ? t("common.total", { count: listQuery.data.total }) : t("common.loading")}
+              {listQuery.data ? t("common_total", { count: listQuery.data.total }) : t("common_loading")}
             </div>
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">{t("buyAll.sort.label")}</span>
+              <span className="text-xs font-normal text-zinc-600">{t("buyAll_sort_label")}</span>
               <Select value={sort} onChange={(e) => setSort(e.target.value as CentersSort)} className="w-44">
-                <option value="newest">{t("common.sort.newest")}</option>
-                <option value="nameAsc">{t("service.sort.nameAsc")}</option>
+                <option value="newest">{t("common_sort_newest")}</option>
+                <option value="nameAsc">{t("service_sort_nameAsc")}</option>
               </Select>
             </label>
           </div>
@@ -170,7 +170,7 @@ export function ServiceCentersClient({ searchParams }: { searchParams: Record<st
               ) : null}
             </>
           ) : (
-            <EmptyState title={t("service.noCentersMessage")} />
+            <EmptyState title={t("service_noCentersMessage")} />
           )}
         </section>
       </div>
