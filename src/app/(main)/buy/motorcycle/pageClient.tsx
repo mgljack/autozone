@@ -67,6 +67,7 @@ export function MotorcycleAllClient({ searchParams }: { searchParams: Record<str
   const [fuel, setFuel] = React.useState(firstString(searchParams.fuel) ?? "all");
   const [color, setColor] = React.useState(firstString(searchParams.color) ?? "all");
   const [regionGroup, setRegionGroup] = React.useState(firstString(searchParams.region) ?? "");
+  const [sellerId, setSellerId] = React.useState<string | null>(firstString(searchParams.sellerId) || null);
 
   React.useEffect(() => setPage(1), [
     sort,
@@ -83,6 +84,7 @@ export function MotorcycleAllClient({ searchParams }: { searchParams: Record<str
     fuel,
     color,
     regionGroup,
+    sellerId,
   ]);
 
   // Keep filters/sort in URL (future backend integration)
@@ -103,8 +105,9 @@ export function MotorcycleAllClient({ searchParams }: { searchParams: Record<str
     if (fuel !== "all") sp.set("fuel", fuel);
     if (color !== "all") sp.set("color", color);
     if (regionGroup) sp.set("region", regionGroup);
+    if (sellerId) sp.set("sellerId", sellerId);
     router.replace(`/buy/motorcycle?${sp.toString()}`, { scroll: false });
-  }, [router, page, sort, manufacturer, model, yearMin, yearMax, importYearMin, importYearMax, mileageMinKm, mileageMaxKm, priceMinMnt, priceMaxMnt, fuel, color, regionGroup]);
+  }, [router, page, sort, manufacturer, model, yearMin, yearMax, importYearMin, importYearMax, mileageMinKm, mileageMaxKm, priceMinMnt, priceMaxMnt, fuel, color, regionGroup, sellerId]);
 
   const manufacturersQuery = useQuery({
     queryKey: ["motorcycles", "manufacturers"],
@@ -160,7 +163,7 @@ export function MotorcycleAllClient({ searchParams }: { searchParams: Record<str
   });
 
   const listQuery = useQuery({
-    queryKey: ["motorcycles", "list", { sort, page, manufacturer, model, yearMin, yearMax, importYearMin, importYearMax, mileageMinKm, mileageMaxKm, priceMinMnt, priceMaxMnt, fuel, color, regionGroup }],
+    queryKey: ["motorcycles", "list", { sort, page, manufacturer, model, yearMin, yearMax, importYearMin, importYearMax, mileageMinKm, mileageMaxKm, priceMinMnt, priceMaxMnt, fuel, color, regionGroup, sellerId }],
     queryFn: () =>
       fetchMotorcyclesList({
         sort,
@@ -179,6 +182,7 @@ export function MotorcycleAllClient({ searchParams }: { searchParams: Record<str
         fuel: fuel as any,
         color: color as any,
         regionGroup: (regionGroup as any) || "",
+        sellerId: sellerId || undefined,
       }),
   });
 

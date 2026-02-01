@@ -10,6 +10,7 @@ import { CarGallery } from "@/components/cars/CarGallery";
 import { EncarDiagnosticMock } from "@/components/cars/EncarDiagnosticMock";
 import { VehiclePriceComparison } from "@/components/cars/VehiclePriceComparison";
 import { OptionInfoSection } from "@/components/cars/OptionInfoSection";
+import { SellerInfo } from "@/components/listings/SellerInfo";
 import { useFavorites } from "@/features/favorites/favorites";
 import { useRecentCars } from "@/features/recent/recent";
 import { formatMnt } from "@/lib/format";
@@ -164,6 +165,9 @@ export default function CarDetailClient({ id }: { id: string }) {
               {formatMnt(car.priceMnt)}
             </div>
 
+            {/* Seller Info */}
+            <SellerInfo sellerName={car.seller.name} type={isMotorcycle ? "motorcycle" : "vehicle"} />
+
             <div className="mt-3 flex flex-wrap gap-2 text-xs font-normal text-zinc-700">
               <button type="button" className="rounded-full border border-zinc-200 bg-white px-3 py-2 hover:bg-zinc-50">
                 보험료 계산
@@ -171,20 +175,6 @@ export default function CarDetailClient({ id }: { id: string }) {
               <button type="button" className="rounded-full border border-zinc-200 bg-white px-3 py-2 hover:bg-zinc-50">
                 대출금리 조회
               </button>
-              <button type="button" className="rounded-full border border-zinc-200 bg-white px-3 py-2 hover:bg-zinc-50">
-                리스상품 조회
-              </button>
-            </div>
-
-            <div className="mt-4 grid gap-2 text-sm text-zinc-700">
-              <div className="flex items-center justify-between rounded-xl bg-zinc-50 px-3 py-2">
-                <span className="text-zinc-600">보험이력</span>
-                <span className="font-normal">프로토타입</span>
-              </div>
-              <div className="flex items-center justify-between rounded-xl bg-zinc-50 px-3 py-2">
-                <span className="text-zinc-600">성능점검내역</span>
-                <span className="font-normal">프로토타입</span>
-              </div>
             </div>
 
             <div className="mt-4">

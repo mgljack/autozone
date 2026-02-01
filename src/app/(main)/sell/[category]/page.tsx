@@ -17,6 +17,7 @@ import { useAuth } from "@/context/AuthContext";
 import { createDefaultDraft } from "@/features/sell/defaults";
 import { readDraft, upsertMyListing, writeDraft } from "@/features/sell/storage";
 import type { SellCategory, SellDraft } from "@/features/sell/types";
+import { PostCreateSummaryCard } from "@/components/posting/PostCreateSummaryCard";
 
 export default function SellFormByCategoryPage({ params }: { params: { category: string } }) {
   const { t } = useI18n();
@@ -37,6 +38,7 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
   const [video, setVideo] = React.useState<File | null>(null);
   const [videoError, setVideoError] = React.useState<string | null>(null);
   const [errors, setErrors] = React.useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   React.useEffect(() => {
     if (!session) return;
@@ -173,6 +175,8 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
 
   const onSubmit = () => {
     if (!validate()) return;
+    setIsSubmitting(true);
+    
     const id =
       typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : `draft_${Date.now()}`;
 
@@ -205,10 +209,13 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
 
   return (
     <RequireAuth returnUrl={`/sell/${params.category}`}>
+      <div className="grid gap-6 pb-24 lg:pb-6">
+        {/* Two-column layout */}
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_360px] lg:items-start">
+          {/* Left: Form Sections */}
       <div className="grid gap-6">
-        <SectionTitle title={`${t("sell_formTitle")} ${category}`} subtitle={t("sell_formSubtitle")} />
-
-        <Card>
+            {/* Basic Info Section */}
+            <Card className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
           <CardHeader>
             <CardTitle>{t("sell_common_basicInfo")}</CardTitle>
           </CardHeader>
@@ -221,6 +228,7 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
                     value={draft.manufacturer}
                     onChange={(e) => setField("manufacturer", e.target.value as any)}
                     placeholder={t("sell_vehicle_manufacturerPlaceholder")}
+                    className="h-11 rounded-xl focus:ring-2 focus:ring-rose-500/20"
                   />
                   {errors.manufacturer ? <div className="text-xs text-red-600">{errors.manufacturer}</div> : null}
                 </div>
@@ -231,13 +239,14 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
                     value={draft.model}
                     onChange={(e) => setField("model", e.target.value as any)}
                     placeholder={t("sell_vehicle_modelPlaceholder")}
+                    className="h-11 rounded-xl focus:ring-2 focus:ring-rose-500/20"
                   />
                   {errors.model ? <div className="text-xs text-red-600">{errors.model}</div> : null}
                 </div>
 
                 <div className="grid gap-2">
                   <Label>{t("sell_vehicle_region")}</Label>
-                  <Select value={draft.region} onChange={(e) => setField("region", e.target.value as any)}>
+                  <Select value={draft.region} onChange={(e) => setField("region", e.target.value as any)} className="h-11 rounded-xl focus:ring-2 focus:ring-rose-500/20">
                     <option value="">{t("sell_common_select")}</option>
                     <option value="Ulaanbaatar">{t("sell_vehicle_region_ulaanbaatar")}</option>
                     <option value="Erdenet">{t("sell_vehicle_region_erdenet")}</option>
@@ -297,7 +306,7 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
 
                 <div className="grid gap-2">
                   <Label>{t("sell_vehicle_yearMade")}</Label>
-                  <Input value={draft.yearMade} onChange={(e) => setField("yearMade", e.target.value as any)} placeholder={t("sell_vehicle_yearMadePlaceholder")} />
+                  <Input value={draft.yearMade} onChange={(e) => setField("yearMade", e.target.value as any)} placeholder={t("sell_vehicle_yearMadePlaceholder")} className="h-11 rounded-xl focus:ring-2 focus:ring-rose-500/20" />
                   {errors.yearMade ? <div className="text-xs text-red-600">{errors.yearMade}</div> : null}
                 </div>
                 <div className="grid gap-2">
@@ -312,12 +321,12 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
 
                 <div className="grid gap-2">
                   <Label>{t("sell_vehicle_color")}</Label>
-                  <Input value={draft.color} onChange={(e) => setField("color", e.target.value as any)} placeholder={t("sell_vehicle_colorPlaceholder")} />
+                  <Input value={draft.color} onChange={(e) => setField("color", e.target.value as any)} placeholder={t("sell_vehicle_colorPlaceholder")} className="h-11 rounded-xl focus:ring-2 focus:ring-rose-500/20" />
                   {errors.color ? <div className="text-xs text-red-600">{errors.color}</div> : null}
                 </div>
                 <div className="grid gap-2">
                   <Label>{t("sell_vehicle_vin")}</Label>
-                  <Input value={draft.vin} onChange={(e) => setField("vin", e.target.value as any)} placeholder={t("sell_vehicle_vinPlaceholder")} />
+                  <Input value={draft.vin} onChange={(e) => setField("vin", e.target.value as any)} placeholder={t("sell_vehicle_vinPlaceholder")} className="h-11 rounded-xl focus:ring-2 focus:ring-rose-500/20" />
                   {errors.vin ? <div className="text-xs text-red-600">{errors.vin}</div> : null}
                 </div>
               </div>
@@ -409,17 +418,17 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
                 </div>
                 <div className="grid gap-2">
                   <Label>{t("sell_tire_radius")}</Label>
-                  <Input value={draft.radius} onChange={(e) => setField("radius", e.target.value as any)} placeholder={t("sell_tire_radiusPlaceholder")} />
+                  <Input value={draft.radius} onChange={(e) => setField("radius", e.target.value as any)} placeholder={t("sell_tire_radiusPlaceholder")} className="h-11 rounded-xl focus:ring-2 focus:ring-rose-500/20" />
                   {errors.radius ? <div className="text-xs text-red-600">{errors.radius}</div> : null}
                 </div>
                 <div className="grid gap-2">
                   <Label>{t("sell_tire_width")}</Label>
-                  <Input value={draft.width} onChange={(e) => setField("width", e.target.value as any)} placeholder={t("sell_tire_widthPlaceholder")} />
+                  <Input value={draft.width} onChange={(e) => setField("width", e.target.value as any)} placeholder={t("sell_tire_widthPlaceholder")} className="h-11 rounded-xl focus:ring-2 focus:ring-rose-500/20" />
                   {errors.width ? <div className="text-xs text-red-600">{errors.width}</div> : null}
                 </div>
                 <div className="grid gap-2">
                   <Label>{t("sell_tire_height")}</Label>
-                  <Input value={draft.height} onChange={(e) => setField("height", e.target.value as any)} placeholder={t("sell_tire_heightPlaceholder")} />
+                  <Input value={draft.height} onChange={(e) => setField("height", e.target.value as any)} placeholder={t("sell_tire_heightPlaceholder")} className="h-11 rounded-xl focus:ring-2 focus:ring-rose-500/20" />
                   {errors.height ? <div className="text-xs text-red-600">{errors.height}</div> : null}
                 </div>
               </div>
@@ -429,7 +438,7 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="grid gap-2 sm:col-span-2">
                   <Label>{t("sell_parts_title")}</Label>
-                  <Input value={draft.title} onChange={(e) => setField("title", e.target.value as any)} placeholder={t("sell_parts_titlePlaceholder")} />
+                  <Input value={draft.title} onChange={(e) => setField("title", e.target.value as any)} placeholder={t("sell_parts_titlePlaceholder")} className="h-11 rounded-xl focus:ring-2 focus:ring-rose-500/20" />
                   {errors.title ? <div className="text-xs text-red-600">{errors.title}</div> : null}
                 </div>
                 <div className="grid gap-2">
@@ -450,25 +459,41 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
                 value={(draft as any).priceMnt ?? ""}
                 onChange={(e) => setField("priceMnt" as any, e.target.value as any)}
                 placeholder={t("sell_vehicle_pricePlaceholder")}
+                className="h-11 rounded-xl focus:ring-2 focus:ring-rose-500/20"
               />
               {errors.priceMnt ? <div className="text-xs text-red-600">{errors.priceMnt}</div> : null}
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("sell_common_photos")}</CardTitle>
+            {/* Photos Section */}
+            <Card className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
+              <CardHeader className="px-0 pb-4 pt-0">
+                <CardTitle className="text-base font-semibold text-zinc-900">{t("sell_common_photos")}</CardTitle>
           </CardHeader>
-          <CardContent className="grid gap-4">
+              <CardContent className="grid gap-4 px-0">
             <div className="grid gap-2">
               <Label>{t("sell_common_imageUpload")}</Label>
-              <Input
+              <label className="group relative flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-zinc-300 bg-zinc-50 p-6 transition-colors hover:border-rose-400 hover:bg-rose-50/30">
+                <input
                 type="file"
                 accept=".jpg,.jpeg,.png,.gif"
                 multiple
                 onChange={onPickImages}
-              />
+                  className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                />
+                <div className="flex flex-col items-center gap-3">
+                  <div className="rounded-full bg-rose-100 p-3">
+                    <svg className="h-6 w-6 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <div className="text-center">
+                    <span className="text-sm font-medium text-zinc-700 group-hover:text-rose-700">{t("sell_common_imageUpload")}</span>
+                    <p className="mt-1 text-xs text-zinc-500">{t("sell_common_imageUploadHint")}</p>
+                  </div>
+                </div>
+              </label>
               {errors.images ? <div className="text-xs text-red-600">{errors.images}</div> : null}
               {imagePreviews.length ? (
                 <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
@@ -479,9 +504,12 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
                       <button
                         type="button"
                         onClick={() => removeImageAt(idx)}
-                        className="absolute right-1 top-1 rounded-md bg-black/60 px-2 py-1 text-xs text-white"
+                        className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-md backdrop-blur-sm transition-all hover:bg-rose-50 hover:shadow-lg"
+                        aria-label={t("sell_common_delete")}
                       >
-                        {t("sell_common_delete")}
+                        <svg className="h-4 w-4 text-zinc-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
                       </button>
                     </div>
                   ))}
@@ -491,23 +519,60 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
 
             <div className="grid gap-2">
               <Label>{t("sell_common_videoUpload")}</Label>
-              <Input type="file" accept=".mpg,.mp4,.mov" onChange={onPickVideo} />
-              {video ? <div className="text-xs text-zinc-600">{t("sell_common_selected")}: {video.name}</div> : null}
+              <label className="group relative flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-zinc-300 bg-zinc-50 p-6 transition-colors hover:border-rose-400 hover:bg-rose-50/30">
+                <input
+                  type="file"
+                  accept=".mpg,.mp4,.mov"
+                  onChange={onPickVideo}
+                  className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                />
+                <div className="flex flex-col items-center gap-3">
+                  <div className="rounded-full bg-rose-100 p-3">
+                    <svg className="h-6 w-6 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <div className="text-center">
+                    <span className="text-sm font-medium text-zinc-700 group-hover:text-rose-700">{t("sell_common_videoUpload")}</span>
+                    <p className="mt-1 text-xs text-zinc-500">{t("sell_common_videoUploadHint")}</p>
+                  </div>
+                </div>
+              </label>
+              {video ? (
+                <div className="flex items-center gap-2 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2">
+                  <svg className="h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <span className="flex-1 text-xs text-zinc-600">{video.name}</span>
+                  <button
+                    type="button"
+                    onClick={() => setVideo(null)}
+                    className="rounded-full p-1 text-zinc-400 hover:bg-zinc-200 hover:text-zinc-700"
+                    aria-label={t("sell_common_delete")}
+                  >
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              ) : null}
               {errors.video ? <div className="text-xs text-red-600">{errors.video}</div> : null}
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("sell_common_memo")}</CardTitle>
+            {/* Memo Section */}
+            <Card className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
+              <CardHeader className="px-0 pb-4 pt-0">
+                <CardTitle className="text-base font-semibold text-zinc-900">{t("sell_common_memo")}</CardTitle>
           </CardHeader>
-          <CardContent className="grid gap-2">
+              <CardContent className="grid gap-2 px-0">
             <Textarea
               value={draft.memo}
               maxLength={10_000}
               onChange={(e) => setField("memo", e.target.value as any)}
               placeholder={t("sell_common_memoPlaceholder")}
+              className="rounded-xl focus:ring-2 focus:ring-rose-500/20"
             />
             <div className="flex items-center justify-between text-xs text-zinc-600">
               <div>{errors.memo ? <span className="text-red-600">{errors.memo}</span> : null}</div>
@@ -518,17 +583,19 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("sell_common_contact")}</CardTitle>
+            {/* Contact Section */}
+            <Card className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
+              <CardHeader className="px-0 pb-4 pt-0">
+                <CardTitle className="text-base font-semibold text-zinc-900">{t("sell_common_contact")}</CardTitle>
           </CardHeader>
-          <CardContent className="grid gap-4 sm:grid-cols-3">
+              <CardContent className="grid gap-4 px-0 sm:grid-cols-3">
             <div className="grid gap-2">
               <Label>{t("sell_contact_name")}</Label>
               <Input
                 value={draft.contactName}
                 onChange={(e) => setField("contactName", e.target.value as any)}
                 placeholder={t("sell_contact_namePlaceholder")}
+                className="h-11 rounded-xl focus:ring-2 focus:ring-rose-500/20"
               />
               {errors.contactName ? <div className="text-xs text-red-600">{errors.contactName}</div> : null}
             </div>
@@ -538,6 +605,7 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
                 value={draft.contactEmail}
                 onChange={(e) => setField("contactEmail", e.target.value as any)}
                 placeholder={t("sell_contact_emailPlaceholder")}
+                className="h-11 rounded-xl focus:ring-2 focus:ring-rose-500/20"
               />
               {errors.contactEmail ? <div className="text-xs text-red-600">{errors.contactEmail}</div> : null}
             </div>
@@ -547,12 +615,14 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
                 value={draft.contactPhone}
                 onChange={(e) => setField("contactPhone", e.target.value as any)}
                 placeholder={t("sell_contact_phonePlaceholder")}
+                className="h-11 rounded-xl focus:ring-2 focus:ring-rose-500/20"
               />
               {errors.contactPhone ? <div className="text-xs text-red-600">{errors.contactPhone}</div> : null}
             </div>
           </CardContent>
         </Card>
 
+            {/* Actions */}
         <div className="flex items-center justify-between">
           <Link href="/sell">
             <Button variant="outline">{t("common_back")}</Button>
@@ -572,12 +642,33 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
             >
               {t("sell_common_reset")}
             </Button>
-            <Button variant="primary" onClick={onSubmit}>{t("sell_form_continueToPayment")}</Button>
+                <Button variant="primary" onClick={onSubmit} disabled={isSubmitting} className="lg:hidden">
+                  {isSubmitting ? t("common_loading") : t("sell_form_continueToPayment")}
+                </Button>
           </div>
         </div>
 
         <div className="text-xs text-zinc-500">
           {t("sell_common_draftAutoSave")}: <span className="font-mono">sellDraft:{category}</span>
+            </div>
+          </div>
+
+          {/* Right: Summary Card (Desktop) */}
+          <aside className="hidden lg:block">
+            <PostCreateSummaryCard
+              draft={draft}
+              imagesCount={images.length}
+              onSubmit={onSubmit}
+              isSubmitting={isSubmitting}
+            />
+          </aside>
+        </div>
+
+        {/* Mobile Sticky CTA */}
+        <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-zinc-200 bg-white p-4 shadow-lg lg:hidden">
+          <Button variant="primary" className="w-full" onClick={onSubmit} disabled={isSubmitting}>
+            {isSubmitting ? t("common_loading") : t("sell_form_continueToPayment")}
+          </Button>
         </div>
       </div>
     </RequireAuth>

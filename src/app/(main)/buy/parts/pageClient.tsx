@@ -37,8 +37,9 @@ export function PartsClient({ searchParams }: { searchParams: Record<string, str
   );
   const [priceMinMnt, setPriceMinMnt] = React.useState(firstString(searchParams.priceMinMnt) ?? "");
   const [priceMaxMnt, setPriceMaxMnt] = React.useState(firstString(searchParams.priceMaxMnt) ?? "");
+  const [sellerId, setSellerId] = React.useState<string | null>(firstString(searchParams.sellerId) || null);
 
-  React.useEffect(() => setPage(1), [sort, searchQuery, carModel, motorcycleModel, accessoryType, priceMinMnt, priceMaxMnt]);
+  React.useEffect(() => setPage(1), [sort, searchQuery, carModel, motorcycleModel, accessoryType, priceMinMnt, priceMaxMnt, sellerId]);
 
   // Keep filters/sort in URL
   React.useEffect(() => {
@@ -51,8 +52,9 @@ export function PartsClient({ searchParams }: { searchParams: Record<string, str
     if (accessoryType !== "all") sp.set("accessoryType", accessoryType);
     if (priceMinMnt) sp.set("priceMinMnt", priceMinMnt);
     if (priceMaxMnt) sp.set("priceMaxMnt", priceMaxMnt);
+    if (sellerId) sp.set("sellerId", sellerId);
     router.replace(`/buy/parts?${sp.toString()}`, { scroll: false });
-  }, [router, page, sort, searchQuery, carModel, motorcycleModel, accessoryType, priceMinMnt, priceMaxMnt]);
+  }, [router, page, sort, searchQuery, carModel, motorcycleModel, accessoryType, priceMinMnt, priceMaxMnt, sellerId]);
 
   const carModelsQuery = useQuery({
     queryKey: ["parts", "carModels"],
@@ -65,7 +67,7 @@ export function PartsClient({ searchParams }: { searchParams: Record<string, str
   });
 
   const listQuery = useQuery({
-    queryKey: ["parts", "list", { sort, page, searchQuery, carModel, motorcycleModel, accessoryType, priceMinMnt, priceMaxMnt }],
+    queryKey: ["parts", "list", { sort, page, searchQuery, carModel, motorcycleModel, accessoryType, priceMinMnt, priceMaxMnt, sellerId }],
     queryFn: () =>
       fetchPartsList({
         sort,
@@ -77,6 +79,7 @@ export function PartsClient({ searchParams }: { searchParams: Record<string, str
         accessoryType: accessoryType !== "all" ? accessoryType : undefined,
         priceMinMnt: priceMinMnt ? Number(priceMinMnt) : undefined,
         priceMaxMnt: priceMaxMnt ? Number(priceMaxMnt) : undefined,
+        sellerId: sellerId || undefined,
       }),
   });
 

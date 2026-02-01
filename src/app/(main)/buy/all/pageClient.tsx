@@ -68,6 +68,7 @@ export function BuyAllClient({ searchParams }: { searchParams: Record<string, st
   const [transmission, setTransmission] = React.useState(firstString(searchParams.transmission) ?? "all");
   const [color, setColor] = React.useState(firstString(searchParams.color) ?? "all");
   const [regionGroup, setRegionGroup] = React.useState(firstString(searchParams.region) ?? "");
+  const [sellerId, setSellerId] = React.useState<string | null>(firstString(searchParams.sellerId) || null);
 
   React.useEffect(() => setPage(1), [
     sort,
@@ -85,6 +86,7 @@ export function BuyAllClient({ searchParams }: { searchParams: Record<string, st
     transmission,
     color,
     regionGroup,
+    sellerId,
   ]);
 
   // Keep filters/sort in URL (future backend integration)
@@ -106,8 +108,9 @@ export function BuyAllClient({ searchParams }: { searchParams: Record<string, st
     if (transmission !== "all") sp.set("transmission", transmission);
     if (color !== "all") sp.set("color", color);
     if (regionGroup) sp.set("region", regionGroup);
+    if (sellerId) sp.set("sellerId", sellerId);
     router.replace(`/buy/all?${sp.toString()}`, { scroll: false });
-  }, [router, page, sort, manufacturer, model, yearMin, yearMax, importYearMin, importYearMax, mileageMinKm, mileageMaxKm, priceMinMnt, priceMaxMnt, fuel, transmission, color, regionGroup]);
+  }, [router, page, sort, manufacturer, model, yearMin, yearMax, importYearMin, importYearMax, mileageMinKm, mileageMaxKm, priceMinMnt, priceMaxMnt, fuel, transmission, color, regionGroup, sellerId]);
 
   const taxonomyQuery = useQuery({
     queryKey: ["cars", "taxonomy"],
@@ -168,7 +171,7 @@ export function BuyAllClient({ searchParams }: { searchParams: Record<string, st
     queryKey: [
       "cars",
       "list",
-      { sort, page, manufacturer, model, yearMin, yearMax, importYearMin, importYearMax, mileageMinKm, mileageMaxKm, priceMinMnt, priceMaxMnt, fuel, transmission, color, regionGroup },
+      { sort, page, manufacturer, model, yearMin, yearMax, importYearMin, importYearMax, mileageMinKm, mileageMaxKm, priceMinMnt, priceMaxMnt, fuel, transmission, color, regionGroup, sellerId },
     ],
     queryFn: () =>
       fetchCarsList({
@@ -189,6 +192,7 @@ export function BuyAllClient({ searchParams }: { searchParams: Record<string, st
         transmission: transmission as any,
         color: color as any,
         regionGroup: (regionGroup as any) || "",
+        sellerId: sellerId || undefined,
       }),
   });
 

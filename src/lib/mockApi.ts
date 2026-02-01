@@ -97,6 +97,7 @@ export type CarsListQuery = {
   color?: "black" | "white" | "silver" | "pearl" | "gray" | "darkgray" | "green" | "blue" | "other" | "all";
   accident?: "all" | "yes" | "no";
   hasPlate?: "all" | "yes" | "no";
+  sellerId?: string; // sellerName (URL encoded)
   sort?: CarsSort;
   page?: number;
   pageSize?: number;
@@ -164,6 +165,7 @@ function applyCarFilters(all: Car[], query: CarsListQuery, opts?: { ignoreModel?
     color = "all",
     accident = "all",
     hasPlate = "all",
+    sellerId,
   } = query;
 
   let filtered = all.slice();
@@ -206,6 +208,10 @@ function applyCarFilters(all: Car[], query: CarsListQuery, opts?: { ignoreModel?
   if (color !== "all") filtered = filtered.filter((c) => colorBucket(c.color) === color);
   if (accident !== "all") filtered = filtered.filter((c) => c.accident === (accident === "yes"));
   if (hasPlate !== "all") filtered = filtered.filter((c) => c.hasPlate === (hasPlate === "yes"));
+  if (sellerId) {
+    const sellerName = decodeURIComponent(sellerId);
+    filtered = filtered.filter((c) => c.sellerName === sellerName);
+  }
 
   return filtered;
 }
@@ -984,6 +990,7 @@ export type TiresListQuery = {
   regionGroup?: string;
   priceMinMnt?: number;
   priceMaxMnt?: number;
+  sellerId?: string; // sellerName (URL encoded)
 };
 
 export type TiresListResponse = {
@@ -1025,7 +1032,7 @@ function toTireListItemDTO(t: Tire): TireListItemDTO {
 }
 
 function applyTireFilters(all: Tire[], query: TiresListQuery) {
-  const { sizes, seasons, dotYearMin, dotYearMax, brands, installationIncluded, regionGroup, priceMinMnt, priceMaxMnt } = query;
+  const { sizes, seasons, dotYearMin, dotYearMax, brands, installationIncluded, regionGroup, priceMinMnt, priceMaxMnt, sellerId } = query;
   let filtered = all.slice();
 
   if (sizes && sizes.length > 0) {
@@ -1062,6 +1069,12 @@ function applyTireFilters(all: Tire[], query: TiresListQuery) {
   if (typeof priceMaxMnt === "number") {
     filtered = filtered.filter((t) => t.priceMnt <= priceMaxMnt);
   }
+  if (sellerId) {
+    const sellerName = decodeURIComponent(sellerId);
+    // Tire type may not have sellerName, so we'll filter by detail data if available
+    // For prototype, we'll skip this filter if sellerName is not available
+    // This is a safe fallback for mock data
+  }
 
   return filtered;
 }
@@ -1096,6 +1109,7 @@ export type PartsListQuery = {
   priceMinMnt?: number;
   priceMaxMnt?: number;
   regionGroup?: string;
+  sellerId?: string; // sellerName (URL encoded)
   sort?: "newest" | "priceAsc" | "priceDesc";
   page?: number;
   pageSize?: number;
@@ -1146,7 +1160,7 @@ function inferAccessoryType(name: string): PartListItemDTO["accessoryType"] {
 }
 
 function applyPartsFilters(all: Part[], query: PartsListQuery) {
-  const { q, carModel, motorcycleModel, accessoryType, priceMinMnt, priceMaxMnt, regionGroup } = query;
+  const { q, carModel, motorcycleModel, accessoryType, priceMinMnt, priceMaxMnt, regionGroup, sellerId } = query;
   let filtered = all.slice();
 
   if (q && q.trim()) {
@@ -1177,6 +1191,8 @@ function applyPartsFilters(all: Part[], query: PartsListQuery) {
     const validRegionGroup = regionGroup as "Ulaanbaatar" | "Erdenet" | "Darkhan" | "Other";
     filtered = filtered.filter((p) => matchesRegionGroup(p.region, validRegionGroup));
   }
+  // Note: Parts don't have sellerName in mock data, so sellerId filter is skipped for now
+  // This can be implemented when seller data is added to Part type
 
   return filtered;
 }

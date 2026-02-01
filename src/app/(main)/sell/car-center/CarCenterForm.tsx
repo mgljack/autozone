@@ -539,7 +539,26 @@ export function CarCenterForm() {
           <CardContent className="grid gap-4">
             <div className="grid gap-2">
               <Label>{t("sell_common_imageUpload")} ({t("carCenter_form_photosMax")})</Label>
-              <Input type="file" accept=".jpg,.jpeg,.png,.gif" multiple onChange={onPickImages} />
+              <label className="group relative flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-zinc-300 bg-zinc-50 p-6 transition-colors hover:border-rose-400 hover:bg-rose-50/30">
+                <input
+                  type="file"
+                  accept=".jpg,.jpeg,.png,.gif"
+                  multiple
+                  onChange={onPickImages}
+                  className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                />
+                <div className="flex flex-col items-center gap-3">
+                  <div className="rounded-full bg-rose-100 p-3">
+                    <svg className="h-6 w-6 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <div className="text-center">
+                    <span className="text-sm font-medium text-zinc-700 group-hover:text-rose-700">{t("sell_common_imageUpload")}</span>
+                    <p className="mt-1 text-xs text-zinc-500">{t("sell_common_imageUploadHint")}</p>
+                  </div>
+                </div>
+              </label>
               {imagePreviews.length > 0 && (
                 <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
                   {imagePreviews.map((src, idx) => (
@@ -549,9 +568,12 @@ export function CarCenterForm() {
                       <button
                         type="button"
                         onClick={() => removeImageAt(idx)}
-                        className="absolute right-1 top-1 rounded-md bg-black/60 px-2 py-1 text-xs text-white"
+                        className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-md backdrop-blur-sm transition-all hover:bg-rose-50 hover:shadow-lg"
+                        aria-label={t("sell_common_delete")}
                       >
-                        {t("sell_common_delete")}
+                        <svg className="h-4 w-4 text-zinc-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
                       </button>
                     </div>
                   ))}

@@ -7,6 +7,7 @@ import React from "react";
 
 import { Button } from "@/components/ui/button";
 import { CarGallery } from "@/components/cars/CarGallery";
+import { SellerInfo } from "@/components/listings/SellerInfo";
 import { useFavorites } from "@/features/favorites/favorites";
 import { formatMnt } from "@/lib/format";
 import { fetchTireById, fetchTiresList } from "@/lib/mockApi";
@@ -147,6 +148,9 @@ export default function TireDetailClient({ id }: { id: string }) {
             <div className="text-3xl font-extrabold tracking-tight text-zinc-900">
               {formatMnt(tire.priceMnt)}
             </div>
+
+            {/* Seller Info */}
+            {tire.seller && <SellerInfo sellerName={tire.seller.name} type="tire" />}
 
             <div className="mt-4">
               <Button

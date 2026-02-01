@@ -48,8 +48,9 @@ export function TirePageClient({ searchParams }: { searchParams: Record<string, 
     () => firstString(searchParams.installationIncluded) ?? "all",
   );
   const [regionGroup, setRegionGroup] = React.useState(firstString(searchParams.region) ?? "");
+  const [sellerId, setSellerId] = React.useState<string | null>(firstString(searchParams.sellerId) || null);
 
-  React.useEffect(() => setPage(1), [sort, sizes, seasons, dotYearMin, dotYearMax, brands, installationIncluded, regionGroup]);
+  React.useEffect(() => setPage(1), [sort, sizes, seasons, dotYearMin, dotYearMax, brands, installationIncluded, regionGroup, sellerId]);
 
   // Keep filters/sort in URL
   React.useEffect(() => {
@@ -63,11 +64,12 @@ export function TirePageClient({ searchParams }: { searchParams: Record<string, 
     if (brands.length > 0) sp.set("brands", brands.join(","));
     if (installationIncluded !== "all") sp.set("installationIncluded", installationIncluded);
     if (regionGroup) sp.set("region", regionGroup);
+    if (sellerId) sp.set("sellerId", sellerId);
     router.replace(`/buy/tire?${sp.toString()}`, { scroll: false });
-  }, [router, page, sort, sizes, seasons, dotYearMin, dotYearMax, brands, installationIncluded, regionGroup]);
+  }, [router, page, sort, sizes, seasons, dotYearMin, dotYearMax, brands, installationIncluded, regionGroup, sellerId]);
 
   const listQuery = useQuery({
-    queryKey: ["tires", "list", { sort, page, sizes, seasons, dotYearMin, dotYearMax, brands, installationIncluded, regionGroup }],
+    queryKey: ["tires", "list", { sort, page, sizes, seasons, dotYearMin, dotYearMax, brands, installationIncluded, regionGroup, sellerId }],
     queryFn: () =>
       fetchTiresList({
         sort,
@@ -80,6 +82,7 @@ export function TirePageClient({ searchParams }: { searchParams: Record<string, 
         brands: brands.length > 0 ? brands : undefined,
         installationIncluded: installationIncluded === "all" ? undefined : installationIncluded === "true",
         regionGroup: regionGroup || undefined,
+        sellerId: sellerId || undefined,
       }),
   });
 

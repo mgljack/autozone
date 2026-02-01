@@ -47,7 +47,7 @@ export function OptionInfoSection({ options }: OptionInfoSectionProps) {
         {fixedOptions.map((opt) => {
           const isActive = options?.[opt.key] === true;
           const Icon = opt.icon;
-          const labelKey = `carDetail.options.${opt.key}` as const;
+          const labelKey = `carDetail_options_${opt.key}` as const;
 
           return (
             <div key={opt.key} className="flex min-w-max flex-col items-center gap-2">

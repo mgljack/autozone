@@ -7,6 +7,7 @@ import React from "react";
 
 import { Button } from "@/components/ui/button";
 import { CarGallery } from "@/components/cars/CarGallery";
+import { SellerInfo } from "@/components/listings/SellerInfo";
 import { useFavorites } from "@/features/favorites/favorites";
 import { formatMnt } from "@/lib/format";
 import { fetchPartById, fetchPartsList } from "@/lib/mockApi";
@@ -137,6 +138,9 @@ export default function PartDetailClient({ id }: { id: string }) {
             <div className="text-3xl font-extrabold tracking-tight text-zinc-900">
               {formatMnt(part.priceMnt)}
             </div>
+
+            {/* Seller Info */}
+            {part.seller && <SellerInfo sellerName={part.seller.name} type="parts" />}
 
             <div className="mt-4">
               <Button

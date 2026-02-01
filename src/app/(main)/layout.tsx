@@ -7,9 +7,9 @@ import { LeftFloatingMenu } from "@/components/layout/LeftFloatingMenu";
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-dvh w-full bg-white text-zinc-900">
+    <div className="flex min-h-dvh w-full flex-col bg-white text-zinc-900">
       <Header />
-      <main className="mx-auto w-full max-w-[1280px] px-3 py-6 sm:px-4 lg:px-5">{children}</main>
+      <main className="mx-auto flex-1 w-full max-w-[1280px] px-3 py-6 sm:px-4 lg:px-5">{children}</main>
       <Footer />
       <FloatingMenu />
       <LeftFloatingMenu />

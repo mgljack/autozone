@@ -237,52 +237,99 @@ export function CarGallery({
 
       {/* Modal: all photos */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-5xl">
-          <DialogHeader>
-            <DialogTitle>{galleryTitle}</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-3">
-            <div className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100">
-              <div className="relative aspect-[16/10] w-full">
-                <Image src={activeSrc} alt={title} fill className="object-cover" />
+        <DialogContent 
+          className="w-[95vw] max-w-[1200px] h-[90vh] max-h-[800px] p-0 rounded-none sm:rounded-2xl overflow-hidden border-0 shadow-2xl"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Header with close button */}
+          <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-zinc-200 bg-white">
+            <div className="flex items-center gap-3">
+              <h3 className="text-lg font-semibold text-zinc-900">{galleryTitle}</h3>
+              <span className="text-sm text-zinc-500">
+                {activeIndex + 1} / {safe.length}
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 text-zinc-700 transition-colors hover:bg-zinc-200 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2"
+              aria-label={t("common_close")}
+            >
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Main image area */}
+          <div className="relative flex-1 bg-zinc-950 overflow-hidden">
+            <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-8">
+              <div className="relative w-full h-full max-w-full max-h-full">
+                <Image 
+                  src={activeSrc} 
+                  alt={`${title} - ${activeIndex + 1}`} 
+                  fill 
+                  className="object-contain" 
+                  sizes="(max-width: 1200px) 95vw, 1200px"
+                />
+              </div>
               </div>
 
+            {/* Navigation arrows */}
+            {safe.length > 1 && (
+              <>
               <button
                 type="button"
-                className="absolute left-3 top-1/2 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-zinc-200 bg-white/90 text-sm font-normal text-zinc-900 shadow-sm backdrop-blur hover:bg-white"
-                aria-label="Prev"
+                  className="absolute left-4 top-1/2 z-20 inline-flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-zinc-900 shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-white/50"
+                  aria-label="Previous image"
                 onClick={() => setActiveIndex((i) => (i - 1 + safe.length) % safe.length)}
               >
-                ←
+                  <ChevronLeftIcon className="h-6 w-6" />
               </button>
               <button
                 type="button"
-                className="absolute right-3 top-1/2 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-zinc-200 bg-white/90 text-sm font-normal text-zinc-900 shadow-sm backdrop-blur hover:bg-white"
-                aria-label="Next"
+                  className="absolute right-4 top-1/2 z-20 inline-flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-zinc-900 shadow-lg backdrop-blur-sm transition-all hover:bg-white hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-white/50"
+                  aria-label="Next image"
                 onClick={() => setActiveIndex((i) => (i + 1) % safe.length)}
               >
-                →
+                  <ChevronRightIcon className="h-6 w-6" />
               </button>
-
-              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/55 px-3 py-1 text-xs font-normal text-white">
-                {activeIndex + 1} / {safe.length}
-              </div>
+              </>
+            )}
             </div>
 
-            <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {/* Thumbnail strip */}
+          {safe.length > 1 && (
+            <div className="border-t border-zinc-200 bg-white px-4 sm:px-6 py-4">
+              <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:thin] [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:bg-zinc-100 [&::-webkit-scrollbar-thumb]:bg-zinc-300 [&::-webkit-scrollbar-thumb]:rounded-full">
               {safe.map((src, idx) => (
                 <button
                   key={`${src}-${idx}`}
                   type="button"
                   onClick={() => setActiveIndex(idx)}
-                  className={`relative h-16 w-24 shrink-0 overflow-hidden rounded-xl border ${idx === activeIndex ? "border-zinc-900" : "border-zinc-200"} bg-white`}
-                  aria-label={selectLabel}
+                    className={`relative h-20 w-28 sm:h-24 sm:w-32 shrink-0 overflow-hidden rounded-xl border-2 transition-all ${
+                      idx === activeIndex 
+                        ? "border-zinc-900 ring-2 ring-zinc-900 ring-offset-2 scale-105" 
+                        : "border-zinc-200 hover:border-zinc-400"
+                    } bg-white`}
+                    aria-label={`${selectLabel} ${idx + 1}`}
+                    aria-pressed={idx === activeIndex}
                 >
                   <Image src={src} alt="" fill className="object-cover" />
                 </button>
               ))}
             </div>
           </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>
