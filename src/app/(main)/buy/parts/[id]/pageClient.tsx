@@ -14,7 +14,7 @@ import { useI18n } from "@/context/I18nContext";
 import type { PartDetailDTO, PartListItemDTO } from "@/lib/apiTypes";
 
 export default function PartDetailClient({ id }: { id: string }) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const { isFavorite, toggleFavorite } = useFavorites();
   const [sellerOpen, setSellerOpen] = React.useState(false);
 
@@ -103,7 +103,7 @@ export default function PartDetailClient({ id }: { id: string }) {
 
   const metaLine = [
     part.forManufacturer && part.forModel ? `${part.forManufacturer} ${part.forModel}` : null,
-    part.condition === "new" ? "신품" : "중고",
+    part.condition === "new" ? t("parts_specs_condition_new") : t("parts_specs_condition_used"),
   ]
     .filter(Boolean)
     .join(" · ");
@@ -112,7 +112,7 @@ export default function PartDetailClient({ id }: { id: string }) {
     <div className="grid gap-6">
       <div className="text-sm">
         <Link href="/buy/parts" className="font-normal text-zinc-900 hover:underline">
-          ← 목록으로 돌아가기
+          {t("parts_detail_backToList")}
         </Link>
       </div>
 
@@ -171,7 +171,7 @@ export default function PartDetailClient({ id }: { id: string }) {
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <Row label={t("parts_specs_price")} value={formatMnt(part.priceMnt)} />
           <Row label={t("parts_specs_condition")} value={part.condition === "new" ? t("parts_specs_condition_new") : t("parts_specs_condition_used")} />
-          <Row label={t("parts_specs_registeredDate")} value={new Date(part.createdAt).toLocaleDateString("ko-KR")} />
+          <Row label={t("parts_specs_registeredDate")} value={new Date(part.createdAt).toLocaleDateString(lang === "ko" ? "ko-KR" : lang === "mn" ? "mn-MN" : "en-US")} />
           <Row label={t("parts_specs_region")} value={part.regionLabel} />
           {part.forManufacturer && <Row label={t("parts_specs_manufacturer")} value={part.forManufacturer} />}
           {part.forModel && <Row label={t("parts_specs_compatibleModel")} value={part.forModel} />}

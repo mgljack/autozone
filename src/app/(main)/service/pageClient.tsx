@@ -12,6 +12,7 @@ import { ServiceCenterCardHorizontal } from "@/components/service/ServiceCenterC
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { useI18n } from "@/context/I18nContext";
+import { SortPills } from "@/components/listings/SortPills";
 import { fetchCentersList, type CentersListQuery } from "@/lib/mockApi";
 
 function firstString(v: string | string[] | undefined) {
@@ -139,17 +140,15 @@ export function ServiceCentersClient({ searchParams }: { searchParams: Record<st
 
         {/* RIGHT: Cards */}
         <section className="grid gap-3">
-          <div className="flex items-center justify-between rounded-2xl border border-zinc-200 bg-white p-4">
-            <div className="text-sm font-normal text-zinc-900">
-              {listQuery.data ? t("common_total", { count: listQuery.data.total }) : t("common_loading")}
-            </div>
-            <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">{t("buyAll_sort_label")}</span>
-              <Select value={sort} onChange={(e) => setSort(e.target.value as CentersSort)} className="w-44">
-                <option value="newest">{t("common_sort_newest")}</option>
-                <option value="nameAsc">{t("service_sort_nameAsc")}</option>
-              </Select>
-            </label>
+          <div className="flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-start">
+            <SortPills
+              value={sort}
+              onChange={setSort}
+              options={[
+                { key: "newest", labelKey: "common_sort_newest" },
+                { key: "nameAsc", labelKey: "service_sort_nameAsc" },
+              ]}
+            />
           </div>
 
           {listQuery.isLoading ? (

@@ -89,7 +89,9 @@ export default function ServiceCenterDetailClient({ id }: { id: string }) {
       <SectionTitle title={center.name} subtitle={center.regionLabel} />
 
       {/* Photos */}
+      <div className="-mx-3 sm:-mx-4 lg:-mx-5">
       <CenterGallery images={images} title={center.name} />
+      </div>
 
       {/* Contact bar under photos (horizontal like reference) */}
       <div className="pt-4">

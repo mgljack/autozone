@@ -12,6 +12,7 @@ import { PartCard } from "@/components/parts/PartCard";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { useI18n } from "@/context/I18nContext";
+import { SortPills } from "@/components/listings/SortPills";
 import { fetchPartsList, fetchCarModelsForParts, fetchMotorcycleModelsForParts, type PartsListQuery } from "@/lib/mockApi";
 
 function firstString(v: string | string[] | undefined) {
@@ -81,22 +82,22 @@ export function PartsClient({ searchParams }: { searchParams: Record<string, str
 
   return (
     <div className="grid gap-6">
-      <SectionTitle title="부품" subtitle="차량 부품 및 액세서리를 검색하세요" />
+      <SectionTitle title={t("parts_title")} subtitle={t("parts_subtitle")} />
 
       <div className="grid gap-4 lg:grid-cols-[320px_1fr] items-start">
         <aside className="rounded-2xl border border-zinc-200 bg-white p-4 h-auto self-start">
-          <div className="text-sm font-normal text-zinc-900">필터</div>
+          <div className="text-sm font-normal text-zinc-900">{t("parts_filters_title")}</div>
 
           <div className="mt-3 grid gap-3">
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">부품을 검색하세요</span>
-              <Input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="부품명 검색" />
+              <span className="text-xs font-normal text-zinc-600">{t("parts_filters_search")}</span>
+              <Input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder={t("parts_filters_searchPlaceholder")} />
             </label>
 
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">전체 모델</span>
+              <span className="text-xs font-normal text-zinc-600">{t("parts_filters_allModels")}</span>
               <Select value={carModel} onChange={(e) => setCarModel(e.target.value)}>
-                <option value="all">전체 모델</option>
+                <option value="all">{t("parts_filters_allModels")}</option>
                 {(carModelsQuery.data ?? []).map((model) => (
                   <option key={model} value={model}>
                     {model}
@@ -106,9 +107,9 @@ export function PartsClient({ searchParams }: { searchParams: Record<string, str
             </label>
 
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">전체 오토바이 모델</span>
+              <span className="text-xs font-normal text-zinc-600">{t("parts_filters_allMotorcycleModels")}</span>
               <Select value={motorcycleModel} onChange={(e) => setMotorcycleModel(e.target.value)}>
-                <option value="all">전체 오토바이 모델</option>
+                <option value="all">{t("parts_filters_allMotorcycleModels")}</option>
                 {(motorcycleModelsQuery.data ?? []).map((model) => (
                   <option key={model} value={model}>
                     {model}
@@ -118,14 +119,14 @@ export function PartsClient({ searchParams }: { searchParams: Record<string, str
             </label>
 
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">액세서리</span>
+              <span className="text-xs font-normal text-zinc-600">{t("parts_filters_accessory")}</span>
               <Select value={accessoryType} onChange={(e) => setAccessoryType(e.target.value as any)}>
-                <option value="all">전체</option>
-                <option value="seat-cover">시트 커버</option>
-                <option value="camera">카메라</option>
-                <option value="floor-mat">바닥 매트</option>
-                <option value="jump-starter">점프 스타터</option>
-                <option value="other">기타</option>
+                <option value="all">{t("common_all")}</option>
+                <option value="seat-cover">{t("parts_filters_accessory_seatCover")}</option>
+                <option value="camera">{t("parts_filters_accessory_camera")}</option>
+                <option value="floor-mat">{t("parts_filters_accessory_floorMat")}</option>
+                <option value="jump-starter">{t("parts_filters_accessory_jumpStarter")}</option>
+                <option value="other">{t("buyAll_option_color_other")}</option>
               </Select>
             </label>
 
@@ -143,18 +144,16 @@ export function PartsClient({ searchParams }: { searchParams: Record<string, str
         </aside>
 
         <section className="grid gap-3">
-          <div className="flex items-center justify-between rounded-2xl border border-zinc-200 bg-white p-4">
-            <div className="text-sm font-normal text-zinc-900">
-              {listQuery.data ? t("common_total", { count: listQuery.data.total }) : t("common_loading")}
-            </div>
-            <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">{t("buyAll_sort_label")}</span>
-              <Select value={sort} onChange={(e) => setSort(e.target.value as PartsSort)} className="w-44">
-                <option value="newest">{t("common_sort_newest")}</option>
-                <option value="priceAsc">{t("buyAll_sort_priceAsc")}</option>
-                <option value="priceDesc">{t("buyAll_sort_priceDesc")}</option>
-              </Select>
-            </label>
+          <div className="flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-start">
+            <SortPills
+              value={sort}
+              onChange={setSort}
+              options={[
+                { key: "newest", labelKey: "common_sort_newest" },
+                { key: "priceAsc", labelKey: "buyAll_sort_priceAsc" },
+                { key: "priceDesc", labelKey: "buyAll_sort_priceDesc" },
+              ]}
+            />
           </div>
 
           {listQuery.isLoading ? (
@@ -178,7 +177,7 @@ export function PartsClient({ searchParams }: { searchParams: Record<string, str
               ) : null}
             </>
           ) : (
-            <EmptyState title="부품이 없습니다" />
+            <EmptyState title={t("parts_emptyState")} />
           )}
         </section>
       </div>

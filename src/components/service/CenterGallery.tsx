@@ -47,7 +47,7 @@ export function CenterGallery({ images, title }: { images: string[]; title: stri
   const isLast = activeIndex === safe.length - 1;
 
   return (
-    <div className="grid gap-3">
+    <div className="grid gap-3 px-3 sm:px-4 lg:px-5">
       {/* Main Image Area */}
       <div className="relative overflow-hidden rounded-3xl border border-zinc-200 bg-white">
         <div
@@ -71,8 +71,8 @@ export function CenterGallery({ images, title }: { images: string[]; title: stri
             style={{ transform: `translateX(-${activeIndex * 100}%)` }}
           >
             {safe.map((src, idx) => (
-              <div key={`${src}-${idx}`} className="relative min-w-full flex items-center justify-center">
-                <Image src={src} alt={`${title} - Image ${idx + 1}`} fill className="object-contain" priority={idx === 0} />
+              <div key={`${src}-${idx}`} className="relative min-w-full">
+                <Image src={src} alt={`${title} - Image ${idx + 1}`} fill className="object-cover" priority={idx === 0} />
               </div>
             ))}
           </div>

@@ -72,7 +72,7 @@ export async function fetchHomeSections(): Promise<HomeSections> {
   );
 }
 
-export type CarsSort = "newest" | "priceAsc" | "priceDesc" | "mileageAsc" | "mileageDesc";
+export type CarsSort = "newest" | "priceAsc" | "priceDesc" | "mileageAsc" | "mileageDesc" | "yearDesc";
 
 export type CarsListQuery = {
   q?: string;
@@ -230,6 +230,7 @@ export async function fetchCarsList(query: CarsListQuery = {}): Promise<CarsList
     if (sort === "priceDesc") return b.priceMnt - a.priceMnt;
     if (sort === "mileageAsc") return a.mileageKm - b.mileageKm;
     if (sort === "mileageDesc") return b.mileageKm - a.mileageKm;
+    if (sort === "yearDesc") return (b.yearMade ?? 0) - (a.yearMade ?? 0);
     return 0;
   });
 
@@ -273,6 +274,7 @@ export async function fetchMotorcyclesList(query: CarsListQuery = {}): Promise<C
     if (sort === "priceDesc") return b.priceMnt - a.priceMnt;
     if (sort === "mileageAsc") return (a.mileageKm ?? 0) - (b.mileageKm ?? 0);
     if (sort === "mileageDesc") return (b.mileageKm ?? 0) - (a.mileageKm ?? 0);
+    if (sort === "yearDesc") return (b.yearMade ?? 0) - (a.yearMade ?? 0);
     return 0;
   });
 
@@ -1209,6 +1211,11 @@ export async function fetchCarModelsForParts(): Promise<string[]> {
 export async function fetchMotorcycleModelsForParts(): Promise<string[]> {
   const models = Array.from(new Set(motorcycles.map((m) => `${m.manufacturer} ${m.model}`).sort()));
   return await mockApi(models, 100, 200);
+}
+
+export async function fetchMotorcycleManufacturers(): Promise<string[]> {
+  const manufacturers = Array.from(new Set(motorcycles.map((m) => m.manufacturer))).sort();
+  return await mockApi(manufacturers, 100, 200);
 }
 
 function toPartDetailDTO(p: Part): PartDetailDTO {

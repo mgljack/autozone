@@ -9,41 +9,68 @@ import { EmptyState } from "@/components/common/EmptyState";
 import { Pagination } from "@/components/common/Pagination";
 import { SectionTitle } from "@/components/common/SectionTitle";
 import { CarCardHorizontal } from "@/components/cars/CarCardHorizontal";
+import { BrandSelect } from "@/components/filters/BrandSelect";
+import { RangeSelect } from "@/components/filters/RangeSelect";
+import { VehicleSortPills } from "@/components/listings/SortPills";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { useI18n } from "@/context/I18nContext";
-import { fetchMotorcycleModelCounts, fetchMotorcyclesList, type CarsSort } from "@/lib/mockApi";
+import { fetchMotorcycleManufacturers, fetchMotorcycleModelCounts, fetchMotorcyclesList, type CarsSort } from "@/lib/mockApi";
 
 function firstString(v: string | string[] | undefined) {
   return Array.isArray(v) ? v[0] : v;
 }
 
 export function MotorcycleAllClient({ searchParams }: { searchParams: Record<string, string | string[] | undefined> }) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const router = useRouter();
 
   const [page, setPage] = React.useState<number>(() => Number(firstString(searchParams.page)) || 1);
   const [sort, setSort] = React.useState<CarsSort>(() => (firstString(searchParams.sort) as CarsSort) || "newest");
 
   // Sidebar filters (URL-synced)
-  const [modelText, setModelText] = React.useState(firstString(searchParams.modelText) ?? "");
+  const [manufacturer, setManufacturer] = React.useState<string | null>(firstString(searchParams.manufacturer) || null);
   const [modelSearch, setModelSearch] = React.useState("");
   const [model, setModel] = React.useState(firstString(searchParams.model) ?? "");
-  const [yearMin, setYearMin] = React.useState(firstString(searchParams.yearMin) ?? "");
-  const [yearMax, setYearMax] = React.useState(firstString(searchParams.yearMax) ?? "");
-  const [importYearMin, setImportYearMin] = React.useState(firstString(searchParams.importYearMin) ?? "");
-  const [importYearMax, setImportYearMax] = React.useState(firstString(searchParams.importYearMax) ?? "");
-  const [mileageMinKm, setMileageMinKm] = React.useState(firstString(searchParams.mileageMinKm) ?? "");
-  const [mileageMaxKm, setMileageMaxKm] = React.useState(firstString(searchParams.mileageMaxKm) ?? "");
-  const [priceMinMnt, setPriceMinMnt] = React.useState(firstString(searchParams.priceMinMnt) ?? "");
-  const [priceMaxMnt, setPriceMaxMnt] = React.useState(firstString(searchParams.priceMaxMnt) ?? "");
+  const [yearMin, setYearMin] = React.useState<number | null>(() => {
+    const val = firstString(searchParams.yearMin);
+    return val ? Number(val) : null;
+  });
+  const [yearMax, setYearMax] = React.useState<number | null>(() => {
+    const val = firstString(searchParams.yearMax);
+    return val ? Number(val) : null;
+  });
+  const [importYearMin, setImportYearMin] = React.useState<number | null>(() => {
+    const val = firstString(searchParams.importYearMin);
+    return val ? Number(val) : null;
+  });
+  const [importYearMax, setImportYearMax] = React.useState<number | null>(() => {
+    const val = firstString(searchParams.importYearMax);
+    return val ? Number(val) : null;
+  });
+  const [mileageMinKm, setMileageMinKm] = React.useState<number | null>(() => {
+    const val = firstString(searchParams.mileageMinKm);
+    return val ? Number(val) : null;
+  });
+  const [mileageMaxKm, setMileageMaxKm] = React.useState<number | null>(() => {
+    const val = firstString(searchParams.mileageMaxKm);
+    return val ? Number(val) : null;
+  });
+  const [priceMinMnt, setPriceMinMnt] = React.useState<number | null>(() => {
+    const val = firstString(searchParams.priceMinMnt);
+    return val ? Number(val) : null;
+  });
+  const [priceMaxMnt, setPriceMaxMnt] = React.useState<number | null>(() => {
+    const val = firstString(searchParams.priceMaxMnt);
+    return val ? Number(val) : null;
+  });
   const [fuel, setFuel] = React.useState(firstString(searchParams.fuel) ?? "all");
   const [color, setColor] = React.useState(firstString(searchParams.color) ?? "all");
   const [regionGroup, setRegionGroup] = React.useState(firstString(searchParams.region) ?? "");
 
   React.useEffect(() => setPage(1), [
     sort,
-    modelText,
+    manufacturer,
     model,
     yearMin,
     yearMax,
@@ -63,35 +90,69 @@ export function MotorcycleAllClient({ searchParams }: { searchParams: Record<str
     const sp = new URLSearchParams();
     if (page > 1) sp.set("page", String(page));
     if (sort !== "newest") sp.set("sort", sort);
-    if (modelText.trim()) sp.set("modelText", modelText.trim());
+    if (manufacturer) sp.set("manufacturer", manufacturer);
     if (model) sp.set("model", model);
-    if (yearMin) sp.set("yearMin", yearMin);
-    if (yearMax) sp.set("yearMax", yearMax);
-    if (importYearMin) sp.set("importYearMin", importYearMin);
-    if (importYearMax) sp.set("importYearMax", importYearMax);
-    if (mileageMinKm) sp.set("mileageMinKm", mileageMinKm);
-    if (mileageMaxKm) sp.set("mileageMaxKm", mileageMaxKm);
-    if (priceMinMnt) sp.set("priceMinMnt", priceMinMnt);
-    if (priceMaxMnt) sp.set("priceMaxMnt", priceMaxMnt);
+    if (yearMin !== null) sp.set("yearMin", String(yearMin));
+    if (yearMax !== null) sp.set("yearMax", String(yearMax));
+    if (importYearMin !== null) sp.set("importYearMin", String(importYearMin));
+    if (importYearMax !== null) sp.set("importYearMax", String(importYearMax));
+    if (mileageMinKm !== null) sp.set("mileageMinKm", String(mileageMinKm));
+    if (mileageMaxKm !== null) sp.set("mileageMaxKm", String(mileageMaxKm));
+    if (priceMinMnt !== null) sp.set("priceMinMnt", String(priceMinMnt));
+    if (priceMaxMnt !== null) sp.set("priceMaxMnt", String(priceMaxMnt));
     if (fuel !== "all") sp.set("fuel", fuel);
     if (color !== "all") sp.set("color", color);
     if (regionGroup) sp.set("region", regionGroup);
     router.replace(`/buy/motorcycle?${sp.toString()}`, { scroll: false });
-  }, [router, page, sort, modelText, model, yearMin, yearMax, importYearMin, importYearMax, mileageMinKm, mileageMaxKm, priceMinMnt, priceMaxMnt, fuel, color, regionGroup]);
+  }, [router, page, sort, manufacturer, model, yearMin, yearMax, importYearMin, importYearMax, mileageMinKm, mileageMaxKm, priceMinMnt, priceMaxMnt, fuel, color, regionGroup]);
+
+  const manufacturersQuery = useQuery({
+    queryKey: ["motorcycles", "manufacturers"],
+    queryFn: fetchMotorcycleManufacturers,
+  });
+
+  // Query to get all items (excluding brand filter) for brand count calculation
+  const baseItemsQuery = useQuery({
+    queryKey: [
+      "motorcycles",
+      "list",
+      "baseItems",
+      { sort, model, yearMin, yearMax, importYearMin, importYearMax, mileageMinKm, mileageMaxKm, priceMinMnt, priceMaxMnt, fuel, color, regionGroup },
+    ],
+    queryFn: () =>
+      fetchMotorcyclesList({
+        sort,
+        page: 1,
+        pageSize: 10000, // Large page size to get all items for count calculation
+        model: model || undefined,
+        yearMin: yearMin ?? undefined,
+        yearMax: yearMax ?? undefined,
+        importYearMin: importYearMin ?? undefined,
+        importYearMax: importYearMax ?? undefined,
+        mileageMinKm: mileageMinKm ?? undefined,
+        mileageMaxKm: mileageMaxKm ?? undefined,
+        priceMinMnt: priceMinMnt ?? undefined,
+        priceMaxMnt: priceMaxMnt ?? undefined,
+        fuel: fuel as any,
+        color: color as any,
+        regionGroup: (regionGroup as any) || "",
+        // manufacturer filter is intentionally excluded
+      }),
+  });
 
   const modelCountsQuery = useQuery({
-    queryKey: ["motorcycles", "modelCounts", { modelText, yearMin, yearMax, importYearMin, importYearMax, mileageMinKm, mileageMaxKm, priceMinMnt, priceMaxMnt, fuel, color, regionGroup }],
+    queryKey: ["motorcycles", "modelCounts", { manufacturer, yearMin, yearMax, importYearMin, importYearMax, mileageMinKm, mileageMaxKm, priceMinMnt, priceMaxMnt, fuel, color, regionGroup }],
     queryFn: () =>
       fetchMotorcycleModelCounts({
-        modelText: modelText || undefined,
-        yearMin: yearMin ? Number(yearMin) : undefined,
-        yearMax: yearMax ? Number(yearMax) : undefined,
-        importYearMin: importYearMin ? Number(importYearMin) : undefined,
-        importYearMax: importYearMax ? Number(importYearMax) : undefined,
-        mileageMinKm: mileageMinKm ? Number(mileageMinKm) : undefined,
-        mileageMaxKm: mileageMaxKm ? Number(mileageMaxKm) : undefined,
-        priceMinMnt: priceMinMnt ? Number(priceMinMnt) : undefined,
-        priceMaxMnt: priceMaxMnt ? Number(priceMaxMnt) : undefined,
+        manufacturer: manufacturer || undefined,
+        yearMin: yearMin ?? undefined,
+        yearMax: yearMax ?? undefined,
+        importYearMin: importYearMin ?? undefined,
+        importYearMax: importYearMax ?? undefined,
+        mileageMinKm: mileageMinKm ?? undefined,
+        mileageMaxKm: mileageMaxKm ?? undefined,
+        priceMinMnt: priceMinMnt ?? undefined,
+        priceMaxMnt: priceMaxMnt ?? undefined,
         fuel: fuel as any,
         color: color as any,
         regionGroup: (regionGroup as any) || "",
@@ -99,22 +160,22 @@ export function MotorcycleAllClient({ searchParams }: { searchParams: Record<str
   });
 
   const listQuery = useQuery({
-    queryKey: ["motorcycles", "list", { sort, page, modelText, model, yearMin, yearMax, importYearMin, importYearMax, mileageMinKm, mileageMaxKm, priceMinMnt, priceMaxMnt, fuel, color, regionGroup }],
+    queryKey: ["motorcycles", "list", { sort, page, manufacturer, model, yearMin, yearMax, importYearMin, importYearMax, mileageMinKm, mileageMaxKm, priceMinMnt, priceMaxMnt, fuel, color, regionGroup }],
     queryFn: () =>
       fetchMotorcyclesList({
         sort,
         page,
         pageSize: 12,
-        modelText: modelText || undefined,
+        manufacturer: manufacturer || undefined,
         model: model || undefined,
-        yearMin: yearMin ? Number(yearMin) : undefined,
-        yearMax: yearMax ? Number(yearMax) : undefined,
-        importYearMin: importYearMin ? Number(importYearMin) : undefined,
-        importYearMax: importYearMax ? Number(importYearMax) : undefined,
-        mileageMinKm: mileageMinKm ? Number(mileageMinKm) : undefined,
-        mileageMaxKm: mileageMaxKm ? Number(mileageMaxKm) : undefined,
-        priceMinMnt: priceMinMnt ? Number(priceMinMnt) : undefined,
-        priceMaxMnt: priceMaxMnt ? Number(priceMaxMnt) : undefined,
+        yearMin: yearMin ?? undefined,
+        yearMax: yearMax ?? undefined,
+        importYearMin: importYearMin ?? undefined,
+        importYearMax: importYearMax ?? undefined,
+        mileageMinKm: mileageMinKm ?? undefined,
+        mileageMaxKm: mileageMaxKm ?? undefined,
+        priceMinMnt: priceMinMnt ?? undefined,
+        priceMaxMnt: priceMaxMnt ?? undefined,
         fuel: fuel as any,
         color: color as any,
         regionGroup: (regionGroup as any) || "",
@@ -123,16 +184,21 @@ export function MotorcycleAllClient({ searchParams }: { searchParams: Record<str
 
   return (
     <div className="grid gap-6">
-      <SectionTitle title="전체 오토바이" subtitle={t("buyAll_subtitle")} />
+      <SectionTitle title={t("nav_motorcycle")} />
 
       <div className="grid gap-4 lg:grid-cols-[320px_1fr] items-start">
         <aside className="rounded-2xl border border-zinc-200 bg-white p-4 h-auto self-start">
           <div className="text-sm font-normal text-zinc-900">{t("buyAll_filters_title")}</div>
 
           <div className="mt-3 grid gap-3">
-            <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">{t("buyAll_filters_modelNameSearch")}</span>
-              <Input value={modelText} onChange={(e) => setModelText(e.target.value)} placeholder={t("buyAll_filters_modelNamePlaceholder")} />
+            <label className="grid gap-1 overflow-visible">
+              <span className="text-xs font-normal text-zinc-600">{t("filters_brand_placeholder")}</span>
+              <BrandSelect
+                options={manufacturersQuery.data ?? []}
+                value={manufacturer}
+                onChange={setManufacturer}
+                items={baseItemsQuery.data?.items ?? []}
+              />
             </label>
 
             <label className="grid gap-1">
@@ -162,49 +228,61 @@ export function MotorcycleAllClient({ searchParams }: { searchParams: Record<str
               </div>
             </label>
 
-            <div className="grid grid-cols-2 gap-3">
-              <label className="grid gap-1">
-                <span className="text-xs font-normal text-zinc-600">{t("buyAll_filters_yearMin")}</span>
-                <Input value={yearMin} onChange={(e) => setYearMin(e.target.value.replace(/[^\d]/g, ""))} inputMode="numeric" />
-              </label>
-              <label className="grid gap-1">
-                <span className="text-xs font-normal text-zinc-600">{t("buyAll_filters_yearMax")}</span>
-                <Input value={yearMax} onChange={(e) => setYearMax(e.target.value.replace(/[^\d]/g, ""))} inputMode="numeric" />
-              </label>
-            </div>
+            <RangeSelect
+              label={t("filters_year_label")}
+              fromValue={yearMin}
+              toValue={yearMax}
+              onFromChange={setYearMin}
+              onToChange={setYearMax}
+              options={Array.from({ length: 2026 - 1990 + 1 }, (_, i) => 2026 - i).map((year) => ({
+                value: year,
+                label: String(year),
+              }))}
+            />
 
-            <div className="grid grid-cols-2 gap-3">
-              <label className="grid gap-1">
-                <span className="text-xs font-normal text-zinc-600">{t("buyAll_filters_importYearMin")}</span>
-                <Input value={importYearMin} onChange={(e) => setImportYearMin(e.target.value.replace(/[^\d]/g, ""))} inputMode="numeric" />
-              </label>
-              <label className="grid gap-1">
-                <span className="text-xs font-normal text-zinc-600">{t("buyAll_filters_importYearMax")}</span>
-                <Input value={importYearMax} onChange={(e) => setImportYearMax(e.target.value.replace(/[^\d]/g, ""))} inputMode="numeric" />
-              </label>
-            </div>
+            <RangeSelect
+              label={t("filters_importYear_label")}
+              fromValue={importYearMin}
+              toValue={importYearMax}
+              onFromChange={setImportYearMin}
+              onToChange={setImportYearMax}
+              options={Array.from({ length: 2026 - 1990 + 1 }, (_, i) => 2026 - i).map((year) => ({
+                value: year,
+                label: String(year),
+              }))}
+            />
 
-            <div className="grid grid-cols-2 gap-3">
-              <label className="grid gap-1">
-                <span className="text-xs font-normal text-zinc-600">{t("buyAll_filters_mileageMin")}</span>
-                <Input value={mileageMinKm} onChange={(e) => setMileageMinKm(e.target.value.replace(/[^\d]/g, ""))} inputMode="numeric" />
-              </label>
-              <label className="grid gap-1">
-                <span className="text-xs font-normal text-zinc-600">{t("buyAll_filters_mileageMax")}</span>
-                <Input value={mileageMaxKm} onChange={(e) => setMileageMaxKm(e.target.value.replace(/[^\d]/g, ""))} inputMode="numeric" />
-              </label>
-            </div>
+            <RangeSelect
+              label={t("filters_mileage_label")}
+              fromValue={mileageMinKm}
+              toValue={mileageMaxKm}
+              onFromChange={setMileageMinKm}
+              onToChange={setMileageMaxKm}
+              fromLabelKey="common_min"
+              toLabelKey="common_max"
+              options={[10000, 25000, 50000, 75000, 100000, 125000, 150000, 200000, 250000, 300000].map((km) => {
+                const formatted = Intl.NumberFormat("en-US").format(km);
+                const label = lang === "ko" ? `${formatted}km` : lang === "mn" ? `${formatted}км` : `${formatted} km`;
+                return {
+                  value: km,
+                  label,
+                };
+              })}
+            />
 
-            <div className="grid grid-cols-2 gap-3">
-              <label className="grid gap-1">
-                <span className="text-xs font-normal text-zinc-600">{t("buyAll_filters_priceMin")}</span>
-                <Input value={priceMinMnt} onChange={(e) => setPriceMinMnt(e.target.value.replace(/[^\d]/g, ""))} inputMode="numeric" />
-              </label>
-              <label className="grid gap-1">
-                <span className="text-xs font-normal text-zinc-600">{t("buyAll_filters_priceMax")}</span>
-                <Input value={priceMaxMnt} onChange={(e) => setPriceMaxMnt(e.target.value.replace(/[^\d]/g, ""))} inputMode="numeric" />
-              </label>
-            </div>
+            <RangeSelect
+              label={t("filters_price_label")}
+              fromValue={priceMinMnt}
+              toValue={priceMaxMnt}
+              onFromChange={setPriceMinMnt}
+              onToChange={setPriceMaxMnt}
+              fromLabelKey="common_min"
+              toLabelKey="common_max"
+              options={[5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map((saya) => ({
+                value: saya * 1_000_000,
+                label: lang === "en" ? `${saya}M` : `${saya} сая`,
+              }))}
+            />
 
             <label className="grid gap-1">
               <span className="text-xs font-normal text-zinc-600">{t("buyAll_filters_fuel")}</span>
@@ -245,19 +323,8 @@ export function MotorcycleAllClient({ searchParams }: { searchParams: Record<str
         </aside>
 
         <section className="grid gap-3">
-          <div className="flex items-center justify-between rounded-2xl border border-zinc-200 bg-white p-4">
-            <div className="text-sm font-normal text-zinc-900">
-              {listQuery.data ? t("buyAll.results", { count: listQuery.data.total }) : t("common_loading")}
-            </div>
-            <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">{t("buyAll_sort_label")}</span>
-              <Select value={sort} onChange={(e) => setSort(e.target.value as CarsSort)} className="w-44">
-                <option value="newest">{t("buyAll_sort_newest")}</option>
-                <option value="priceAsc">{t("buyAll_sort_priceAsc")}</option>
-                <option value="priceDesc">{t("buyAll_sort_priceDesc")}</option>
-                <option value="mileageAsc">{t("buyAll_sort_mileageAsc")}</option>
-              </Select>
-            </label>
+          <div className="flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-start">
+            <VehicleSortPills value={sort} onChange={setSort} />
           </div>
 
           {listQuery.isLoading ? (

@@ -14,7 +14,7 @@ import { useI18n } from "@/context/I18nContext";
 import type { TireDetailDTO, TireListItemDTO } from "@/lib/apiTypes";
 
 export default function TireDetailClient({ id }: { id: string }) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const { isFavorite, toggleFavorite } = useFavorites();
   const [sellerOpen, setSellerOpen] = React.useState(false);
 
@@ -101,25 +101,28 @@ export default function TireDetailClient({ id }: { id: string }) {
     }
   };
 
-  const seasonLabels: Record<string, string> = {
-    summer: "썸머",
-    winter: "윈터",
-    "all-season": "올시즌",
-    "off-road": "오프로드",
+  const getSeasonLabel = (season: string): string => {
+    const seasonKeyMap: Record<string, string> = {
+      summer: "tire_filters_season_summer",
+      winter: "tire_filters_season_winter",
+      "all-season": "tire_filters_season_allSeason",
+      "off-road": "tire_filters_season_offRoad",
+    };
+    return t(seasonKeyMap[season] || season);
   };
-  const seasonLabel = seasonLabels[tire.season] || tire.season;
+  const seasonLabel = getSeasonLabel(tire.season);
 
   const metaLine = [
     seasonLabel,
     `DOT ${tire.dotYear}`,
-    tire.installationIncluded ? "장착 포함" : "장착 미포함",
+    tire.installationIncluded ? t("tire_detail_installationIncluded") : t("tire_detail_installationNotIncluded"),
   ].join(" · ");
 
   return (
     <div className="grid gap-6">
       <div className="text-sm">
         <Link href="/buy/tire" className="font-normal text-zinc-900 hover:underline">
-          ← 목록으로 돌아가기
+          {t("tire_detail_backToList")}
         </Link>
       </div>
 
@@ -179,12 +182,12 @@ export default function TireDetailClient({ id }: { id: string }) {
           <Row label={t("tire_specs_price")} value={formatMnt(tire.priceMnt)} />
           <Row label={t("tire_specs_brand")} value={tire.brand} />
           <Row label={t("tire_specs_size")} value={tire.size} />
-          <Row label={t("tire_specs_season")} value={seasonLabel} />
+          <Row label={t("tire_specs_season")} value={getSeasonLabel(tire.season)} />
           <Row label={t("tire_specs_yearMade")} value={`${tire.dotYear}${t("common_year")}`} />
           <Row label={t("tire_specs_quantity")} value={`${tire.qty}${t("common_unit")}`} />
           <Row label={t("tire_specs_condition")} value={tire.condition === "new" ? t("tire_specs_condition_new") : t("tire_specs_condition_used")} />
           <Row label={t("tire_specs_installationIncluded")} value={tire.installationIncluded ? t("tire_specs_installationIncluded_yes") : t("tire_specs_installationIncluded_no")} />
-          <Row label={t("tire_specs_registeredDate")} value={new Date(tire.createdAt).toLocaleDateString("ko-KR")} />
+          <Row label={t("tire_specs_registeredDate")} value={new Date(tire.createdAt).toLocaleDateString(lang === "ko" ? "ko-KR" : lang === "mn" ? "mn-MN" : "en-US")} />
           <Row label={t("tire_specs_region")} value={tire.regionLabel} />
         </div>
       </div>

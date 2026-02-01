@@ -78,7 +78,7 @@ export default function HomeAppPromoSection() {
               <div className="inline-flex items-center gap-2">
                 <span className="h-1.5 w-8 rounded-full bg-gradient-to-r from-red-500 to-orange-500" />
                 <span className="text-sm font-semibold uppercase tracking-widest text-zinc-400">
-                  {t("home_appPromo_label")}
+                {t("home_appPromo_label")}
                 </span>
               </div>
 

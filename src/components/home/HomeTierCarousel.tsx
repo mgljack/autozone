@@ -194,23 +194,34 @@ export function HomeTierCarousel({
 
         <div
           ref={trackRef}
-          className="-mx-2 flex snap-x snap-mandatory gap-4 overflow-x-auto overflow-y-visible px-2 pb-4 scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="-mx-2 flex snap-x snap-mandatory gap-4 overflow-x-auto overflow-y-visible px-2 pt-2 pb-4 scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {cars.map((c) => (
             <Link
               key={c.id}
               href={`/buy/all/${c.id}`}
               data-carousel-card="true"
-              className="shrink-0 snap-start overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-zinc-200/70 transition-transform duration-200 ease-out will-change-transform hover:scale-[1.03] hover:shadow-lg motion-reduce:transition-none motion-reduce:hover:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 md:basis-[calc((100%-32px)/2)] lg:basis-[calc((100%-48px)/3)]"
+              className="relative shrink-0 snap-start rounded-2xl bg-white shadow-sm ring-1 ring-zinc-200/70 transition-all duration-200 ease-out will-change-transform hover:-translate-y-1 hover:z-10 hover:shadow-lg motion-reduce:transition-none motion-reduce:hover:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 md:basis-[calc((100%-32px)/2)] lg:basis-[calc((100%-48px)/3)]"
             >
-              <div className="group relative h-44 w-full bg-zinc-100 sm:h-48">
+              <div className="group relative h-44 w-full overflow-hidden rounded-t-2xl bg-zinc-100 sm:h-48">
+                {/* Default image (image[0]) */}
                 <Image
                   src={c.thumbnailUrl ?? "/samples/cars/car-01.svg"}
                   alt={c.title}
                   fill
-                  className="object-cover"
+                  className="object-cover transition-all duration-300 ease-out group-hover:opacity-0 group-hover:scale-[1.03]"
                   sizes="(min-width: 1024px) 320px, (min-width: 768px) 420px, 80vw"
                 />
+                {/* Hover image (image[1]) - Only for GOLD/SILVER */}
+                {(c.tier === "gold" || c.tier === "silver") && c.images && c.images.length > 1 && (
+                  <Image
+                    src={c.images[1] ?? c.thumbnailUrl ?? "/samples/cars/car-01.svg"}
+                    alt={c.title}
+                    fill
+                    className="absolute inset-0 object-cover opacity-0 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:scale-[1.03]"
+                    sizes="(min-width: 1024px) 320px, (min-width: 768px) 420px, 80vw"
+                  />
+                )}
                 {(c.tier === "gold" || c.tier === "silver") && (
                   <PremiumTierBadge tier={c.tier} />
                 )}

@@ -12,6 +12,7 @@ import { TireCard } from "@/components/tires/TireCard";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { useI18n } from "@/context/I18nContext";
+import { SortPills } from "@/components/listings/SortPills";
 import { fetchTiresList, type TiresListQuery } from "@/lib/mockApi";
 import type { TireListItemDTO } from "@/lib/apiTypes";
 import { formatMnt } from "@/lib/format";
@@ -112,25 +113,25 @@ export function TirePageClient({ searchParams }: { searchParams: Record<string, 
 
   return (
     <div className="grid gap-6">
-      <SectionTitle title="타이어" subtitle="타이어를 검색하고 구매하세요" />
+      <SectionTitle title={t("tire_title")} subtitle={t("tire_subtitle")} />
 
       <div className="grid gap-4 lg:grid-cols-[320px_1fr] items-start">
         <aside className="rounded-2xl border border-zinc-200 bg-white p-4 h-auto self-start">
           <div className="flex items-center justify-between">
-            <div className="text-sm font-normal text-zinc-900">필터</div>
+            <div className="text-sm font-normal text-zinc-900">{t("tire_filters_title")}</div>
             <button
               type="button"
               onClick={resetFilters}
               className="text-xs font-normal text-zinc-600 hover:text-zinc-900"
             >
-              초기화
+              {t("tire_filters_reset")}
             </button>
           </div>
 
           <div className="mt-3 grid gap-3">
             {/* 1) Tire Size */}
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">타이어 규격</span>
+              <span className="text-xs font-normal text-zinc-600">{t("tire_filters_size")}</span>
               <div className="max-h-56 overflow-auto rounded-xl border border-zinc-200 p-2">
                 {availableSizes.map((size) => (
                   <button
@@ -149,14 +150,14 @@ export function TirePageClient({ searchParams }: { searchParams: Record<string, 
 
             {/* 2) Season / Usage */}
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">계절용도</span>
+              <span className="text-xs font-normal text-zinc-600">{t("tire_filters_season")}</span>
               <div className="grid grid-cols-2 gap-2">
                 {[
-                  { value: "summer", label: "썸머" },
-                  { value: "winter", label: "윈터" },
-                  { value: "all-season", label: "올시즌" },
-                  { value: "off-road", label: "오프로드" },
-                ].map(({ value, label }) => (
+                  { value: "summer", labelKey: "tire_filters_season_summer" },
+                  { value: "winter", labelKey: "tire_filters_season_winter" },
+                  { value: "all-season", labelKey: "tire_filters_season_allSeason" },
+                  { value: "off-road", labelKey: "tire_filters_season_offRoad" },
+                ].map(({ value, labelKey }) => (
                   <button
                     key={value}
                     type="button"
@@ -167,7 +168,7 @@ export function TirePageClient({ searchParams }: { searchParams: Record<string, 
                         : "bg-zinc-100 text-zinc-900 hover:bg-zinc-200"
                     }`}
                   >
-                    {label}
+                    {t(labelKey)}
                   </button>
                 ))}
               </div>
@@ -175,7 +176,7 @@ export function TirePageClient({ searchParams }: { searchParams: Record<string, 
 
             {/* 3) Manufacturing Year (DOT) */}
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">제조 연도(DOT)</span>
+              <span className="text-xs font-normal text-zinc-600">{t("tire_filters_dotYear")}</span>
               <div className="grid grid-cols-2 gap-3">
                 <Input
                   value={dotYearMin}
@@ -194,11 +195,11 @@ export function TirePageClient({ searchParams }: { searchParams: Record<string, 
 
             {/* 4) Brand */}
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">브랜드</span>
+              <span className="text-xs font-normal text-zinc-600">{t("tire_filters_brand")}</span>
               <Input
                 value={brandSearch}
                 onChange={(e) => setBrandSearch(e.target.value)}
-                placeholder="브랜드 검색"
+                placeholder={t("tire_filters_brandSearch")}
               />
               <div className="max-h-56 overflow-auto rounded-xl border border-zinc-200 p-2">
                 {availableBrands
@@ -220,11 +221,11 @@ export function TirePageClient({ searchParams }: { searchParams: Record<string, 
 
             {/* 5) Installation Included */}
             <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">장착 포함 여부</span>
+              <span className="text-xs font-normal text-zinc-600">{t("tire_filters_installation")}</span>
               <Select value={installationIncluded} onChange={(e) => setInstallationIncluded(e.target.value)}>
-                <option value="all">전체</option>
-                <option value="true">포함</option>
-                <option value="false">미포함</option>
+                <option value="all">{t("common_all")}</option>
+                <option value="true">{t("tire_filters_installation_included")}</option>
+                <option value="false">{t("tire_filters_installation_notIncluded")}</option>
               </Select>
             </label>
 
@@ -232,29 +233,27 @@ export function TirePageClient({ searchParams }: { searchParams: Record<string, 
             <label className="grid gap-1">
               <span className="text-xs font-normal text-zinc-600">{t("buyAll_filters_region")}</span>
               <Select value={regionGroup} onChange={(e) => setRegionGroup(e.target.value)}>
-                <option value="">전체</option>
-                <option value="Ulaanbaatar">Улаанбаатар</option>
-                <option value="Erdenet">Эрдэнэт</option>
-                <option value="Darkhan">Дархан</option>
-                <option value="Other">기타</option>
+                <option value="">{t("common_all")}</option>
+                <option value="Ulaanbaatar">{t("buyAll_option_region_ua")}</option>
+                <option value="Erdenet">{t("buyAll_option_region_erdenet")}</option>
+                <option value="Darkhan">{t("buyAll_option_region_darkhan")}</option>
+                <option value="Other">{t("buyAll_option_region_other")}</option>
               </Select>
             </label>
           </div>
         </aside>
 
         <section className="grid gap-3">
-          <div className="flex items-center justify-between rounded-2xl border border-zinc-200 bg-white p-4">
-            <div className="text-sm font-normal text-zinc-900">
-              {listQuery.data ? t("common_total", { count: listQuery.data.total }) : t("common_loading")}
-            </div>
-            <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">{t("buyAll_sort_label")}</span>
-              <Select value={sort} onChange={(e) => setSort(e.target.value as any)} className="w-44">
-                <option value="newest">{t("common_sort_newest")}</option>
-                <option value="priceAsc">{t("buyAll_sort_priceAsc")}</option>
-                <option value="priceDesc">{t("buyAll_sort_priceDesc")}</option>
-              </Select>
-            </label>
+          <div className="flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-start">
+            <SortPills
+              value={sort}
+              onChange={setSort}
+              options={[
+                { key: "newest", labelKey: "common_sort_newest" },
+                { key: "priceAsc", labelKey: "buyAll_sort_priceAsc" },
+                { key: "priceDesc", labelKey: "buyAll_sort_priceDesc" },
+              ]}
+            />
           </div>
 
           {listQuery.isLoading ? (
@@ -278,7 +277,7 @@ export function TirePageClient({ searchParams }: { searchParams: Record<string, 
               ) : null}
             </>
           ) : (
-            <EmptyState title="타이어가 없습니다" />
+            <EmptyState title={t("tire_emptyState")} />
           )}
         </section>
       </div>

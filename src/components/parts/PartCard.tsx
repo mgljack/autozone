@@ -5,9 +5,11 @@ import Link from "next/link";
 
 import { formatMnt } from "@/lib/format";
 import { formatRelativeTimeKo } from "@/lib/formatRelativeTime";
+import { useI18n } from "@/context/I18nContext";
 import type { PartListItemDTO } from "@/lib/apiTypes";
 
 export function PartCard({ part }: { part: PartListItemDTO }) {
+  const { t } = useI18n();
   const imageUrl = part.thumbnailUrl || "/samples/cars/car-01.svg";
 
   return (
@@ -33,7 +35,7 @@ export function PartCard({ part }: { part: PartListItemDTO }) {
         )}
         <div className="mt-2 flex items-center justify-between">
           <span className="rounded-full border border-zinc-200 px-2 py-1 text-xs font-normal text-zinc-600">
-            {part.condition === "new" ? "신품" : "중고"}
+            {part.condition === "new" ? t("parts_specs_condition_new") : t("parts_specs_condition_used")}
           </span>
           <div className="text-lg font-extrabold text-zinc-900">{formatMnt(part.priceMnt)}</div>
         </div>

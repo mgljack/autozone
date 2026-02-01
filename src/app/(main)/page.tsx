@@ -86,16 +86,36 @@ function PriceSelect({
   const dropdownRef = React.useRef<HTMLDivElement>(null);
   const selectedOption = options.find((opt) => opt.value === value);
 
-  // Update dropdown position when opened
+  // Update dropdown position when opened or on scroll/resize
   React.useEffect(() => {
-    if (isOpen && triggerRef.current) {
-      const rect = triggerRef.current.getBoundingClientRect();
-      setDropdownPosition({
-        top: rect.bottom + window.scrollY + 4,
-        left: rect.left + window.scrollX,
-        width: rect.width,
+    if (!isOpen || !triggerRef.current) return;
+
+    const updatePosition = () => {
+      if (!triggerRef.current) return;
+      // Use requestAnimationFrame to ensure DOM is ready
+      requestAnimationFrame(() => {
+        if (!triggerRef.current) return;
+        const rect = triggerRef.current.getBoundingClientRect();
+        setDropdownPosition({
+          top: rect.bottom + 4, // fixed positioning, no scroll offset needed
+          left: rect.left,
+          width: rect.width,
+        });
       });
-    }
+    };
+
+    // Initial position with slight delay to ensure layout is stable
+    const timeoutId = setTimeout(updatePosition, 0);
+
+    // Update on scroll/resize
+    window.addEventListener("scroll", updatePosition, true);
+    window.addEventListener("resize", updatePosition);
+
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener("scroll", updatePosition, true);
+      window.removeEventListener("resize", updatePosition);
+    };
   }, [isOpen]);
 
   // Close dropdown when clicking outside
@@ -358,7 +378,13 @@ export default function MainHomePage() {
       {/* 1) Hero */}
       <section className="relative w-full">
         <div className="mx-auto w-full max-w-[1280px] px-4">
-          <div className="relative w-full aspect-[1960/600] max-h-[600px] min-h-[360px] rounded-[28px] overflow-hidden border border-white/10 ring-1 ring-black/10 shadow-[0_18px_45px_rgba(0,0,0,0.18)] bg-zinc-950 text-white">
+          <div 
+            className="relative w-full aspect-[1960/600] max-h-[600px] min-h-[360px] rounded-tr-[40px] rounded-bl-[40px] overflow-hidden border border-white/10 ring-1 ring-black/10 shadow-[0_18px_45px_rgba(0,0,0,0.18)] bg-zinc-950 text-white"
+            style={{
+              borderTopLeftRadius: '10px',
+              borderBottomRightRadius: '10px',
+            }}
+          >
           <div
             className="flex h-full transition-transform duration-500 ease-out"
             style={{ transform: `translateX(-${bannerIndex * 100}%)` }}
@@ -473,164 +499,164 @@ export default function MainHomePage() {
           <div className="relative overflow-hidden rounded-[28px] bg-white px-6 py-6 shadow-[0_8px_40px_rgba(0,0,0,0.08)] sm:px-8 sm:py-7">
               {/* Tabs row - Pill style */}
               <div className="flex flex-wrap items-center gap-2">
-                <button
-                  type="button"
+              <button
+                type="button"
                   onClick={() => setQuickTab("quick")}
-                  className={[
+                className={[
                     "relative inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300",
                     quickTab === "quick" 
                       ? "bg-zinc-900 text-white shadow-lg shadow-zinc-900/25" 
                       : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-700",
-                  ].join(" ")}
-                >
+                ].join(" ")}
+              >
                   {quickTab === "quick" && (
                     <span className="flex h-4 w-4 items-center justify-center">
-                      <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-                        <path
-                          d="M20 6 9 17l-5-5"
-                          fill="none"
-                          stroke="currentColor"
+                    <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                      <path
+                        d="M20 6 9 17l-5-5"
+                        fill="none"
+                        stroke="currentColor"
                           strokeWidth="2.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </span>
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
                   )}
-                  <span>{t("home_quickSearch_tab_quick")}</span>
-                </button>
+                <span>{t("home_quickSearch_tab_quick")}</span>
+              </button>
 
-                <button
-                  type="button"
-                  onClick={() => setQuickTab("budget")}
-                  className={[
+              <button
+                type="button"
+                onClick={() => setQuickTab("budget")}
+                className={[
                     "relative inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300",
                     quickTab === "budget" 
                       ? "bg-zinc-900 text-white shadow-lg shadow-zinc-900/25" 
                       : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-700",
-                  ].join(" ")}
-                >
+                ].join(" ")}
+              >
                   {quickTab === "budget" && (
                     <span className="flex h-4 w-4 items-center justify-center">
-                      <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-                        <path
-                          d="M20 6 9 17l-5-5"
-                          fill="none"
-                          stroke="currentColor"
+                    <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                      <path
+                        d="M20 6 9 17l-5-5"
+                        fill="none"
+                        stroke="currentColor"
                           strokeWidth="2.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </span>
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
                   )}
-                  <span>{t("home_quickSearch_tab_budget")}</span>
-                </button>
+                <span>{t("home_quickSearch_tab_budget")}</span>
+              </button>
 
-                <button
-                  type="button"
+              <button
+                type="button"
                   onClick={() => setQuickTab("keyword")}
-                  className={[
+                className={[
                     "relative inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300",
                     quickTab === "keyword" 
                       ? "bg-zinc-900 text-white shadow-lg shadow-zinc-900/25" 
                       : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-700",
-                  ].join(" ")}
-                >
+                ].join(" ")}
+              >
                   {quickTab === "keyword" && (
                     <span className="flex h-4 w-4 items-center justify-center">
-                      <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-                        <path
-                          d="M20 6 9 17l-5-5"
-                          fill="none"
-                          stroke="currentColor"
+                    <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                      <path
+                        d="M20 6 9 17l-5-5"
+                        fill="none"
+                        stroke="currentColor"
                           strokeWidth="2.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </span>
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
                   )}
-                  <span>{t("home_quickSearch_tab_keyword")}</span>
-                </button>
-              </div>
+                <span>{t("home_quickSearch_tab_keyword")}</span>
+              </button>
+            </div>
 
-              {/* Inputs row */}
+            {/* Inputs row */}
               <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                {quickTab === "quick" ? (
+              {quickTab === "quick" ? (
                   <div className="flex flex-1 flex-col gap-4 sm:flex-row sm:items-end sm:gap-3">
                     <div className="group flex min-w-0 flex-1 flex-col gap-1.5">
                       <label className="text-xs font-medium uppercase tracking-wider text-zinc-400">{t("home_quickSearch_manufacturer")}</label>
                       <div className="relative">
-                        <select
+                    <select
                           className="h-12 w-full cursor-pointer appearance-none rounded-xl border-0 bg-zinc-100 px-4 pr-10 text-sm font-medium text-zinc-900 outline-none ring-0 shadow-none transition-all duration-200 hover:bg-zinc-200 focus:border-0 focus:bg-zinc-200 focus:outline-none focus:ring-0 focus:shadow-none"
-                          value={manufacturer}
-                          onChange={(e) => setManufacturer(e.target.value)}
-                        >
-                          <option value="">{t("home_quickSearch_selectPlaceholder")}</option>
-                          {(taxonomyQuery.data?.manufacturers ?? []).map((m) => (
-                            <option key={m} value={m}>
-                              {m}
-                            </option>
-                          ))}
-                        </select>
+                      value={manufacturer}
+                      onChange={(e) => setManufacturer(e.target.value)}
+                    >
+                      <option value="">{t("home_quickSearch_selectPlaceholder")}</option>
+                      {(taxonomyQuery.data?.manufacturers ?? []).map((m) => (
+                        <option key={m} value={m}>
+                          {m}
+                        </option>
+                      ))}
+                    </select>
                         <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400">
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M6 9l6 6 6-6"/>
                           </svg>
                         </div>
                       </div>
-                    </div>
+                  </div>
 
                     <div className="group flex min-w-0 flex-1 flex-col gap-1.5">
                       <label className="text-xs font-medium uppercase tracking-wider text-zinc-400">{t("home_quickSearch_model")}</label>
                       <div className="relative">
-                        <select
+                    <select
                           className="h-12 w-full cursor-pointer appearance-none rounded-xl border-0 bg-zinc-100 px-4 pr-10 text-sm font-medium text-zinc-900 outline-none ring-0 shadow-none transition-all duration-200 hover:bg-zinc-200 focus:border-0 focus:bg-zinc-200 focus:outline-none focus:ring-0 focus:shadow-none disabled:cursor-not-allowed disabled:opacity-50"
-                          value={model}
-                          onChange={(e) => setModel(e.target.value)}
-                          disabled={!manufacturer}
-                        >
-                          <option value="">{t("home_quickSearch_selectPlaceholder")}</option>
-                          {models.map((m) => (
-                            <option key={m} value={m}>
-                              {m}
-                            </option>
-                          ))}
-                        </select>
+                      value={model}
+                      onChange={(e) => setModel(e.target.value)}
+                      disabled={!manufacturer}
+                    >
+                      <option value="">{t("home_quickSearch_selectPlaceholder")}</option>
+                      {models.map((m) => (
+                        <option key={m} value={m}>
+                          {m}
+                        </option>
+                      ))}
+                    </select>
                         <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400">
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M6 9l6 6 6-6"/>
                           </svg>
                         </div>
                       </div>
-                    </div>
+                  </div>
 
                     <div className="group flex min-w-0 flex-1 flex-col gap-1.5">
                       <label className="text-xs font-medium uppercase tracking-wider text-zinc-400">{t("home_quickSearch_subModel")}</label>
                       <div className="relative">
-                        <select
+                    <select
                           className="h-12 w-full cursor-pointer appearance-none rounded-xl border-0 bg-zinc-100 px-4 pr-10 text-sm font-medium text-zinc-900 outline-none ring-0 shadow-none transition-all duration-200 hover:bg-zinc-200 focus:border-0 focus:bg-zinc-200 focus:outline-none focus:ring-0 focus:shadow-none disabled:cursor-not-allowed disabled:opacity-50"
-                          value={subModel}
-                          onChange={(e) => setSubModel(e.target.value)}
-                          disabled={!manufacturer || !model}
-                        >
-                          <option value="">{t("home_quickSearch_selectPlaceholder")}</option>
-                          {subModels.map((s) => (
-                            <option key={s} value={s}>
-                              {s}
-                            </option>
-                          ))}
-                        </select>
+                      value={subModel}
+                      onChange={(e) => setSubModel(e.target.value)}
+                      disabled={!manufacturer || !model}
+                    >
+                      <option value="">{t("home_quickSearch_selectPlaceholder")}</option>
+                      {subModels.map((s) => (
+                        <option key={s} value={s}>
+                          {s}
+                        </option>
+                      ))}
+                    </select>
                         <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400">
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M6 9l6 6 6-6"/>
                           </svg>
                         </div>
                       </div>
-                    </div>
                   </div>
-                ) : quickTab === "budget" ? (
+                </div>
+              ) : quickTab === "budget" ? (
                   <div className="flex flex-1 flex-col gap-4 sm:flex-row sm:items-end sm:gap-3">
                     {/* Price Range Selectors with scrollable dropdown */}
                     <div className="flex min-w-0 flex-1 flex-col gap-1.5">
@@ -703,37 +729,37 @@ export default function MainHomePage() {
                     <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                       <label className="text-xs font-medium uppercase tracking-wider text-zinc-400">{t("home_quickSearch_carTypeSelect")}</label>
                       <div className="relative">
-                        <select
+                    <select
                           className="h-12 w-full cursor-pointer appearance-none rounded-xl border-0 bg-zinc-100 px-4 pr-10 text-sm font-medium text-zinc-900 outline-none ring-0 shadow-none transition-all duration-200 hover:bg-zinc-200 focus:border-0 focus:bg-zinc-200 focus:outline-none focus:ring-0 focus:shadow-none"
-                          value={carType}
+                      value={carType}
                           onChange={(e) => setCarType(e.target.value as typeof carType)}
-                        >
-                          <option value="all">{t("carType_all")}</option>
-                          <option value="sedan">{t("carType_sedan")}</option>
-                          <option value="suv">{t("carType_suv")}</option>
-                          <option value="coupe">{t("carType_coupe")}</option>
-                          <option value="hatchback">{t("carType_hatchback")}</option>
-                          <option value="pickup">{t("carType_pickup")}</option>
-                          <option value="van">{t("carType_van")}</option>
-                        </select>
+                    >
+                      <option value="all">{t("carType_all")}</option>
+                      <option value="sedan">{t("carType_sedan")}</option>
+                      <option value="suv">{t("carType_suv")}</option>
+                      <option value="coupe">{t("carType_coupe")}</option>
+                      <option value="hatchback">{t("carType_hatchback")}</option>
+                      <option value="pickup">{t("carType_pickup")}</option>
+                      <option value="van">{t("carType_van")}</option>
+                    </select>
                         <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400">
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M6 9l6 6 6-6"/>
                           </svg>
                         </div>
                       </div>
-                    </div>
                   </div>
-                ) : (
+                </div>
+              ) : (
                   <div className="flex flex-1 flex-col gap-1.5">
                     <label className="text-xs font-medium uppercase tracking-wider text-zinc-400">{t("home_quickSearch_keyword")}</label>
                     <div className="relative">
-                      <input
+                  <input
                         className="h-12 w-full rounded-xl border-0 bg-zinc-100 px-4 pr-10 text-sm font-medium text-zinc-900 outline-none ring-0 shadow-none transition-all duration-200 placeholder:text-zinc-400 hover:bg-zinc-200 focus:border-0 focus:bg-zinc-200 focus:outline-none focus:ring-0 focus:shadow-none"
-                        value={keyword}
-                        onChange={(e) => setKeyword(e.target.value)}
-                        placeholder={t("home_quickSearch_keywordInputPlaceholder")}
-                      />
+                    value={keyword}
+                    onChange={(e) => setKeyword(e.target.value)}
+                    placeholder={t("home_quickSearch_keywordInputPlaceholder")}
+                  />
                       <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <circle cx="11" cy="11" r="8"/>
@@ -741,34 +767,34 @@ export default function MainHomePage() {
                         </svg>
                       </div>
                     </div>
-                  </div>
-                )}
+                </div>
+              )}
 
-                <button
-                  type="button"
-                  onClick={onSearch}
+              <button
+                type="button"
+                onClick={onSearch}
                   className="group relative inline-flex h-12 min-w-[140px] items-center justify-center gap-2.5 overflow-hidden rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 px-6 text-base font-bold text-white shadow-lg shadow-rose-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-rose-500/40 active:scale-[0.98] sm:h-12"
-                >
+              >
                   <span className="absolute inset-0 bg-gradient-to-r from-rose-700 to-rose-600 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                   <span className="relative">{t("home_quickSearch_search")}</span>
-                  <svg
-                    viewBox="0 0 24 24"
+                <svg
+                  viewBox="0 0 24 24"
                     width={18}
                     height={18}
-                    aria-hidden="true"
+                  aria-hidden="true"
                     className="relative transition-transform duration-300 group-hover:translate-x-0.5"
-                  >
-                    <path
-                      d="M21 21l-4.35-4.35m1.35-5.15a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
-                      fill="none"
-                      stroke="currentColor"
+                >
+                  <path
+                    d="M21 21l-4.35-4.35m1.35-5.15a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
+                    fill="none"
+                    stroke="currentColor"
                       strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-              </div>
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </section>

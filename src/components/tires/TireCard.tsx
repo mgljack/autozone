@@ -5,24 +5,29 @@ import Link from "next/link";
 
 import { formatMnt } from "@/lib/format";
 import { formatRelativeTimeKo } from "@/lib/formatRelativeTime";
+import { useI18n } from "@/context/I18nContext";
 import type { TireListItemDTO } from "@/lib/apiTypes";
 
 export function TireCard({ tire }: { tire: TireListItemDTO }) {
+  const { t } = useI18n();
   const imageUrl = tire.thumbnailUrl || "/samples/cars/car-01.svg";
 
-  const seasonLabels: Record<string, string> = {
-    summer: "썸머",
-    winter: "윈터",
-    "all-season": "올시즌",
-    "off-road": "오프로드",
+  const getSeasonLabel = (season: string): string => {
+    const seasonKeyMap: Record<string, string> = {
+      summer: "tire_filters_season_summer",
+      winter: "tire_filters_season_winter",
+      "all-season": "tire_filters_season_allSeason",
+      "off-road": "tire_filters_season_offRoad",
+    };
+    return t(seasonKeyMap[season] || season);
   };
-  const seasonLabel = seasonLabels[tire.season] || tire.season;
+  const seasonLabel = getSeasonLabel(tire.season);
 
   // Meta line: season + DOT year + installation status
   const metaParts = [
     seasonLabel,
     tire.dotYear ? `DOT ${tire.dotYear}` : null,
-    tire.installationIncluded ? "장착 포함" : null,
+    tire.installationIncluded ? t("tire_card_installationIncluded") : null,
   ].filter(Boolean);
 
   return (
@@ -47,7 +52,7 @@ export function TireCard({ tire }: { tire: TireListItemDTO }) {
         )}
         <div className="mt-2 flex items-center justify-between">
           <span className="rounded-full border border-zinc-200 px-2 py-1 text-xs font-normal text-zinc-600">
-            {tire.condition === "new" ? "신품" : "중고"}
+            {tire.condition === "new" ? t("tire_specs_condition_new") : t("tire_specs_condition_used")}
           </span>
           <div className="text-lg font-extrabold text-zinc-900">{formatMnt(tire.priceMnt)}</div>
         </div>
