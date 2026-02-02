@@ -23,12 +23,6 @@ export default function ServiceCenterDetailPage({ params }: { params: { id: stri
 
   return (
     <div className="grid gap-6">
-      <div className="text-sm">
-        <Link className="font-normal text-zinc-900 hover:underline" href="/service">
-          ← {t("service_backToCenters")}
-        </Link>
-      </div>
-
       {/* Hero */}
       <div className="overflow-hidden rounded-3xl border border-zinc-200 bg-white">
         <div className="relative h-64 w-full bg-zinc-100">

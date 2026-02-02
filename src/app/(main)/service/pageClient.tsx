@@ -19,7 +19,7 @@ function firstString(v: string | string[] | undefined) {
   return Array.isArray(v) ? v[0] : v;
 }
 
-type CentersSort = "newest" | "ratingDesc" | "ratingAsc" | "nameAsc";
+type CentersSort = "newest" | "ratingDesc" | "ratingAsc" | "priceAsc" | "priceDesc";
 
 export function ServiceCentersClient({ searchParams }: { searchParams: Record<string, string | string[] | undefined> }) {
   const { t } = useI18n();
@@ -75,7 +75,7 @@ export function ServiceCentersClient({ searchParams }: { searchParams: Record<st
 
   return (
     <div className="grid gap-6">
-      <SectionTitle title={t("service_title")} subtitle={t("service_subtitle")} />
+      <SectionTitle title={t("service_title")} />
 
       <div className="grid gap-4 lg:grid-cols-[320px_1fr] items-start">
         {/* LEFT: Filters */}
@@ -146,7 +146,8 @@ export function ServiceCentersClient({ searchParams }: { searchParams: Record<st
               onChange={setSort}
               options={[
                 { key: "newest", labelKey: "common_sort_newest" },
-                { key: "nameAsc", labelKey: "service_sort_nameAsc" },
+                { key: "priceAsc", labelKey: "service_sort_priceAsc" },
+                { key: "priceDesc", labelKey: "service_sort_priceDesc" },
               ]}
             />
           </div>
@@ -160,9 +161,25 @@ export function ServiceCentersClient({ searchParams }: { searchParams: Record<st
           ) : listQuery.data && listQuery.data.items.length > 0 ? (
             <>
               <div className="grid gap-3">
-                {listQuery.data.items.map((center) => (
-                  <ServiceCenterCardHorizontal key={center.id} center={center} />
-                ))}
+                {listQuery.data.items
+                  .map((center, index) => {
+                    // Determine tier (prototype: index-based)
+                    let tier: "gold" | "silver" | null = null;
+                    if (index % 7 === 0) tier = "gold";
+                    else if (index % 5 === 0) tier = "silver";
+                    return { center, tier, originalIndex: index };
+                  })
+                  .sort((a, b) => {
+                    // Sort: GOLD → SILVER → null
+                    if (a.tier === "gold" && b.tier !== "gold") return -1;
+                    if (a.tier !== "gold" && b.tier === "gold") return 1;
+                    if (a.tier === "silver" && b.tier === null) return -1;
+                    if (a.tier === null && b.tier === "silver") return 1;
+                    return a.originalIndex - b.originalIndex;
+                  })
+                  .map(({ center, tier }) => (
+                    <ServiceCenterCardHorizontal key={center.id} center={center} tier={tier} />
+                  ))}
               </div>
               {listQuery.data.totalPages > 1 ? (
                 <Pagination page={listQuery.data.page} totalPages={listQuery.data.totalPages} onPageChange={(p) => setPage(p)} />

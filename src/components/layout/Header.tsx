@@ -197,7 +197,7 @@ export function Header() {
                   }
                 }}
                 className={cn(
-                  "group/btn relative rounded-lg px-2 py-1 text-sm font-normal text-zinc-700 hover:text-zinc-900",
+                  "group/btn relative cursor-pointer rounded-lg px-2 py-1 text-sm font-normal text-zinc-700 hover:text-zinc-900",
                   pathname?.startsWith("/rent") && "bg-zinc-100 text-zinc-900",
                 )}
                 aria-expanded={rentOpen}

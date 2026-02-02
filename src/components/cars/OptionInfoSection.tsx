@@ -32,7 +32,7 @@ export function OptionInfoSection({ options }: OptionInfoSectionProps) {
   const { t } = useI18n();
 
   return (
-    <div className="rounded-2xl border border-zinc-200 bg-white p-6">
+    <div>
       {/* Header */}
       <div className="flex items-center gap-2">
         <h3 className="text-lg font-bold text-zinc-900">{t("carDetail_options_title")}</h3>

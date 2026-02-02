@@ -17,10 +17,29 @@ import { fetchRentList, fetchRentModels, type RentListQuery, type RentType } fro
 import type { RentItem } from "@/mock/rent";
 
 function RentCardGrid({ items }: { items: RentItem[] }) {
+  const sortedItems = React.useMemo(() => {
+    return items
+      .map((item, index) => {
+        // Determine tier (prototype: index-based)
+        let tier: "gold" | "silver" | null = null;
+        if (index % 7 === 0) tier = "gold";
+        else if (index % 5 === 0) tier = "silver";
+        return { item, tier, originalIndex: index };
+      })
+      .sort((a, b) => {
+        // Sort: GOLD → SILVER → null
+        if (a.tier === "gold" && b.tier !== "gold") return -1;
+        if (a.tier !== "gold" && b.tier === "gold") return 1;
+        if (a.tier === "silver" && b.tier === null) return -1;
+        if (a.tier === null && b.tier === "silver") return 1;
+        return a.originalIndex - b.originalIndex;
+      });
+  }, [items]);
+
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {items.map((item) => (
-        <RentCard key={item.id} item={item} />
+      {sortedItems.map(({ item, tier }) => (
+        <RentCard key={item.id} item={item} tier={tier} />
       ))}
     </div>
   );

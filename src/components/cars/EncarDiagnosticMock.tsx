@@ -60,8 +60,8 @@ export function EncarDiagnosticMock({ carId, title }: { carId: string; title?: s
   );
 
   return (
-    <section className="rounded-2xl border border-zinc-200 bg-white p-6">
-      <div className="text-sm font-normal text-zinc-900">{title ?? t("vehicleStatus_title")}</div>
+    <section>
+      <div className="text-lg font-bold text-zinc-900">{title ?? t("vehicleStatus_title")}</div>
 
       <div className="mt-4 grid gap-6 lg:grid-cols-[1fr_420px] lg:items-start">
         {/* Left: summary */}

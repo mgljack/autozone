@@ -171,9 +171,25 @@ export function PartsClient({ searchParams }: { searchParams: Record<string, str
           ) : listQuery.data && listQuery.data.items.length > 0 ? (
             <>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {listQuery.data.items.map((part) => (
-                  <PartCard key={part.id} part={part} />
-                ))}
+                {listQuery.data.items
+                  .map((part, index) => {
+                    // Determine tier (prototype: index-based)
+                    let tier: "gold" | "silver" | null = null;
+                    if (index % 7 === 0) tier = "gold";
+                    else if (index % 5 === 0) tier = "silver";
+                    return { part, tier, originalIndex: index };
+                  })
+                  .sort((a, b) => {
+                    // Sort: GOLD → SILVER → null
+                    if (a.tier === "gold" && b.tier !== "gold") return -1;
+                    if (a.tier !== "gold" && b.tier === "gold") return 1;
+                    if (a.tier === "silver" && b.tier === null) return -1;
+                    if (a.tier === null && b.tier === "silver") return 1;
+                    return a.originalIndex - b.originalIndex;
+                  })
+                  .map(({ part, tier }, displayIndex) => (
+                    <PartCard key={part.id} part={part} index={displayIndex} tier={tier} />
+                  ))}
               </div>
               {listQuery.data.totalPages > 1 ? (
                 <Pagination page={listQuery.data.page} totalPages={listQuery.data.totalPages} onPageChange={(p) => setPage(p)} />

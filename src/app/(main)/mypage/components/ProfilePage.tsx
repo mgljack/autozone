@@ -5,8 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ProfileImageUploader } from "@/components/mypage/ProfileImageUploader";
 import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
+
+const PROFILE_IMAGE_STORAGE_KEY = "profile.image";
 
 export function ProfilePage() {
   const { session, updateProfile } = useAuth();
@@ -14,6 +17,7 @@ export function ProfilePage() {
   const [profileName, setProfileName] = React.useState("");
   const [profileEmail, setProfileEmail] = React.useState("");
   const [profilePhone, setProfilePhone] = React.useState("");
+  const [profileImage, setProfileImage] = React.useState<string | null>(null);
   const [profileMsg, setProfileMsg] = React.useState<string | null>(null);
 
   React.useEffect(() => {
@@ -21,7 +25,18 @@ export function ProfilePage() {
     setProfileName(session.name ?? "");
     setProfileEmail(session.email ?? "");
     setProfilePhone(session.phone ?? "");
+    // Load profile image from localStorage
+    if (typeof window !== "undefined") {
+      const savedImage = localStorage.getItem(PROFILE_IMAGE_STORAGE_KEY);
+      if (savedImage) {
+        setProfileImage(savedImage);
+      }
+    }
   }, [session]);
+
+  const handleImageChange = (dataUrl: string | null) => {
+    setProfileImage(dataUrl);
+  };
 
   if (!session) return null;
 
@@ -36,10 +51,21 @@ export function ProfilePage() {
         <CardHeader>
           <CardTitle>{t("mypage_profile_title")}</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-6">
           {profileMsg && (
             <div className="rounded-xl bg-zinc-50 p-3 text-sm text-zinc-700">{profileMsg}</div>
           )}
+
+          {/* Profile Image Upload */}
+          <div className="space-y-2">
+            <Label>{t("mypage_profile_image_label")}</Label>
+            <ProfileImageUploader
+              value={profileImage}
+              onChange={handleImageChange}
+              userName={session.name}
+            />
+          </div>
+
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label>{t("mypage_profile_name")}</Label>

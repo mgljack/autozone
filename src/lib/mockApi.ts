@@ -466,7 +466,7 @@ export type CentersListQuery = {
   priceMaxMnt?: number;
   ratingMin?: number;
   availability?: "now" | "next-week" | "all";
-  sort?: "newest" | "ratingDesc" | "ratingAsc" | "nameAsc";
+  sort?: "newest" | "ratingDesc" | "ratingAsc" | "priceAsc" | "priceDesc";
   page?: number;
   pageSize?: number;
 };
@@ -544,6 +544,15 @@ export async function fetchCentersList(query: CentersListQuery = {}): Promise<Ce
 
   let filtered = applyCenterFilters(allCenters, query);
 
+  // Helper to get price value from center
+  const getPrice = (c: any): number | null => {
+    const v = c.minPriceMnt ?? (c.serviceItems && c.serviceItems.length > 0 ? Math.min(...c.serviceItems.map((item: any) => item.priceMnt || 0)) : null);
+    if (v == null) return null;
+    if (typeof v === "number") return v;
+    const n = Number(String(v).replace(/[^\d.]/g, ""));
+    return Number.isFinite(n) ? n : null;
+  };
+
   filtered.sort((a, b) => {
     if (sort === "ratingDesc") {
       const ratingA = (a as any).rating ?? 4.0;
@@ -555,7 +564,14 @@ export async function fetchCentersList(query: CentersListQuery = {}): Promise<Ce
       const ratingB = (b as any).rating ?? 4.0;
       return ratingA - ratingB;
     }
-    if (sort === "nameAsc") return a.name.localeCompare(b.name);
+    if (sort === "priceAsc" || sort === "priceDesc") {
+      const ap = getPrice(a);
+      const bp = getPrice(b);
+      if (ap == null && bp == null) return 0;
+      if (ap == null) return 1;
+      if (bp == null) return -1;
+      return sort === "priceAsc" ? ap - bp : bp - ap;
+    }
     // Default: newest (by createdAt or id)
     const createdAtA = (a as any).createdAt;
     const createdAtB = (b as any).createdAt;

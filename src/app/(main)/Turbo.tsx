@@ -572,9 +572,9 @@ export default function MainHomePage() {
 
                     <div className="w-full max-w-full overflow-hidden">
                       <div className="relative w-full max-w-full px-2 pt-4">
-                        <div className="h-2 w-full rounded-full bg-zinc-200" />
+                        <div className="h-3 w-full rounded-full bg-slate-200" />
                         <div
-                          className="absolute top-4 h-2 rounded-full bg-purple-500"
+                          className="absolute top-4 h-3 rounded-full bg-purple-500 transition-all duration-300 ease-out"
                           style={{
                             left: `calc(${(minManwon / MAX_MANWON) * 100}% + 8px)`,
                             right: `calc(${100 - (maxManwon / MAX_MANWON) * 100}% + 8px)`,

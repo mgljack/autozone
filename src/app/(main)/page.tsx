@@ -800,7 +800,6 @@ export default function MainHomePage() {
       </section>
 
       {/* 3) GOLD */}
-      <section className="grid gap-3">
         <HomeTierCarousel
           title={t("home_sections_goldTitle")}
           viewAllHref="/buy/all?tier=gold"
@@ -808,7 +807,6 @@ export default function MainHomePage() {
           centerTitle={true}
           customSubtitle={t("home_goldSection_subtitle")}
         />
-      </section>
 
       {/* 4) Promo - Middle Banner Advertisement (Diagonal Split) */}
       <section className="w-full">
@@ -816,13 +814,11 @@ export default function MainHomePage() {
       </section>
 
       {/* 5) SILVER */}
-      <section className="grid gap-3">
         <HomeTierCarousel
           title={t("home_sections_silverTitle")}
           viewAllHref="/buy/all?tier=silver"
           cars={homeQuery.data?.silverCars ?? []}
         />
-      </section>
 
       {/* 6) Media */}
       <section className="grid gap-3">
@@ -917,8 +913,8 @@ export default function MainHomePage() {
         {homeQuery.isLoading ? (
           <div className="text-sm text-zinc-600">{t("common_loading")}</div>
         ) : (
-          <div className="grid gap-4 grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-            {(homeQuery.data?.recentGeneralCars ?? []).slice(0, 8).map((c) => (
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+            {(homeQuery.data?.recentGeneralCars ?? []).slice(0, 10).map((c) => (
               <CarCard key={c.id} car={c} />
             ))}
           </div>

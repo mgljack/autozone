@@ -111,12 +111,6 @@ export default function PartDetailClient({ id }: { id: string }) {
 
   return (
     <div className="grid gap-6">
-      <div className="text-sm">
-        <Link href="/buy/parts" className="font-normal text-zinc-900 hover:underline">
-          {t("parts_detail_backToList")}
-        </Link>
-      </div>
-
       {/* Top section: Gallery (left) + Sticky info (right) */}
       <div className="grid gap-6 lg:grid-cols-[1fr_360px] lg:items-start">
         <CarGallery
@@ -164,14 +158,17 @@ export default function PartDetailClient({ id }: { id: string }) {
       </div>
 
       {/* Title & meta */}
-      <div className="rounded-2xl border border-zinc-200 bg-white p-6">
+      <div>
         <div className="text-2xl font-normal text-zinc-900">{part.name}</div>
         {metaLine && <div className="mt-2 text-sm text-zinc-600">{metaLine}</div>}
       </div>
 
+      {/* Section Divider */}
+      <div className="my-6 h-px w-full bg-gradient-to-r from-transparent via-slate-300/60 to-transparent" />
+
       {/* Options */}
-      <div className="rounded-2xl border border-zinc-200 bg-white p-6">
-        <div className="text-sm font-normal text-zinc-900">{t("carDetail_specs_title")}</div>
+      <div>
+        <div className="text-lg font-bold text-zinc-900">{t("carDetail_specs_title")}</div>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <Row label={t("parts_specs_price")} value={formatMnt(part.priceMnt)} />
           <Row label={t("parts_specs_condition")} value={part.condition === "new" ? t("parts_specs_condition_new") : t("parts_specs_condition_used")} />
@@ -182,10 +179,13 @@ export default function PartDetailClient({ id }: { id: string }) {
         </div>
       </div>
 
+      {/* Section Divider */}
+      {part.description && <div className="my-6 h-px w-full bg-gradient-to-r from-transparent via-slate-300/60 to-transparent" />}
+
       {/* Memo / description */}
       {part.description && (
-        <div className="rounded-2xl border border-zinc-200 bg-white p-6">
-          <div className="text-sm font-normal text-zinc-900">{t("carDetail_desc")}</div>
+        <div>
+          <div className="text-lg font-bold text-zinc-900">{t("carDetail_desc")}</div>
           <div className="mt-3 whitespace-pre-line text-sm text-zinc-600">{part.description}</div>
         </div>
       )}

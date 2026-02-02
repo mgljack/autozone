@@ -5,9 +5,10 @@ import Link from "next/link";
 
 import { formatKm, formatMnt } from "@/lib/format";
 import { useI18n } from "@/context/I18nContext";
+import { PremiumTierBadge } from "@/components/badges/PremiumTierBadge";
 import type { RentItem } from "@/mock/rent";
 
-export function RentCard({ item }: { item: RentItem }) {
+export function RentCard({ item, tier }: { item: RentItem; tier?: "gold" | "silver" | null }) {
   const { t } = useI18n();
   const imageUrl = item.image || "/samples/cars/car-01.svg";
 
@@ -34,7 +35,10 @@ export function RentCard({ item }: { item: RentItem }) {
       {/* Details Section */}
       <div className="flex flex-1 flex-col p-5">
         {/* Car Name */}
-        <h3 className="text-xl font-bold text-zinc-900">{item.title}</h3>
+        <div className="flex items-start justify-between gap-2">
+          <h3 className="flex-1 min-w-0 truncate text-xl font-bold text-zinc-900">{item.title}</h3>
+          {tier && <PremiumTierBadge tier={tier} placement="right" />}
+        </div>
         
         {/* Details List */}
         <div className="mt-4 space-y-2.5 text-sm">

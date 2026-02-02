@@ -106,7 +106,12 @@ export function HomeTierCarousel({
   if (!cars.length) return null;
 
   return (
-    <div className={cn("rounded-3xl bg-zinc-50 p-4 sm:p-6", className)}>
+    <section className="relative py-10">
+      {/* Full-bleed background layer */}
+      <div className="absolute inset-0 left-1/2 w-screen -translate-x-1/2 bg-zinc-50 -z-10" />
+      {/* Content container */}
+      <div className={cn("mx-auto w-full max-w-[1280px] px-4 sm:px-6 lg:px-8", className)}>
+        <div className="rounded-3xl p-4 sm:p-6">
       {centerTitle ? (
         <div className="mb-6">
           <div className="text-center">
@@ -276,6 +281,8 @@ export function HomeTierCarousel({
         </div>
       </div>
     </div>
+      </div>
+    </section>
   );
 }
 

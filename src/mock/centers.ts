@@ -14,14 +14,14 @@ export type Center = {
   location: { address: string; lat: number; lng: number };
 };
 
-// Pexels high-quality car service center images
+// Pexels high-quality car repair center images
 const SERVICE_CENTER_IMAGES = [
-  "https://images.pexels.com/photos/3802508/pexels-photo-3802508.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Auto repair shop
-  "https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Car service center
-  "https://images.pexels.com/photos/1592384/pexels-photo-1592384.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Mechanic working
-  "https://images.pexels.com/photos/1545743/pexels-photo-1545743.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Car inspection
-  "https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Auto workshop
-  "https://images.pexels.com/photos/1149137/pexels-photo-1149137.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop", // Car maintenance
+  "https://images.pexels.com/photos/13065690/pexels-photo-13065690.jpeg", // Auto repair shop interior
+  "https://images.pexels.com/photos/13065689/pexels-photo-13065689.jpeg", // Car repair center
+  "https://images.pexels.com/photos/10126666/pexels-photo-10126666.jpeg", // Mechanic working on car
+  "https://images.pexels.com/photos/3894030/pexels-photo-3894030.jpeg", // Car repair service
+  "https://images.pexels.com/photos/32152039/pexels-photo-32152039.jpeg", // Auto repair workshop
+  "https://images.pexels.com/photos/4756887/pexels-photo-4756887.jpeg", // Car maintenance center
 ];
 
 export const centers: Center[] = [

@@ -5,9 +5,10 @@ import Link from "next/link";
 
 import { formatMnt } from "@/lib/format";
 import { useI18n } from "@/context/I18nContext";
+import { PremiumTierBadge } from "@/components/badges/PremiumTierBadge";
 import type { CenterDTO } from "@/lib/apiTypes";
 
-export function ServiceCenterCardHorizontal({ center }: { center: CenterDTO }) {
+export function ServiceCenterCardHorizontal({ center, tier }: { center: CenterDTO; tier?: "gold" | "silver" | null }) {
   const { t } = useI18n();
   const imageUrl = center.imageUrl || "/samples/cars/car-01.svg";
 
@@ -26,6 +27,12 @@ export function ServiceCenterCardHorizontal({ center }: { center: CenterDTO }) {
             className="object-cover object-center transition-transform duration-300 group-hover:scale-105" 
             sizes="(max-width: 768px) 100vw, 360px"
           />
+          {/* Tier Badge - overlay on image */}
+          {tier && (
+            <div className="absolute top-2 right-2 z-10">
+              <PremiumTierBadge tier={tier} placement="overlay" />
+            </div>
+          )}
         </div>
 
         {/* CENTER: Service center details */}

@@ -78,12 +78,6 @@ export default function RentDetailClient({ type, id }: { type: string; id: strin
 
   return (
     <div className="grid gap-6">
-      <div className="text-sm">
-        <Link href={backHref} className="font-normal text-zinc-900 hover:underline">
-          ← 목록으로 돌아가기
-        </Link>
-      </div>
-
       {/* Top section: Gallery (left) + Sticky info (right) */}
       <div className="grid gap-6 lg:grid-cols-[1fr_360px] lg:items-start">
         <CarGallery
@@ -129,14 +123,17 @@ export default function RentDetailClient({ type, id }: { type: string; id: strin
       </div>
 
       {/* Title & meta */}
-      <div className="rounded-2xl border border-zinc-200 bg-white p-6">
+      <div>
         <div className="text-2xl font-normal text-zinc-900">{rent.title}</div>
         {metaLine && <div className="mt-2 text-sm text-zinc-600">{metaLine}</div>}
       </div>
 
+      {/* Section Divider */}
+      <div className="my-6 h-px w-full bg-gradient-to-r from-transparent via-slate-300/60 to-transparent" />
+
       {/* Options */}
-      <div className="rounded-2xl border border-zinc-200 bg-white p-6">
-        <div className="text-sm font-normal text-zinc-900">{t("carDetail_specs_title")}</div>
+      <div>
+        <div className="text-lg font-bold text-zinc-900">{t("carDetail_specs_title")}</div>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <Row label="일일 렌트 가격" value={formatMnt(rent.pricePerDayMnt)} />
           <Row label="차량 유형" value={typeLabel} />
@@ -150,10 +147,13 @@ export default function RentDetailClient({ type, id }: { type: string; id: strin
         </div>
       </div>
 
+      {/* Section Divider */}
+      {rent.description && <div className="my-6 h-px w-full bg-gradient-to-r from-transparent via-slate-300/60 to-transparent" />}
+
       {/* Memo / description */}
       {rent.description && (
-        <div className="rounded-2xl border border-zinc-200 bg-white p-6">
-          <div className="text-sm font-normal text-zinc-900">{t("carDetail_desc")}</div>
+        <div>
+          <div className="text-lg font-bold text-zinc-900">{t("carDetail_desc")}</div>
           <div className="mt-3 whitespace-pre-line text-sm text-zinc-600">{rent.description}</div>
         </div>
       )}

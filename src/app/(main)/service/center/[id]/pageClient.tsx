@@ -80,12 +80,6 @@ export default function ServiceCenterDetailClient({ id }: { id: string }) {
 
   return (
     <div className="grid gap-6">
-      <div className="text-sm">
-        <Link className="font-normal text-zinc-900 hover:underline" href="/service">
-          ← {t("service_backToCenters")}
-        </Link>
-      </div>
-
       <SectionTitle title={center.name} subtitle={center.regionLabel} />
 
       {/* Photos */}
@@ -95,7 +89,7 @@ export default function ServiceCenterDetailClient({ id }: { id: string }) {
 
       {/* Contact bar under photos (horizontal like reference) */}
       <div className="pt-4">
-        <div className="flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
           {operatingHours && (
           <div className="text-sm text-zinc-600">
               {t("service_detail_operatingHours")} <span className="font-medium text-zinc-900">{operatingHours}</span>
@@ -121,9 +115,12 @@ export default function ServiceCenterDetailClient({ id }: { id: string }) {
         </div>
       </div>
 
+      {/* Section Divider */}
+      <div className="my-6 h-px w-full bg-gradient-to-r from-transparent via-slate-300/60 to-transparent" />
+
       {/* Services */}
-      <div className="rounded-3xl border border-zinc-200 bg-white p-6">
-        <div className="text-sm font-normal text-zinc-900">{t("service_detail_servicesAndPrice")}</div>
+      <div>
+        <div className="text-lg font-bold text-zinc-900">{t("service_detail_servicesAndPrice")}</div>
         <div className="mt-4 grid gap-2">
           {serviceItems.map((s) => (
             <div key={s.name} className="flex items-center justify-between rounded-xl bg-zinc-50 px-4 py-3">
@@ -134,10 +131,13 @@ export default function ServiceCenterDetailClient({ id }: { id: string }) {
         </div>
       </div>
 
+      {/* Section Divider */}
+      <div className="my-6 h-px w-full bg-gradient-to-r from-transparent via-slate-300/60 to-transparent" />
+
       {/* Location */}
-      <div className="rounded-3xl border border-zinc-200 bg-white p-6">
+      <div>
         <div className="flex items-center justify-between gap-3">
-          <div className="text-sm font-normal text-zinc-900">{t("service_detail_location")}</div>
+          <div className="text-lg font-bold text-zinc-900">{t("service_detail_location")}</div>
           <a href={mapsHref} target="_blank" rel="noreferrer noopener">
             <Button variant="outline">{t("service_detail_viewOnMap")}</Button>
           </a>

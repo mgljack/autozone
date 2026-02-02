@@ -137,12 +137,6 @@ export default function CarDetailClient({ id }: { id: string }) {
 
   return (
     <div className="grid gap-6">
-      <div className="text-sm">
-        <Link href="/buy/all" className="font-normal text-zinc-900 hover:underline">
-          ← {t("carDetail_backToList")}
-        </Link>
-      </div>
-
       {/* Top section: Gallery (left) + Sticky info (right) */}
       <div className="grid gap-6 lg:grid-cols-[1fr_360px] lg:items-start">
         <CarGallery
@@ -199,22 +193,31 @@ export default function CarDetailClient({ id }: { id: string }) {
       </div>
 
       {/* Title & meta */}
-      <div className="rounded-2xl border border-zinc-200 bg-white p-6">
+      <div>
         <div className="text-2xl font-normal text-zinc-900">{car.title}</div>
         <div className="mt-2 text-sm text-zinc-600">
           {car.yearMade} · {car.yearImported} · {car.mileageKm.toLocaleString("mn-MN")}km · {car.specs.fuel}
         </div>
       </div>
 
+      {/* Section Divider */}
+      <div className="my-6 h-px w-full bg-gradient-to-r from-transparent via-slate-300/60 to-transparent" />
+
       {/* Options Section */}
       {!isMotorcycle ? <OptionInfoSection options={car.options} /> : null}
+
+      {/* Section Divider */}
+      {!isMotorcycle && <div className="my-6 h-px w-full bg-gradient-to-r from-transparent via-slate-300/60 to-transparent" />}
 
       {/* Vehicle Status Section */}
       {!isMotorcycle ? <EncarDiagnosticMock carId={car.id} title={t("vehicleStatus_title")} /> : null}
 
+      {/* Section Divider */}
+      {!isMotorcycle && <div className="my-6 h-px w-full bg-gradient-to-r from-transparent via-slate-300/60 to-transparent" />}
+
       {/* Options */}
-      <div className="rounded-2xl border border-zinc-200 bg-white p-6">
-        <div className="text-sm font-normal text-zinc-900">{t("carDetail_specs_title")}</div>
+      <div>
+        <div className="text-lg font-bold text-zinc-900">{t("carDetail_specs_title")}</div>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <Row label={t("carDetail_specs_price")} value={formatMnt(car.priceMnt)} />
           <Row label={t("carDetail_specs_tier")} value={car.tier.toUpperCase()} />
@@ -233,11 +236,17 @@ export default function CarDetailClient({ id }: { id: string }) {
         </div>
       </div>
 
+      {/* Section Divider */}
+      <div className="my-6 h-px w-full bg-gradient-to-r from-transparent via-slate-300/60 to-transparent" />
+
       {/* Memo / description */}
-      <div className="rounded-2xl border border-zinc-200 bg-white p-6">
-        <div className="text-sm font-normal text-zinc-900">{t("carDetail_desc")}</div>
+      <div>
+        <div className="text-lg font-bold text-zinc-900">{t("carDetail_desc")}</div>
         <div className="mt-3 whitespace-pre-line text-sm text-zinc-600">{car.description}</div>
       </div>
+
+      {/* Section Divider */}
+      <div className="my-6 h-px w-full bg-gradient-to-r from-transparent via-slate-300/60 to-transparent" />
 
       {/* Price Comparison */}
       <VehiclePriceComparison

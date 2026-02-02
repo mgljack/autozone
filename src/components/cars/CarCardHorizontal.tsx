@@ -8,6 +8,7 @@ import { formatMnt } from "@/lib/format";
 import { formatRelativeTimeKo } from "@/lib/formatRelativeTime";
 import { useFavorites, type FavoriteItem } from "@/features/favorites/favorites";
 import { PremiumTierBadge } from "@/components/badges/PremiumTierBadge";
+import { LikeIcon } from "@/components/ui/LikeIcon";
 import type { CarListItemDTO } from "@/lib/apiTypes";
 
 export function CarCardHorizontal({ car, href }: { car: CarListItemDTO; href?: string }) {
@@ -62,12 +63,12 @@ export function CarCardHorizontal({ car, href }: { car: CarListItemDTO; href?: s
           <div className="absolute right-2 top-2 z-10">
             <button
               type="button"
-              className="grid h-9 w-9 place-items-center rounded-full bg-white/90 shadow-sm transition-colors hover:bg-white"
+              className="grid h-7 w-7 place-items-center rounded-full bg-zinc-500 shadow-sm transition-all duration-150 hover:scale-105 hover:bg-zinc-600"
               aria-label="Favorite"
               aria-pressed={favored}
               onClick={onFavoriteClick}
             >
-              <span className="text-lg">{favored ? "♥" : "♡"}</span>
+              <LikeIcon liked={favored} size="sm" />
             </button>
           </div>
         </div>

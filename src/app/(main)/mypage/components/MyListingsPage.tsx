@@ -239,7 +239,7 @@ export function MyListingsPage() {
             />
           </div>
           <div className="text-sm font-medium text-zinc-600">
-            {t("mypage.myListings.results", { count: filteredListings.length })}
+            {t("mypage_myListings_results", { count: filteredListings.length })}
           </div>
         </div>
 

@@ -2,15 +2,47 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import React from "react";
 
 import { formatMnt } from "@/lib/format";
 import { formatRelativeTimeKo } from "@/lib/formatRelativeTime";
 import { useI18n } from "@/context/I18nContext";
+import { useFavorites, type FavoriteItem } from "@/features/favorites/favorites";
+import { LikeIcon } from "@/components/ui/LikeIcon";
+import { PremiumTierBadge } from "@/components/badges/PremiumTierBadge";
 import type { TireListItemDTO } from "@/lib/apiTypes";
 
-export function TireCard({ tire }: { tire: TireListItemDTO }) {
+export function TireCard({ tire, index, tier: tierProp }: { tire: TireListItemDTO; index?: number; tier?: "gold" | "silver" | null }) {
   const { t } = useI18n();
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const favored = isFavorite(tire.id);
   const imageUrl = tire.thumbnailUrl || "/samples/cars/car-01.svg";
+
+  const favItem: FavoriteItem = React.useMemo(
+    () => ({
+      id: tire.id,
+      title: `${tire.brand} ${tire.size}`,
+      priceMnt: tire.priceMnt,
+      image: imageUrl,
+      createdAt: tire.createdAt,
+    }),
+    [tire.id, tire.brand, tire.size, tire.priceMnt, tire.createdAt, imageUrl],
+  );
+
+  const onFavoriteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFavorite(tire.id, favItem);
+  };
+
+  // Use tier from prop if provided, otherwise calculate from index (prototype)
+  const tier = React.useMemo<"gold" | "silver" | null>(() => {
+    if (tierProp !== undefined) return tierProp;
+    if (index === undefined) return null;
+    if (index % 7 === 0) return "gold";
+    if (index % 5 === 0) return "silver";
+    return null;
+  }, [tierProp, index]);
 
   const getSeasonLabel = (season: string): string => {
     const seasonKeyMap: Record<string, string> = {
@@ -37,10 +69,25 @@ export function TireCard({ tire }: { tire: TireListItemDTO }) {
     >
       <div className="relative h-48 w-full overflow-hidden bg-zinc-100">
         <Image src={imageUrl} alt={`${tire.brand} ${tire.size}`} fill className="object-cover" />
+        {/* Like icon overlay */}
+        <div className="absolute right-2 top-2 z-10">
+          <button
+            type="button"
+            className="grid h-7 w-7 place-items-center rounded-full bg-zinc-500 shadow-sm transition-all duration-150 hover:scale-105 hover:bg-zinc-600"
+            aria-label="Favorite"
+            aria-pressed={favored}
+            onClick={onFavoriteClick}
+          >
+            <LikeIcon liked={favored} size="sm" />
+          </button>
+        </div>
       </div>
       <div className="p-4">
-        <div className="text-base font-normal text-zinc-900">
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex-1 min-w-0 truncate text-base font-normal text-zinc-900">
           {tire.brand} {tire.size}
+          </div>
+          {tier && <PremiumTierBadge tier={tier} placement="right" />}
         </div>
         {metaParts.length > 0 ? (
           <div className="mt-1 text-sm text-zinc-600">{metaParts.join(" · ")}</div>

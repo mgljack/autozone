@@ -3,6 +3,7 @@
 import Link from "next/link";
 
 import { useFavorites } from "@/features/favorites/favorites";
+import { LikeIcon } from "@/components/ui/LikeIcon";
 import type { Car } from "@/lib/api/cars";
 import { formatKm, formatMnt } from "@/lib/format";
 
@@ -38,13 +39,10 @@ export function CarCard({ car }: { car: Car }) {
               createdAt: car.postedAt,
             });
           }}
-          className={[
-            "shrink-0 rounded-xl px-3 py-2 text-sm font-normal transition-colors",
-            favored ? "bg-rose-50 text-rose-700 hover:bg-rose-100" : "bg-zinc-100 text-zinc-900 hover:bg-zinc-200",
-          ].join(" ")}
+          className="shrink-0 flex items-center justify-center h-7 w-7 rounded-full bg-zinc-500 transition-all duration-150 hover:scale-105 hover:bg-zinc-600"
           aria-pressed={favored}
         >
-          {favored ? "♥" : "♡"}
+          <LikeIcon liked={favored} size="sm" />
         </button>
       </div>
     </Link>

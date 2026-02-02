@@ -59,12 +59,12 @@ function Trash2Icon({ className }: { className?: string }) {
 }
 
 const navItems = [
-  { key: "favorites", icon: HeartIcon, label: "mypage.favorites.title" },
-  { key: "recent", icon: ClockIcon, label: "mypage.recent.title" },
-  { key: "listings", icon: FileTextIcon, label: "mypage.myListings.title" },
-  { key: "notifications", icon: BellIcon, label: "mypage.notifications.title" },
-  { key: "profile", icon: UserIcon, label: "mypage.profile.title" },
-  { key: "withdraw", icon: Trash2Icon, label: "mypage.withdraw" },
+  { key: "favorites", icon: HeartIcon, label: "mypage_favorites_title" },
+  { key: "recent", icon: ClockIcon, label: "mypage_recent_title" },
+  { key: "listings", icon: FileTextIcon, label: "mypage_myListings_title" },
+  { key: "notifications", icon: BellIcon, label: "mypage_notifications_title" },
+  { key: "profile", icon: UserIcon, label: "mypage_profile_title" },
+  { key: "withdraw", icon: Trash2Icon, label: "mypage_withdraw" },
 ] as const;
 
 export function SidebarNav() {

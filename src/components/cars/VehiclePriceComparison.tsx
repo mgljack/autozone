@@ -87,6 +87,13 @@ export function VehiclePriceComparison({
 
       const animate = () => {
         if (currentStep >= steps) {
+          // Ensure final values are exactly correct
+          setAnimatedSellingPrice(sellingPrice);
+          setAnimatedSavingsRate(savingsRate);
+          setAnimatedSavingsAmount(savingsAmount);
+          setAnimatedIconPosition(salePosition);
+          setAnimatedProgress(salePosition / 100);
+          setAnimatedCountdownPrice(sellingPrice);
           setIsAnimating(false);
           rafIdRef.current = null;
           return;
@@ -100,7 +107,8 @@ export function VehiclePriceComparison({
         setAnimatedReferencePrice(referencePrice);
 
         // Animate selling price from referencePrice DOWN to actual sellingPrice
-        setAnimatedSellingPrice(referencePrice - (referencePrice - sellingPrice) * eased);
+        const currentSellingPrice = referencePrice - (referencePrice - sellingPrice) * eased;
+        setAnimatedSellingPrice(Math.round(currentSellingPrice));
 
         // Animate savings rate from 100% DOWN to actual rate
         setAnimatedSavingsRate(100 - (100 - savingsRate) * eased);
@@ -116,7 +124,8 @@ export function VehiclePriceComparison({
         setAnimatedProgress(eased * (salePosition / 100));
 
         // Animate countdown price from referencePrice DOWN to sellingPrice
-        setAnimatedCountdownPrice(referencePrice - (referencePrice - sellingPrice) * eased);
+        const currentCountdownPrice = referencePrice - (referencePrice - sellingPrice) * eased;
+        setAnimatedCountdownPrice(Math.round(currentCountdownPrice));
 
         currentStep++;
         rafIdRef.current = requestAnimationFrame(() => {
@@ -165,7 +174,7 @@ export function VehiclePriceComparison({
 
       {/* Mode Switch */}
       <div className="mb-8" role="tablist">
-        <div className="inline-flex rounded-xl border border-zinc-200/60 bg-white/50 p-1.5 shadow-sm">
+        <div className="inline-flex gap-2">
           <button
             type="button"
             role="tab"
@@ -202,20 +211,26 @@ export function VehiclePriceComparison({
         <div className="relative h-14 w-full rounded-full overflow-visible">
           {/* Full bar background */}
           <div
-            className="absolute rounded-full"
+            className="absolute rounded-full bg-zinc-100"
             style={{
-              inset: "calc(var(--spacing) * 3)",
-              background: "linear-gradient(90deg, #e9edf3 0%, #f3f5f8 100%)",
+              top: "calc((56px - 12px) / 2)",
+              bottom: "calc((56px - 12px) / 2)",
+              left: 0,
+              right: 0,
+              height: "12px",
             }}
           />
           
           {/* Active range (Base → Sale) - filled area */}
           <div
-            className="absolute rounded-full transition-all duration-75 ease-out"
+            className="absolute rounded-full transition-all duration-300 ease-out"
             style={{
-              inset: "calc(var(--spacing) * 3)",
+              top: "calc((56px - 12px) / 2)",
+              bottom: "calc((56px - 12px) / 2)",
+              left: 0,
               width: `${animatedProgress * 100}%`,
-              background: "linear-gradient(90deg, #3b82f6 0%, #22c55e 100%)",
+              height: "12px",
+              background: "linear-gradient(90deg, #b70f28 0%, #dc2626 50%, #ef4444 100%)",
             }}
           />
           
@@ -228,26 +243,11 @@ export function VehiclePriceComparison({
             }}
           >
             <div
-              className="flex h-14 w-14 items-center justify-center rounded-full bg-white"
+              className="h-6 w-6 rounded-full bg-white"
               style={{
                 boxShadow: "0 0 12px rgba(59,130,246,0.35), 0 4px 12px rgba(0,0,0,0.1)",
               }}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-7 w-7 text-zinc-800"
-                aria-hidden="true"
-              >
-                <path d="M3 13.5V11a2 2 0 0 1 2-2h.8l1.3-3.2A2 2 0 0 1 9 4.5h6a2 2 0 0 1 1.9 1.3L18.2 9H19a2 2 0 0 1 2 2v2.5" />
-                <path d="M5.5 13.5h13" />
-                <path d="M7 18a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm10 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" />
-              </svg>
-            </div>
+            />
           </div>
 
           {/* Price labels */}
@@ -262,7 +262,7 @@ export function VehiclePriceComparison({
             }}
           >
             <div className="rounded-lg bg-zinc-900 px-3 py-1.5 text-xs font-semibold text-white shadow-lg whitespace-nowrap">
-              {t("priceComparison_label_salePrice")} {formatMnt(Math.round(animatedSellingPrice))}
+              {t("priceComparison_label_salePrice")} {formatMnt(sellingPrice)}
             </div>
           </div>
         </div>
@@ -276,7 +276,7 @@ export function VehiclePriceComparison({
         />
         <MetricCard
           label={t("priceComparison_salePrice")}
-          value={formatMnt(Math.round(animatedSellingPrice))}
+          value={formatMnt(sellingPrice)}
         />
         <MetricCard
           label={t("priceComparison_savingRate")}

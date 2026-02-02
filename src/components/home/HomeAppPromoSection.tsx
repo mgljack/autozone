@@ -8,8 +8,8 @@ export default function HomeAppPromoSection() {
   const { t } = useI18n();
 
   return (
-    <section className="relative w-full py-16 md:py-20 overflow-hidden">
-      <div className="mx-auto w-full max-w-[1280px] px-4">
+    <section className="relative w-full py-16 md:py-20 overflow-visible -mx-3 sm:-mx-4 lg:-mx-5">
+      <div className="mx-auto w-full max-w-[1280px] px-3 sm:px-4 lg:px-5">
         {/* Premium Card Container */}
         <div className="relative rounded-[32px] bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 p-8 md:p-12 lg:p-16 overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.5)]">
           

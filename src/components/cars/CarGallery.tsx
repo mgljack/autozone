@@ -4,6 +4,7 @@ import Image from "next/image";
 import React from "react";
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { LikeIcon } from "@/components/ui/LikeIcon";
 import { useI18n } from "@/context/I18nContext";
 
 function ChevronLeftIcon({ className }: { className?: string }) {
@@ -61,23 +62,6 @@ function ShareIcon({ className, filled }: { className?: string; filled?: boolean
   );
 }
 
-function HeartIcon({ className, filled }: { className?: string; filled?: boolean }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill={filled ? "currentColor" : "none"}
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-    </svg>
-  );
-}
-
 export function CarGallery({
   images,
   title,
@@ -102,7 +86,6 @@ export function CarGallery({
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [open, setOpen] = React.useState(false);
   const [shareHovered, setShareHovered] = React.useState(false);
-  const [heartHovered, setHeartHovered] = React.useState(false);
 
   const activeSrc = safe[Math.min(activeIndex, safe.length - 1)]!;
 
@@ -176,23 +159,12 @@ export function CarGallery({
           </button>
           <button
             type="button"
-            className={`group relative inline-flex h-8 w-8 items-center justify-center rounded-full border border-black/6 bg-white/85 text-[#6B7280] shadow-[0_2px_6px_rgba(0,0,0,0.08)] backdrop-blur-[6px] transition-all duration-180 ease-out hover:scale-104 hover:bg-white hover:text-[#111827] hover:shadow-[0_6px_18px_rgba(0,0,0,0.12)] active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#111827]/20 focus-visible:ring-offset-2 ${
-              liked ? "text-[#EF4444]" : ""
-            }`}
-            style={
-              liked
-                ? {
-                    animation: "heart-pulse 0.4s ease-out 1",
-                  }
-                : undefined
-            }
+            className="group relative inline-flex h-7 w-7 items-center justify-center rounded-full bg-zinc-500 shadow-[0_2px_6px_rgba(0,0,0,0.08)] transition-all duration-150 ease-out hover:scale-105 hover:bg-zinc-600 hover:shadow-[0_6px_18px_rgba(0,0,0,0.12)] active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#111827]/20 focus-visible:ring-offset-2"
             aria-label="Like"
             aria-pressed={liked}
             onClick={onToggleLike}
-            onMouseEnter={() => setHeartHovered(true)}
-            onMouseLeave={() => setHeartHovered(false)}
           >
-            <HeartIcon className="h-4 w-4" filled={liked || heartHovered} />
+            <LikeIcon liked={liked} size="sm" />
           </button>
         </div>
 

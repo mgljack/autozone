@@ -40,7 +40,7 @@ export default function MediaPage() {
 
   return (
     <div className="grid gap-6">
-      <SectionTitle title={t("media_title")} subtitle={t("media_subtitle")} />
+      <SectionTitle title={t("media_title")} />
 
       <Tabs value={tab} onValueChange={(v) => setTab(v as MediaDTO["type"])}>
         <TabsList className="max-w-md">
