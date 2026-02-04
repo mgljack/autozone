@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useI18n } from "@/context/I18nContext";
+import { cn } from "@/lib/utils";
 import type { CarsSort } from "@/lib/mockApi";
 
 interface SortPillsProps<T extends string = CarsSort> {
@@ -16,26 +17,30 @@ export function SortPills<T extends string = CarsSort>({ value, onChange, option
 
   return (
     <div
-      className="flex justify-start items-center gap-2 overflow-x-auto whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      className="flex items-center py-2 overflow-x-auto whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       aria-label={ariaLabelKey ? t(ariaLabelKey) : undefined}
     >
-      {options.map((sort) => {
+      {options.map((sort, idx) => {
         const isActive = value === sort.key;
         return (
-          <button
-            key={sort.key}
-            type="button"
-            onClick={() => onChange(sort.key)}
-            aria-pressed={isActive}
-            className={[
-              "px-3 py-1.5 rounded-full text-sm border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400",
-              isActive
-                ? "bg-slate-900 text-white border-slate-900"
-                : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50",
-            ].join(" ")}
-          >
-            {t(sort.labelKey)}
-          </button>
+          <div key={sort.key} className="flex items-center">
+            <button
+              type="button"
+              onClick={() => onChange(sort.key)}
+              aria-pressed={isActive}
+              className={cn(
+                "text-sm leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400",
+                isActive
+                  ? "text-slate-900 font-medium"
+                  : "text-slate-500 hover:text-slate-900"
+              )}
+            >
+              {t(sort.labelKey)}
+            </button>
+            {idx !== options.length - 1 && (
+              <span className="mx-2 h-4 w-px bg-slate-300/70" />
+            )}
+          </div>
         );
       })}
     </div>

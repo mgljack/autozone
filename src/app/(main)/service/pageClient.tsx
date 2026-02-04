@@ -5,12 +5,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 import { CardSkeleton } from "@/components/common/CardSkeleton";
+import { CustomSelect } from "@/components/common/CustomSelect";
 import { EmptyState } from "@/components/common/EmptyState";
 import { Pagination } from "@/components/common/Pagination";
 import { SectionTitle } from "@/components/common/SectionTitle";
 import { ServiceCenterCardHorizontal } from "@/components/service/ServiceCenterCardHorizontal";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
 import { useI18n } from "@/context/I18nContext";
 import { SortPills } from "@/components/listings/SortPills";
 import { fetchCentersList, type CentersListQuery } from "@/lib/mockApi";
@@ -35,11 +35,8 @@ export function ServiceCentersClient({ searchParams }: { searchParams: Record<st
   const [priceMinMnt, setPriceMinMnt] = React.useState(firstString(searchParams.priceMinMnt) ?? "");
   const [priceMaxMnt, setPriceMaxMnt] = React.useState(firstString(searchParams.priceMaxMnt) ?? "");
   const [ratingMin, setRatingMin] = React.useState(firstString(searchParams.ratingMin) ?? "");
-  const [availability, setAvailability] = React.useState<"now" | "next-week" | "all">(
-    () => (firstString(searchParams.availability) as any) || "all",
-  );
 
-  React.useEffect(() => setPage(1), [sort, searchQuery, serviceType, regionGroup, priceMinMnt, priceMaxMnt, ratingMin, availability]);
+  React.useEffect(() => setPage(1), [sort, searchQuery, serviceType, regionGroup, priceMinMnt, priceMaxMnt, ratingMin]);
 
   // Keep filters/sort in URL
   React.useEffect(() => {
@@ -52,12 +49,11 @@ export function ServiceCentersClient({ searchParams }: { searchParams: Record<st
     if (priceMinMnt) sp.set("priceMinMnt", priceMinMnt);
     if (priceMaxMnt) sp.set("priceMaxMnt", priceMaxMnt);
     if (ratingMin) sp.set("ratingMin", ratingMin);
-    if (availability !== "all") sp.set("availability", availability);
     router.replace(`/service?${sp.toString()}`, { scroll: false });
-  }, [router, page, sort, searchQuery, serviceType, regionGroup, priceMinMnt, priceMaxMnt, ratingMin, availability]);
+  }, [router, page, sort, searchQuery, serviceType, regionGroup, priceMinMnt, priceMaxMnt, ratingMin]);
 
   const listQuery = useQuery({
-    queryKey: ["centers", "list", { sort, page, searchQuery, serviceType, regionGroup, priceMinMnt, priceMaxMnt, ratingMin, availability }],
+    queryKey: ["centers", "list", { sort, page, searchQuery, serviceType, regionGroup, priceMinMnt, priceMaxMnt, ratingMin }],
     queryFn: () =>
       fetchCentersList({
         sort,
@@ -69,7 +65,6 @@ export function ServiceCentersClient({ searchParams }: { searchParams: Record<st
         priceMinMnt: priceMinMnt ? Number(priceMinMnt) : undefined,
         priceMaxMnt: priceMaxMnt ? Number(priceMaxMnt) : undefined,
         ratingMin: ratingMin ? Number(ratingMin) : undefined,
-        availability: availability !== "all" ? availability : undefined,
       }),
   });
 
@@ -90,30 +85,38 @@ export function ServiceCentersClient({ searchParams }: { searchParams: Record<st
 
             <label className="grid gap-1">
               <span className="text-xs font-normal text-zinc-600">{t("service_filter_serviceType")}</span>
-              <Select value={serviceType} onChange={(e) => setServiceType(e.target.value)}>
-                <option value="all">{t("service_filter_serviceType_all")}</option>
-                <option value="Engine Repair">{t("service_filter_serviceType_engineRepair")}</option>
-                <option value="Tire Service">{t("service_filter_serviceType_tireService")}</option>
-                <option value="Oil Change">{t("service_filter_serviceType_oilChange")}</option>
-                <option value="Brake Service">{t("service_filter_serviceType_brakeService")}</option>
-                <option value="General Maintenance">{t("service_filter_serviceType_generalMaintenance")}</option>
-                <option value="Diagnostics">{t("service_filter_serviceType_diagnostics")}</option>
-                <option value="Electrical">{t("service_filter_serviceType_electrical")}</option>
-                <option value="AC service">{t("service_filter_serviceType_acService")}</option>
-                <option value="Suspension">{t("service_filter_serviceType_suspension")}</option>
-                <option value="Battery">{t("service_filter_serviceType_battery")}</option>
-              </Select>
+              <CustomSelect
+                value={serviceType}
+                onChange={(v) => setServiceType(v)}
+                options={[
+                  { value: "all", label: t("service_filter_serviceType_all") },
+                  { value: "Engine Repair", label: t("service_filter_serviceType_engineRepair") },
+                  { value: "Tire Service", label: t("service_filter_serviceType_tireService") },
+                  { value: "Oil Change", label: t("service_filter_serviceType_oilChange") },
+                  { value: "Brake Service", label: t("service_filter_serviceType_brakeService") },
+                  { value: "General Maintenance", label: t("service_filter_serviceType_generalMaintenance") },
+                  { value: "Diagnostics", label: t("service_filter_serviceType_diagnostics") },
+                  { value: "Electrical", label: t("service_filter_serviceType_electrical") },
+                  { value: "AC service", label: t("service_filter_serviceType_acService") },
+                  { value: "Suspension", label: t("service_filter_serviceType_suspension") },
+                  { value: "Battery", label: t("service_filter_serviceType_battery") },
+                ]}
+              />
             </label>
 
             <label className="grid gap-1">
               <span className="text-xs font-normal text-zinc-600">{t("buyAll_filters_region")}</span>
-              <Select value={regionGroup} onChange={(e) => setRegionGroup(e.target.value)}>
-                <option value="">{t("service_filter_region_all")}</option>
-                <option value="Ulaanbaatar">{t("service_filter_region_ulaanbaatar")}</option>
-                <option value="Darkhan">{t("service_filter_region_darkhan")}</option>
-                <option value="Erdenet">{t("service_filter_region_erdenet")}</option>
-                <option value="Other">{t("service_filter_region_other")}</option>
-              </Select>
+              <CustomSelect
+                value={regionGroup}
+                onChange={(v) => setRegionGroup(v)}
+                options={[
+                  { value: "", label: t("service_filter_region_all") },
+                  { value: "Ulaanbaatar", label: t("service_filter_region_ulaanbaatar") },
+                  { value: "Darkhan", label: t("service_filter_region_darkhan") },
+                  { value: "Erdenet", label: t("service_filter_region_erdenet") },
+                  { value: "Other", label: t("service_filter_region_other") },
+                ]}
+              />
             </label>
 
             <div className="grid grid-cols-2 gap-3">
@@ -126,31 +129,23 @@ export function ServiceCentersClient({ searchParams }: { searchParams: Record<st
                 <Input value={priceMaxMnt} onChange={(e) => setPriceMaxMnt(e.target.value.replace(/[^\d]/g, ""))} inputMode="numeric" />
               </label>
             </div>
-
-            <label className="grid gap-1">
-              <span className="text-xs font-normal text-zinc-600">{t("service_filter_availability")}</span>
-              <Select value={availability} onChange={(e) => setAvailability(e.target.value as any)}>
-                <option value="all">{t("service_filter_availability_all")}</option>
-                <option value="now">{t("service_filter_availability_now")}</option>
-                <option value="next-week">{t("service_filter_availability_nextWeek")}</option>
-              </Select>
-            </label>
           </div>
         </aside>
 
         {/* RIGHT: Cards */}
         <section className="grid gap-3">
-          <div className="flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-start">
-            <SortPills
-              value={sort}
-              onChange={setSort}
-              options={[
-                { key: "newest", labelKey: "common_sort_newest" },
-                { key: "priceAsc", labelKey: "service_sort_priceAsc" },
-                { key: "priceDesc", labelKey: "service_sort_priceDesc" },
-              ]}
-            />
-          </div>
+          <SortPills
+            value={sort}
+            onChange={setSort}
+            options={[
+              { key: "newest", labelKey: "common_sort_newest" },
+              { key: "priceAsc", labelKey: "service_sort_priceAsc" },
+              { key: "priceDesc", labelKey: "service_sort_priceDesc" },
+            ]}
+          />
+
+          {/* Section Divider */}
+          <div className="my-1 h-px w-full bg-gradient-to-r from-transparent via-slate-300/60 to-transparent" />
 
           {listQuery.isLoading ? (
             <div className="grid gap-3">
@@ -160,7 +155,7 @@ export function ServiceCentersClient({ searchParams }: { searchParams: Record<st
             </div>
           ) : listQuery.data && listQuery.data.items.length > 0 ? (
             <>
-              <div className="grid gap-3">
+              <div>
                 {listQuery.data.items
                   .map((center, index) => {
                     // Determine tier (prototype: index-based)

@@ -5,12 +5,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 import { CardSkeleton } from "@/components/common/CardSkeleton";
+import { CustomSelect } from "@/components/common/CustomSelect";
 import { EmptyState } from "@/components/common/EmptyState";
 import { Pagination } from "@/components/common/Pagination";
 import { SectionTitle } from "@/components/common/SectionTitle";
 import { PartCard } from "@/components/parts/PartCard";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
 import { useI18n } from "@/context/I18nContext";
 import { SortPills } from "@/components/listings/SortPills";
 import { fetchPartsList, fetchCarModelsForParts, fetchMotorcycleModelsForParts, type PartsListQuery } from "@/lib/mockApi";
@@ -99,38 +99,48 @@ export function PartsClient({ searchParams }: { searchParams: Record<string, str
 
             <label className="grid gap-1">
               <span className="text-xs font-normal text-zinc-600">{t("parts_filters_allModels")}</span>
-              <Select value={carModel} onChange={(e) => setCarModel(e.target.value)}>
-                <option value="all">{t("parts_filters_allModels")}</option>
-                {(carModelsQuery.data ?? []).map((model) => (
-                  <option key={model} value={model}>
-                    {model}
-                  </option>
-                ))}
-              </Select>
+              <CustomSelect
+                value={carModel}
+                onChange={(v) => setCarModel(v)}
+                options={[
+                  { value: "all", label: t("parts_filters_allModels") },
+                  ...(carModelsQuery.data ?? []).map((model) => ({
+                    value: model,
+                    label: model,
+                  })),
+                ]}
+              />
             </label>
 
             <label className="grid gap-1">
               <span className="text-xs font-normal text-zinc-600">{t("parts_filters_allMotorcycleModels")}</span>
-              <Select value={motorcycleModel} onChange={(e) => setMotorcycleModel(e.target.value)}>
-                <option value="all">{t("parts_filters_allMotorcycleModels")}</option>
-                {(motorcycleModelsQuery.data ?? []).map((model) => (
-                  <option key={model} value={model}>
-                    {model}
-                  </option>
-                ))}
-              </Select>
+              <CustomSelect
+                value={motorcycleModel}
+                onChange={(v) => setMotorcycleModel(v)}
+                options={[
+                  { value: "all", label: t("parts_filters_allMotorcycleModels") },
+                  ...(motorcycleModelsQuery.data ?? []).map((model) => ({
+                    value: model,
+                    label: model,
+                  })),
+                ]}
+              />
             </label>
 
             <label className="grid gap-1">
               <span className="text-xs font-normal text-zinc-600">{t("parts_filters_accessory")}</span>
-              <Select value={accessoryType} onChange={(e) => setAccessoryType(e.target.value as any)}>
-                <option value="all">{t("common_all")}</option>
-                <option value="seat-cover">{t("parts_filters_accessory_seatCover")}</option>
-                <option value="camera">{t("parts_filters_accessory_camera")}</option>
-                <option value="floor-mat">{t("parts_filters_accessory_floorMat")}</option>
-                <option value="jump-starter">{t("parts_filters_accessory_jumpStarter")}</option>
-                <option value="other">{t("buyAll_option_color_other")}</option>
-              </Select>
+              <CustomSelect
+                value={accessoryType}
+                onChange={(v) => setAccessoryType(v as typeof accessoryType)}
+                options={[
+                  { value: "all", label: t("common_all") },
+                  { value: "seat-cover", label: t("parts_filters_accessory_seatCover") },
+                  { value: "camera", label: t("parts_filters_accessory_camera") },
+                  { value: "floor-mat", label: t("parts_filters_accessory_floorMat") },
+                  { value: "jump-starter", label: t("parts_filters_accessory_jumpStarter") },
+                  { value: "other", label: t("buyAll_option_color_other") },
+                ]}
+              />
             </label>
 
             <div className="grid grid-cols-2 gap-3">
@@ -147,17 +157,15 @@ export function PartsClient({ searchParams }: { searchParams: Record<string, str
         </aside>
 
         <section className="grid gap-3">
-          <div className="flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-start">
-            <SortPills
-              value={sort}
-              onChange={setSort}
-              options={[
-                { key: "newest", labelKey: "common_sort_newest" },
-                { key: "priceAsc", labelKey: "buyAll_sort_priceAsc" },
-                { key: "priceDesc", labelKey: "buyAll_sort_priceDesc" },
-              ]}
-            />
-          </div>
+          <SortPills
+            value={sort}
+            onChange={setSort}
+            options={[
+              { key: "newest", labelKey: "common_sort_newest" },
+              { key: "priceAsc", labelKey: "buyAll_sort_priceAsc" },
+              { key: "priceDesc", labelKey: "buyAll_sort_priceDesc" },
+            ]}
+          />
 
           {listQuery.isLoading ? (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

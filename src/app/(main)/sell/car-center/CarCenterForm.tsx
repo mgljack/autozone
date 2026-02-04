@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
@@ -120,6 +121,7 @@ export function CarCenterForm() {
   const [submitting, setSubmitting] = React.useState(false);
   const [imageFiles, setImageFiles] = React.useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = React.useState<string[]>([]);
+  const [draggedIndex, setDraggedIndex] = React.useState<number | null>(null);
   
   // Payment state
   const [tier, setTier] = React.useState<"gold" | "silver" | "general">("general");
@@ -193,6 +195,36 @@ export function CarCenterForm() {
     setImageFiles(nextFiles);
     setImagePreviews(previews);
     setField("images", nextFiles.map((f) => f.name));
+  };
+
+  const handleDragStart = (idx: number) => {
+    setDraggedIndex(idx);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (dropIndex: number) => {
+    if (draggedIndex === null || draggedIndex === dropIndex) {
+      setDraggedIndex(null);
+      return;
+    }
+
+    // Reorder images and previews
+    const newImageFiles = [...imageFiles];
+    const newPreviews = [...imagePreviews];
+    
+    const [draggedImage] = newImageFiles.splice(draggedIndex, 1);
+    const [draggedPreview] = newPreviews.splice(draggedIndex, 1);
+    
+    newImageFiles.splice(dropIndex, 0, draggedImage);
+    newPreviews.splice(dropIndex, 0, draggedPreview);
+    
+    setImageFiles(newImageFiles);
+    setImagePreviews(newPreviews);
+    setField("images", newImageFiles.map((f) => f.name));
+    setDraggedIndex(null);
   };
 
   const addServiceItem = () => {
@@ -318,10 +350,37 @@ export function CarCenterForm() {
 
   const geocodeResults = geocodeQuery.data || [];
 
+  // Banner image for car center
+  const bannerImage = "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=1200&h=600&fit=crop&auto=format";
+
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
-      {/* Left: Form */}
-      <div className="grid gap-6">
+    <div className="grid gap-6">
+      {/* Premium Banner Section */}
+      <section className="mb-2">
+        <div className="relative h-32 overflow-hidden rounded-2xl border border-slate-200/70 sm:h-40">
+          <Image
+            src={bannerImage}
+            alt={t("carCenter_form_title")}
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/60 to-slate-900/40" />
+          <div className="relative z-10 flex h-full items-center p-6 sm:p-8">
+            <div className="max-w-2xl">
+              <h1 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">{t("carCenter_form_title")}</h1>
+              <p className="mt-2 text-sm text-slate-100 sm:text-base">
+                {t("carCenter_form_subtitle")}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Left: Form */}
+        <div className="grid gap-6">
         {/* Basic Info */}
         <Card>
           <CardHeader>
@@ -562,13 +621,25 @@ export function CarCenterForm() {
               {imagePreviews.length > 0 && (
                 <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
                   {imagePreviews.map((src, idx) => (
-                    <div key={src} className="relative overflow-hidden rounded-xl border border-zinc-200 bg-white">
+                    <div
+                      key={`${src}-${idx}`}
+                      draggable
+                      onDragStart={() => handleDragStart(idx)}
+                      onDragOver={handleDragOver}
+                      onDrop={() => handleDrop(idx)}
+                      className={`relative cursor-move overflow-hidden rounded-xl border border-zinc-200 bg-white transition-all ${
+                        draggedIndex === idx ? "opacity-50 scale-95" : "hover:border-zinc-300 hover:shadow-md"
+                      }`}
+                    >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={src} alt={`upload-${idx}`} className="h-20 w-full object-cover" />
+                      <img src={src} alt={`upload-${idx}`} className="h-20 w-full object-cover pointer-events-none" />
                       <button
                         type="button"
-                        onClick={() => removeImageAt(idx)}
-                        className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-md backdrop-blur-sm transition-all hover:bg-rose-50 hover:shadow-lg"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removeImageAt(idx);
+                        }}
+                        className="absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-md backdrop-blur-sm transition-all hover:bg-rose-50 hover:shadow-lg"
                         aria-label={t("sell_common_delete")}
                       >
                         <svg className="h-4 w-4 text-zinc-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
@@ -668,6 +739,7 @@ export function CarCenterForm() {
             <MapPreview lat={draft.lat} lng={draft.lng} centerName={draft.name || "카센터"} address={draft.address} />
           </CardContent>
         </Card>
+      </div>
       </div>
 
       {/* Payment Dialog */}

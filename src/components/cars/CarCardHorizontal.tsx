@@ -48,9 +48,9 @@ export function CarCardHorizontal({ car, href }: { car: CarListItemDTO; href?: s
   return (
     <Link
       href={detailHref}
-      className="group block w-full overflow-hidden rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
+      className="group block w-full border-b border-slate-200/70 py-4 transition-colors hover:bg-slate-50/60 last:border-b-0"
     >
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-[360px_1fr_220px] md:items-start">
+      <div className="grid grid-cols-1 gap-4 px-4 md:grid-cols-[360px_1fr_220px] md:items-start">
         {/* LEFT: Two images */}
         <div className="relative grid grid-cols-2 gap-2">
           {images.map((img, idx) => (

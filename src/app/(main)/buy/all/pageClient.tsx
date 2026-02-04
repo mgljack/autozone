@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 import { CardSkeleton } from "@/components/common/CardSkeleton";
+import { CustomSelect } from "@/components/common/CustomSelect";
 import { EmptyState } from "@/components/common/EmptyState";
 import { Pagination } from "@/components/common/Pagination";
 import { SectionTitle } from "@/components/common/SectionTitle";
@@ -13,7 +14,6 @@ import { BrandSelect } from "@/components/filters/BrandSelect";
 import { RangeSelect } from "@/components/filters/RangeSelect";
 import { VehicleSortPills } from "@/components/listings/SortPills";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
 import { useI18n } from "@/context/I18nContext";
 import { fetchCarTaxonomy, fetchCarsList, fetchModelCounts, type CarsSort } from "@/lib/mockApi";
 
@@ -221,7 +221,7 @@ export function BuyAllClient({ searchParams }: { searchParams: Record<string, st
               <div className="max-h-56 overflow-auto rounded-xl border border-zinc-200 p-2">
                 <button
                   type="button"
-                  className={`w-full rounded-lg px-2 py-2 text-left text-sm font-normal hover:bg-zinc-50 ${!model ? "bg-zinc-100" : ""}`}
+                  className={`w-full rounded-lg border px-2 py-2 text-left text-sm font-normal transition-colors ${!model ? "border-zinc-300 bg-zinc-50 ring-1 ring-zinc-200" : "border-transparent hover:bg-zinc-50"}`}
                   onClick={() => setModel("")}
                 >
                   {t("buyAll_filters_allModels")}
@@ -232,7 +232,7 @@ export function BuyAllClient({ searchParams }: { searchParams: Record<string, st
                     <button
                       key={m.model}
                       type="button"
-                      className={`flex w-full items-center justify-between rounded-lg px-2 py-2 text-left text-sm hover:bg-zinc-50 ${model === m.model ? "bg-zinc-100 font-normal" : ""}`}
+                      className={`flex w-full items-center justify-between rounded-lg border px-2 py-2 text-left text-sm transition-colors ${model === m.model ? "border-zinc-300 bg-zinc-50 ring-1 ring-zinc-200 font-normal" : "border-transparent hover:bg-zinc-50"}`}
                       onClick={() => setModel(m.model)}
                     >
                       <span className="truncate">{m.model}</span>
@@ -300,58 +300,75 @@ export function BuyAllClient({ searchParams }: { searchParams: Record<string, st
 
             <label className="grid gap-1">
               <span className="text-xs font-normal text-zinc-600">{t("buyAll_filters_fuel")}</span>
-              <Select value={fuel} onChange={(e) => setFuel(e.target.value)}>
-                <option value="all">{t("common_all")}</option>
-                <option value="gasoline">{t("buyAll_option_fuel_gasoline")}</option>
-                <option value="diesel">{t("buyAll_option_fuel_diesel")}</option>
-                <option value="lpg">{t("buyAll_option_fuel_lpg")}</option>
-                <option value="electric">{t("buyAll_option_fuel_electric")}</option>
-                <option value="hybrid">{t("buyAll_option_fuel_hybrid")}</option>
-              </Select>
+              <CustomSelect
+                value={fuel}
+                onChange={(v) => setFuel(v)}
+                options={[
+                  { value: "all", label: t("common_all") },
+                  { value: "gasoline", label: t("buyAll_option_fuel_gasoline") },
+                  { value: "diesel", label: t("buyAll_option_fuel_diesel") },
+                  { value: "lpg", label: t("buyAll_option_fuel_lpg") },
+                  { value: "electric", label: t("buyAll_option_fuel_electric") },
+                  { value: "hybrid", label: t("buyAll_option_fuel_hybrid") },
+                ]}
+              />
             </label>
 
             <label className="grid gap-1">
               <span className="text-xs font-normal text-zinc-600">{t("buyAll_filters_transmission")}</span>
-              <Select value={transmission} onChange={(e) => setTransmission(e.target.value)}>
-                <option value="all">{t("common_all")}</option>
-                <option value="at">{t("buyAll_option_trans_at")}</option>
-                <option value="mt">{t("buyAll_option_trans_mt")}</option>
-              </Select>
+              <CustomSelect
+                value={transmission}
+                onChange={(v) => setTransmission(v)}
+                options={[
+                  { value: "all", label: t("common_all") },
+                  { value: "at", label: t("buyAll_option_trans_at") },
+                  { value: "mt", label: t("buyAll_option_trans_mt") },
+                ]}
+              />
             </label>
 
             <label className="grid gap-1">
               <span className="text-xs font-normal text-zinc-600">{t("buyAll_filters_color")}</span>
-              <Select value={color} onChange={(e) => setColor(e.target.value)}>
-                <option value="all">{t("common_all")}</option>
-                <option value="black">{t("buyAll_option_color_black")}</option>
-                <option value="white">{t("buyAll_option_color_white")}</option>
-                <option value="silver">{t("buyAll_option_color_silver")}</option>
-                <option value="pearl">{t("buyAll_option_color_pearl")}</option>
-                <option value="gray">{t("buyAll_option_color_gray")}</option>
-                <option value="darkgray">{t("buyAll_option_color_darkgray")}</option>
-                <option value="green">{t("buyAll_option_color_green")}</option>
-                <option value="blue">{t("buyAll_option_color_blue")}</option>
-                <option value="other">{t("buyAll_option_color_other")}</option>
-              </Select>
+              <CustomSelect
+                value={color}
+                onChange={(v) => setColor(v)}
+                options={[
+                  { value: "all", label: t("common_all") },
+                  { value: "black", label: t("buyAll_option_color_black") },
+                  { value: "white", label: t("buyAll_option_color_white") },
+                  { value: "silver", label: t("buyAll_option_color_silver") },
+                  { value: "pearl", label: t("buyAll_option_color_pearl") },
+                  { value: "gray", label: t("buyAll_option_color_gray") },
+                  { value: "darkgray", label: t("buyAll_option_color_darkgray") },
+                  { value: "green", label: t("buyAll_option_color_green") },
+                  { value: "blue", label: t("buyAll_option_color_blue") },
+                  { value: "other", label: t("buyAll_option_color_other") },
+                ]}
+              />
             </label>
 
             <label className="grid gap-1">
               <span className="text-xs font-normal text-zinc-600">{t("buyAll_filters_region")}</span>
-              <Select value={regionGroup} onChange={(e) => setRegionGroup(e.target.value)}>
-                <option value="">{t("common_all")}</option>
-                <option value="Ulaanbaatar">{t("buyAll_option_region_ua")}</option>
-                <option value="Erdenet">{t("buyAll_option_region_erdenet")}</option>
-                <option value="Darkhan">{t("buyAll_option_region_darkhan")}</option>
-                <option value="Other">{t("buyAll_option_region_other")}</option>
-              </Select>
+              <CustomSelect
+                value={regionGroup}
+                onChange={(v) => setRegionGroup(v)}
+                options={[
+                  { value: "", label: t("common_all") },
+                  { value: "Ulaanbaatar", label: t("buyAll_option_region_ua") },
+                  { value: "Erdenet", label: t("buyAll_option_region_erdenet") },
+                  { value: "Darkhan", label: t("buyAll_option_region_darkhan") },
+                  { value: "Other", label: t("buyAll_option_region_other") },
+                ]}
+              />
             </label>
           </div>
         </aside>
 
         <section className="grid gap-3">
-          <div className="flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-start">
-            <VehicleSortPills value={sort} onChange={setSort} />
-          </div>
+          <VehicleSortPills value={sort} onChange={setSort} />
+
+          {/* Section Divider */}
+          <div className="my-1 h-px w-full bg-gradient-to-r from-transparent via-slate-300/60 to-transparent" />
 
           {listQuery.isLoading ? (
             <div className="grid gap-3 sm:grid-cols-2">
@@ -361,7 +378,7 @@ export function BuyAllClient({ searchParams }: { searchParams: Record<string, st
               <CardSkeleton />
             </div>
           ) : listQuery.data?.items?.length ? (
-            <div className="grid gap-3">
+            <div>
               {listQuery.data.items.map((c) => (
                 <CarCardHorizontal key={c.id} car={c} />
               ))}

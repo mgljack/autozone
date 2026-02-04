@@ -15,9 +15,9 @@ export function ServiceCenterCardHorizontal({ center, tier }: { center: CenterDT
   return (
     <Link
       href={`/service/center/${center.id}`}
-      className="group block w-full overflow-hidden rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
+      className="group block w-full border-b border-slate-200/70 py-4 transition-colors hover:bg-slate-50/60 last:border-b-0"
     >
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-[360px_1fr_220px] md:items-start">
+      <div className="grid grid-cols-1 gap-4 px-4 md:grid-cols-[360px_1fr_220px] md:items-start">
         {/* LEFT: Single service center image */}
         <div className="relative h-[200px] w-full overflow-hidden rounded-xl bg-zinc-100 md:h-[160px]">
           <Image 

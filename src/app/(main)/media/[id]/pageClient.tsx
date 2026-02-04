@@ -8,8 +8,10 @@ import React from "react";
 import { fetchMediaById, fetchMediaList } from "@/lib/mockApi";
 import type { MediaDTO } from "@/lib/apiTypes";
 import { LikeIcon } from "@/components/ui/LikeIcon";
+import { useI18n } from "@/context/I18nContext";
 
 export default function MediaDetailClient({ id }: { id: string }) {
+  const { t } = useI18n();
   const [liked, setLiked] = React.useState(false);
   const [likeCount, setLikeCount] = React.useState(0);
 
@@ -32,7 +34,7 @@ export default function MediaDetailClient({ id }: { id: string }) {
   if (detailQuery.isLoading) {
     return (
       <div className="grid gap-6">
-        <div className="text-sm text-zinc-600">로딩 중...</div>
+        <div className="text-sm text-zinc-600">{t("media_detail_loading")}</div>
       </div>
     );
   }
@@ -40,7 +42,7 @@ export default function MediaDetailClient({ id }: { id: string }) {
   if (!detailQuery.data) {
     return (
       <div className="grid gap-6">
-        <div className="text-sm text-zinc-600">기사를 찾을 수 없습니다.</div>
+        <div className="text-sm text-zinc-600">{t("media_detail_notFound")}</div>
       </div>
     );
   }
@@ -77,9 +79,9 @@ export default function MediaDetailClient({ id }: { id: string }) {
     } else {
       try {
         await navigator.clipboard.writeText(url);
-        alert("링크가 복사되었습니다_");
+        alert(t("media_detail_linkCopied"));
       } catch (err) {
-        alert("링크 복사에 실패했습니다_");
+        alert(t("media_detail_linkCopyFailed"));
       }
     }
   };
@@ -98,7 +100,14 @@ export default function MediaDetailClient({ id }: { id: string }) {
   const coverImage = news.coverImage || news.thumbnailUrl;
   const images = news.images && news.images.length > 0 ? news.images : [coverImage];
   const content = news.content || news.excerpt;
-  const author = news.author || news.reporterName || "관리자";
+  const author = news.author || news.reporterName || t("media_detail_admin");
+  
+  const getTypeLabel = (type: MediaDTO["type"]) => {
+    if (type === "news") return t("media_tab_news");
+    if (type === "video") return t("media_tab_video");
+    if (type === "event") return t("media_tab_event");
+    return type;
+  };
 
   return (
     <div className="grid gap-6">
@@ -119,13 +128,13 @@ export default function MediaDetailClient({ id }: { id: string }) {
 
           {/* Main Image - Single representative image only */}
           {images.length > 0 && (
-            <div className="mb-6 w-full overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100">
+            <div className="mb-6 w-full overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-100">
               <div className="relative w-full" style={{ aspectRatio: "16/9", maxHeight: "480px" }}>
                 <Image
                   src={coverImage}
                   alt={news.title}
                   fill
-                  className="object-cover"
+                  className="object-cover rounded-2xl"
                   priority
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
                 />
@@ -179,7 +188,7 @@ export default function MediaDetailClient({ id }: { id: string }) {
                 <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
                 <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
               </svg>
-              공유하기
+              {t("media_detail_share")}
             </button>
           </div>
         </article>
@@ -204,17 +213,17 @@ export default function MediaDetailClient({ id }: { id: string }) {
               <path d="m12 19-7-7 7-7" />
               <path d="M19 12H5" />
             </svg>
-            목록으로 돌아가기
+            {t("media_detail_backToList")}
           </Link>
 
           {/* Previous article */}
           <div className="rounded-xl border border-zinc-200 bg-white p-4">
-            <div className="mb-3 text-xs font-normal text-zinc-600">이전글</div>
+            <div className="mb-3 text-xs font-normal text-zinc-600">{t("media_detail_previous")}</div>
             {previousNews ? (
               <Link href={`/media/${previousNews.id}`} className="block">
                 <div className="mb-2">
                   <span className="inline-block rounded-full border border-zinc-200 bg-zinc-50 px-2 py-0.5 text-xs font-normal text-zinc-700">
-                    {previousNews.type === "news" ? "뉴스" : previousNews.type === "video" ? "비디오" : "이벤트"}
+                    {getTypeLabel(previousNews.type)}
                   </span>
                 </div>
                 <h3 className="line-clamp-2 text-sm font-normal text-zinc-900">{previousNews.title}</h3>
@@ -226,7 +235,7 @@ export default function MediaDetailClient({ id }: { id: string }) {
                 )}
               </Link>
             ) : (
-              <div className="text-sm text-zinc-500">이전글이 없습니다.</div>
+              <div className="text-sm text-zinc-500">{t("media_detail_noPrevious")}</div>
             )}
           </div>
         </aside>

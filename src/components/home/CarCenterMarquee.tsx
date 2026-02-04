@@ -65,44 +65,66 @@ export function CarCenterMarquee({ centers }: CarCenterMarqueeProps) {
             // Get first 2-3 services for subtitle
             const servicesPreview = center.services?.slice(0, 3).join(" · ") || "Auto Repair";
             
+            // Get first image: images[0] → imageUrl → placeholder
+            const firstImage = center.images?.[0] || center.imageUrl || "/samples/cars/car-01.svg";
+            
             return (
-              <Link
+              <div
                 key={`${center.id}-${idx}`}
-                href={`/service/center/${center.id}`}
-                className="group relative flex shrink-0 cursor-pointer items-center gap-4 rounded-2xl bg-white p-4 shadow-md transition-all duration-200 hover:scale-105 hover:shadow-lg"
+                className="group shrink-0"
                 style={{ 
-                  width: "280px", 
-                  minHeight: "120px",
+                  width: "280px",
                   flexShrink: 0,
                   flexGrow: 0,
                 }}
               >
-                {/* Icon Accent - Top Right */}
-                <div className="absolute right-3 top-3">
-                  <WrenchIcon 
-                    className="h-4 w-4 opacity-30 transition-opacity group-hover:opacity-50" 
-                    style={{ color: "var(--accent-orange)" }}
-                  />
-                </div>
+                <Link
+                  href={`/service/center/${center.id}`}
+                  className="relative flex cursor-pointer items-center gap-4 rounded-2xl bg-white p-4 shadow-md transition-all duration-200 hover:scale-105 hover:shadow-lg"
+                  style={{ 
+                    minHeight: "120px",
+                  }}
+                >
+                  {/* Icon Accent - Top Right */}
+                  <div className="absolute right-3 top-3">
+                    <WrenchIcon 
+                      className="h-4 w-4 opacity-30 transition-opacity group-hover:opacity-50" 
+                      style={{ color: "var(--accent-orange)" }}
+                    />
+                  </div>
 
-                {/* Circular Image */}
-                <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full bg-zinc-100 ring-2 ring-zinc-200/50 transition-all group-hover:ring-zinc-300/70">
-                  <Image
-                    src={center.imageUrl || "/samples/cars/car-01.svg"}
-                    alt={center.name}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
+                  {/* Circular Image */}
+                  <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full bg-zinc-100 ring-2 ring-zinc-200/50 transition-all group-hover:ring-zinc-300/70">
+                    <Image
+                      src={center.imageUrl || "/samples/cars/car-01.svg"}
+                      alt={center.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
 
-                {/* Text Content */}
-                <div className="min-w-0 flex-1 pr-2">
-                  <h3 className="truncate text-base font-semibold leading-tight text-zinc-900">{center.name}</h3>
-                  {servicesPreview && (
-                    <p className="mt-1.5 line-clamp-1 text-sm leading-tight text-zinc-600">{servicesPreview}</p>
-                  )}
+                  {/* Text Content */}
+                  <div className="min-w-0 flex-1 pr-2">
+                    <h3 className="truncate text-base font-semibold leading-tight text-zinc-900">{center.name}</h3>
+                    {servicesPreview && (
+                      <p className="mt-1.5 line-clamp-1 text-sm leading-tight text-zinc-600">{servicesPreview}</p>
+                    )}
+                  </div>
+                </Link>
+
+                {/* Reveal Panel - Slides down on hover */}
+                <div className="overflow-hidden max-h-0 opacity-0 transition-all duration-300 ease-out group-hover:max-h-[160px] group-hover:opacity-100">
+                  <div className="relative h-[160px] w-full overflow-hidden rounded-b-2xl bg-zinc-100">
+                    <Image
+                      src={firstImage}
+                      alt={center.name}
+                      fill
+                      className="object-cover"
+                      sizes="280px"
+                    />
+                  </div>
                 </div>
-              </Link>
+              </div>
             );
           })}
         </div>

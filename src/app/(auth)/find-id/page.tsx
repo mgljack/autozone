@@ -36,7 +36,7 @@ export default function FindIdPage() {
           <Input value={value} onChange={(e) => setValue(e.target.value)} placeholder={t("findId_placeholder")} />
           <Button onClick={onSubmit}>{t("findId_sendMock")}</Button>
           <Link className="text-sm font-normal text-zinc-900 hover:underline" href="/login">
-            ← {t("common_back")} • {t("auth_login")}
+            {t("auth_backToLogin")}
           </Link>
         </CardContent>
       </Card>

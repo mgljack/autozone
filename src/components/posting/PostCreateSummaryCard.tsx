@@ -23,28 +23,26 @@ export function PostCreateSummaryCard({ draft, imagesCount, onSubmit, isSubmitti
       <h3 className="text-base font-semibold text-zinc-900">{t("sell_summary_title")}</h3>
       
       <div className="mt-4 grid gap-3">
-        {/* Title/Category */}
-        <div className="grid gap-1.5">
-          <div className="text-xs font-medium text-zinc-500">{t("sell_summary_category")}</div>
-          <div className="text-sm font-normal text-zinc-900">
-            {hasData(draft.category) ? t(`sell_category_${draft.category}`) : (
-              <span className="text-zinc-400">{t("sell_summary_empty")}</span>
-            )}
-          </div>
-        </div>
-
-        {/* Title/Name */}
+        {/* Manufacturer */}
         {(draft.category === "car" || draft.category === "motorcycle") && (
-          <div className="grid gap-1.5">
-            <div className="text-xs font-medium text-zinc-500">{t("sell_summary_vehicle")}</div>
-            <div className="text-sm font-normal text-zinc-900">
-              {hasData(draft.manufacturer) && hasData(draft.model) ? (
-                `${draft.manufacturer} ${draft.model}`
-              ) : (
-                <span className="text-zinc-400">{t("sell_summary_empty")}</span>
-              )}
+          <>
+            <div className="grid gap-1.5">
+              <div className="text-xs font-medium text-zinc-500">{t("sell_vehicle_manufacturer")}</div>
+              <div className="text-sm font-normal text-zinc-900">
+                {hasData(draft.manufacturer) ? draft.manufacturer : (
+                  <span className="text-zinc-400">{t("sell_summary_empty")}</span>
+                )}
+              </div>
             </div>
-          </div>
+            <div className="grid gap-1.5">
+              <div className="text-xs font-medium text-zinc-500">{t("sell_vehicle_model")}</div>
+              <div className="text-sm font-normal text-zinc-900">
+                {hasData(draft.model) ? draft.model : (
+                  <span className="text-zinc-400">{t("sell_summary_empty")}</span>
+                )}
+              </div>
+            </div>
+          </>
         )}
 
         {draft.category === "parts" && (

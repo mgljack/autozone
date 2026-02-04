@@ -1,11 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { useQuery } from "@tanstack/react-query";
 
 import { RequireAuth } from "@/components/common/RequireAuth";
 import { SectionTitle } from "@/components/common/SectionTitle";
+import { CustomSelect } from "@/components/common/CustomSelect";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -18,6 +21,8 @@ import { createDefaultDraft } from "@/features/sell/defaults";
 import { readDraft, upsertMyListing, writeDraft } from "@/features/sell/storage";
 import type { SellCategory, SellDraft } from "@/features/sell/types";
 import { PostCreateSummaryCard } from "@/components/posting/PostCreateSummaryCard";
+import { fetchCarTaxonomy } from "@/lib/mockApi";
+import { sampleCarImage } from "@/mock/cars";
 
 export default function SellFormByCategoryPage({ params }: { params: { category: string } }) {
   const { t } = useI18n();
@@ -39,6 +44,60 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
   const [videoError, setVideoError] = React.useState<string | null>(null);
   const [errors, setErrors] = React.useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [draggedIndex, setDraggedIndex] = React.useState<number | null>(null);
+
+  // Fetch car taxonomy for manufacturer and model dropdowns
+  const taxonomyQuery = useQuery({
+    queryKey: ["carTaxonomy"],
+    queryFn: () => fetchCarTaxonomy(),
+    enabled: draft.category === "car" || draft.category === "motorcycle",
+  });
+
+  // Get available models based on selected manufacturer
+  const availableModels = React.useMemo(() => {
+    if (draft.category !== "car" && draft.category !== "motorcycle") return [];
+    const manufacturer = draft.category === "car" || draft.category === "motorcycle" ? draft.manufacturer : "";
+    if (!manufacturer || !taxonomyQuery.data) return [];
+    return taxonomyQuery.data.modelsByManufacturer[manufacturer] ?? [];
+  }, [draft.category, taxonomyQuery.data]);
+
+  // Generate year options (1990 to current year)
+  const yearOptions = React.useMemo(() => {
+    const currentYear = new Date().getFullYear();
+    const years: { value: string; label: string }[] = [];
+    for (let year = currentYear; year >= 1990; year--) {
+      years.push({ value: String(year), label: String(year) });
+    }
+    return years;
+  }, []);
+
+  // Category banner images
+  const categoryBannerImage = React.useMemo(() => {
+    switch (category) {
+      case "car":
+        return sampleCarImage(1);
+      case "motorcycle":
+        return "https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=1200&h=600&fit=crop&auto=format";
+      case "tire":
+        return "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&h=600&fit=crop&auto=format";
+      case "parts":
+        return "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=1200&h=600&fit=crop&auto=format";
+      default:
+        return sampleCarImage(1);
+    }
+  }, [category]);
+
+  // Reset model when manufacturer changes
+  React.useEffect(() => {
+    if (draft.category === "car" || draft.category === "motorcycle") {
+      const manufacturer = draft.category === "car" || draft.category === "motorcycle" ? draft.manufacturer : "";
+      const currentModels = taxonomyQuery.data?.modelsByManufacturer[manufacturer] ?? [];
+      const model = draft.category === "car" || draft.category === "motorcycle" ? draft.model : "";
+      if (model && !currentModels.includes(model)) {
+        setField("model", "");
+      }
+    }
+  }, [draft.category, taxonomyQuery.data]);
 
   React.useEffect(() => {
     if (!session) return;
@@ -94,6 +153,35 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
     setImagePreviews(previews);
   };
 
+  const handleDragStart = (idx: number) => {
+    setDraggedIndex(idx);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (dropIndex: number) => {
+    if (draggedIndex === null || draggedIndex === dropIndex) {
+      setDraggedIndex(null);
+      return;
+    }
+
+    // Reorder images and previews
+    const newImages = [...images];
+    const newPreviews = [...imagePreviews];
+    
+    const [draggedImage] = newImages.splice(draggedIndex, 1);
+    const [draggedPreview] = newPreviews.splice(draggedIndex, 1);
+    
+    newImages.splice(dropIndex, 0, draggedImage);
+    newPreviews.splice(dropIndex, 0, draggedPreview);
+    
+    setImages(newImages);
+    setImagePreviews(newPreviews);
+    setDraggedIndex(null);
+  };
+
   const onPickVideo: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setVideoError(null);
     const file = (e.target.files ?? [])[0] ?? null;
@@ -138,7 +226,6 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
       if (!draft.fuel) next.fuel = t("sell_error_fuelRequired");
       if (!draft.transmission) next.transmission = t("sell_error_transmissionRequired");
       require("color", draft.color);
-      require("vin", draft.vin);
       require("priceMnt", draft.priceMnt);
     }
 
@@ -210,6 +297,29 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
   return (
     <RequireAuth returnUrl={`/sell/${params.category}`}>
       <div className="grid gap-6 pb-24 lg:pb-6">
+        {/* Premium Banner Section */}
+        <section className="mb-2">
+          <div className="relative h-32 overflow-hidden rounded-2xl border border-slate-200/70 sm:h-40">
+            <Image
+              src={categoryBannerImage}
+              alt={t("sell_form_banner_title")}
+              fill
+              className="object-cover"
+              sizes="100vw"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/60 to-slate-900/40" />
+            <div className="relative z-10 flex h-full items-center p-6 sm:p-8">
+              <div className="max-w-2xl">
+                <h1 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">{t("sell_form_banner_title")}</h1>
+                <p className="mt-2 text-sm text-slate-100 sm:text-base">
+                  {t("sell_form_banner_subtitle")}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Two-column layout */}
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_360px] lg:items-start">
           {/* Left: Form Sections */}
@@ -224,45 +334,66 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="grid gap-2">
                   <Label>{t("sell_vehicle_manufacturer")}</Label>
-                  <Input
-                    value={draft.manufacturer}
-                    onChange={(e) => setField("manufacturer", e.target.value as any)}
+                  <CustomSelect
+                    value={draft.manufacturer || ""}
+                    onChange={(v) => setField("manufacturer", v)}
+                    options={[
+                      { value: "", label: t("sell_common_select") },
+                      ...(taxonomyQuery.data?.manufacturers ?? []).map((m) => ({
+                        value: m,
+                        label: m,
+                      })),
+                    ]}
                     placeholder={t("sell_vehicle_manufacturerPlaceholder")}
-                    className="h-11 rounded-xl focus:ring-2 focus:ring-rose-500/20"
                   />
                   {errors.manufacturer ? <div className="text-xs text-red-600">{errors.manufacturer}</div> : null}
                 </div>
 
                 <div className="grid gap-2">
                   <Label>{t("sell_vehicle_model")}</Label>
-                  <Input
-                    value={draft.model}
-                    onChange={(e) => setField("model", e.target.value as any)}
+                  <CustomSelect
+                    value={draft.model || ""}
+                    onChange={(v) => setField("model", v)}
+                    options={[
+                      { value: "", label: t("sell_common_select") },
+                      ...availableModels.map((m) => ({
+                        value: m,
+                        label: m,
+                      })),
+                    ]}
                     placeholder={t("sell_vehicle_modelPlaceholder")}
-                    className="h-11 rounded-xl focus:ring-2 focus:ring-rose-500/20"
+                    disabled={!draft.manufacturer}
                   />
                   {errors.model ? <div className="text-xs text-red-600">{errors.model}</div> : null}
                 </div>
 
                 <div className="grid gap-2">
                   <Label>{t("sell_vehicle_region")}</Label>
-                  <Select value={draft.region} onChange={(e) => setField("region", e.target.value as any)} className="h-11 rounded-xl focus:ring-2 focus:ring-rose-500/20">
-                    <option value="">{t("sell_common_select")}</option>
-                    <option value="Ulaanbaatar">{t("sell_vehicle_region_ulaanbaatar")}</option>
-                    <option value="Erdenet">{t("sell_vehicle_region_erdenet")}</option>
-                    <option value="Darkhan">{t("sell_vehicle_region_darkhan")}</option>
-                    <option value="Other">{t("sell_vehicle_region_other")}</option>
-                  </Select>
+                  <CustomSelect
+                    value={draft.region || ""}
+                    onChange={(v) => setField("region", v)}
+                    options={[
+                      { value: "", label: t("sell_common_select") },
+                      { value: "Ulaanbaatar", label: t("sell_vehicle_region_ulaanbaatar") },
+                      { value: "Erdenet", label: t("sell_vehicle_region_erdenet") },
+                      { value: "Darkhan", label: t("sell_vehicle_region_darkhan") },
+                      { value: "Other", label: t("sell_vehicle_region_other") },
+                    ]}
+                  />
                   {errors.region ? <div className="text-xs text-red-600">{errors.region}</div> : null}
                 </div>
 
                 <div className="grid gap-2">
                   <Label>{t("sell_vehicle_hasPlate")}</Label>
-                  <Select value={draft.hasPlate} onChange={(e) => setField("hasPlate", e.target.value as any)}>
-                    <option value="">{t("sell_common_select")}</option>
-                    <option value="yes">{t("sell_vehicle_hasPlate_yes")}</option>
-                    <option value="no">{t("sell_vehicle_hasPlate_no")}</option>
-                  </Select>
+                  <CustomSelect
+                    value={draft.hasPlate || ""}
+                    onChange={(v) => setField("hasPlate", v)}
+                    options={[
+                      { value: "", label: t("sell_common_select") },
+                      { value: "yes", label: t("sell_vehicle_hasPlate_yes") },
+                      { value: "no", label: t("sell_vehicle_hasPlate_no") },
+                    ]}
+                  />
                   {errors.hasPlate ? <div className="text-xs text-red-600">{errors.hasPlate}</div> : null}
                 </div>
               </div>
@@ -273,61 +404,93 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="grid gap-2">
                   <Label>{t("sell_vehicle_steering")}</Label>
-                  <Select value={draft.steering} onChange={(e) => setField("steering", e.target.value as any)}>
-                    <option value="">{t("sell_common_select")}</option>
-                    <option value="left">{t("sell_vehicle_steering_left")}</option>
-                    <option value="right">{t("sell_vehicle_steering_right")}</option>
-                  </Select>
+                  <CustomSelect
+                    value={draft.steering || ""}
+                    onChange={(v) => setField("steering", v)}
+                    options={[
+                      { value: "", label: t("sell_common_select") },
+                      { value: "left", label: t("sell_vehicle_steering_left") },
+                      { value: "right", label: t("sell_vehicle_steering_right") },
+                    ]}
+                  />
                   {errors.steering ? <div className="text-xs text-red-600">{errors.steering}</div> : null}
                 </div>
 
                 <div className="grid gap-2">
                   <Label>{t("sell_vehicle_fuel")}</Label>
-                  <Select value={draft.fuel} onChange={(e) => setField("fuel", e.target.value as any)}>
-                    <option value="">{t("sell_common_select")}</option>
-                    <option value="gasoline">{t("sell_vehicle_fuel_gasoline")}</option>
-                    <option value="diesel">{t("sell_vehicle_fuel_diesel")}</option>
-                    <option value="lpg">{t("sell_vehicle_fuel_lpg")}</option>
-                    <option value="electric">{t("sell_vehicle_fuel_electric")}</option>
-                    <option value="hybrid">{t("sell_vehicle_fuel_hybrid")}</option>
-                  </Select>
+                  <CustomSelect
+                    value={draft.fuel || ""}
+                    onChange={(v) => setField("fuel", v)}
+                    options={[
+                      { value: "", label: t("sell_common_select") },
+                      { value: "gasoline", label: t("sell_vehicle_fuel_gasoline") },
+                      { value: "diesel", label: t("sell_vehicle_fuel_diesel") },
+                      { value: "lpg", label: t("sell_vehicle_fuel_lpg") },
+                      { value: "electric", label: t("sell_vehicle_fuel_electric") },
+                      { value: "hybrid", label: t("sell_vehicle_fuel_hybrid") },
+                    ]}
+                  />
                   {errors.fuel ? <div className="text-xs text-red-600">{errors.fuel}</div> : null}
                 </div>
 
                 <div className="grid gap-2">
                   <Label>{t("sell_vehicle_transmission")}</Label>
-                  <Select value={draft.transmission} onChange={(e) => setField("transmission", e.target.value as any)}>
-                    <option value="">{t("sell_vehicle_transmission_select")}</option>
-                    <option value="automatic">{t("sell_vehicle_transmission_automatic")}</option>
-                    <option value="manual">{t("sell_vehicle_transmission_manual")}</option>
-                  </Select>
+                  <CustomSelect
+                    value={draft.transmission || ""}
+                    onChange={(v) => setField("transmission", v)}
+                    options={[
+                      { value: "", label: t("sell_vehicle_transmission_select") },
+                      { value: "automatic", label: t("sell_vehicle_transmission_automatic") },
+                      { value: "manual", label: t("sell_vehicle_transmission_manual") },
+                    ]}
+                  />
                   {errors.transmission ? <div className="text-xs text-red-600">{errors.transmission}</div> : null}
                 </div>
 
                 <div className="grid gap-2">
                   <Label>{t("sell_vehicle_yearMade")}</Label>
-                  <Input value={draft.yearMade} onChange={(e) => setField("yearMade", e.target.value as any)} placeholder={t("sell_vehicle_yearMadePlaceholder")} className="h-11 rounded-xl focus:ring-2 focus:ring-rose-500/20" />
+                  <CustomSelect
+                    value={draft.yearMade || ""}
+                    onChange={(v) => setField("yearMade", v)}
+                    options={[
+                      { value: "", label: t("sell_common_select") },
+                      ...yearOptions,
+                    ]}
+                  />
                   {errors.yearMade ? <div className="text-xs text-red-600">{errors.yearMade}</div> : null}
                 </div>
                 <div className="grid gap-2">
                   <Label>{t("sell_vehicle_yearImported")}</Label>
-                  <Input
-                    value={draft.yearImported}
-                    onChange={(e) => setField("yearImported", e.target.value as any)}
-                    placeholder={t("sell_vehicle_yearImportedPlaceholder")}
+                  <CustomSelect
+                    value={draft.yearImported || ""}
+                    onChange={(v) => setField("yearImported", v)}
+                    options={[
+                      { value: "", label: t("sell_common_select") },
+                      ...yearOptions,
+                    ]}
                   />
                   {errors.yearImported ? <div className="text-xs text-red-600">{errors.yearImported}</div> : null}
                 </div>
 
                 <div className="grid gap-2">
                   <Label>{t("sell_vehicle_color")}</Label>
-                  <Input value={draft.color} onChange={(e) => setField("color", e.target.value as any)} placeholder={t("sell_vehicle_colorPlaceholder")} className="h-11 rounded-xl focus:ring-2 focus:ring-rose-500/20" />
+                  <CustomSelect
+                    value={draft.color || ""}
+                    onChange={(v) => setField("color", v)}
+                    options={[
+                      { value: "", label: t("sell_common_select") },
+                      { value: "black", label: t("buyAll_option_color_black") },
+                      { value: "white", label: t("buyAll_option_color_white") },
+                      { value: "silver", label: t("buyAll_option_color_silver") },
+                      { value: "pearl", label: t("buyAll_option_color_pearl") },
+                      { value: "gray", label: t("buyAll_option_color_gray") },
+                      { value: "darkgray", label: t("buyAll_option_color_darkgray") },
+                      { value: "green", label: t("buyAll_option_color_green") },
+                      { value: "blue", label: t("buyAll_option_color_blue") },
+                      { value: "other", label: t("buyAll_option_color_other") },
+                    ]}
+                  />
                   {errors.color ? <div className="text-xs text-red-600">{errors.color}</div> : null}
-                </div>
-                <div className="grid gap-2">
-                  <Label>{t("sell_vehicle_vin")}</Label>
-                  <Input value={draft.vin} onChange={(e) => setField("vin", e.target.value as any)} placeholder={t("sell_vehicle_vinPlaceholder")} className="h-11 rounded-xl focus:ring-2 focus:ring-rose-500/20" />
-                  {errors.vin ? <div className="text-xs text-red-600">{errors.vin}</div> : null}
                 </div>
               </div>
 
@@ -379,26 +542,40 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="grid gap-2">
                   <Label>{t("sell_vehicle_yearMade")}</Label>
-                  <Input value={draft.yearMade} onChange={(e) => setField("yearMade", e.target.value as any)} placeholder={t("sell_motorcycle_yearMadePlaceholder")} />
+                  <CustomSelect
+                    value={draft.yearMade || ""}
+                    onChange={(v) => setField("yearMade", v)}
+                    options={[
+                      { value: "", label: t("sell_common_select") },
+                      ...yearOptions,
+                    ]}
+                  />
                   {errors.yearMade ? <div className="text-xs text-red-600">{errors.yearMade}</div> : null}
                 </div>
                 <div className="grid gap-2">
                   <Label>{t("sell_vehicle_yearImported")}</Label>
-                  <Input
-                    value={draft.yearImported}
-                    onChange={(e) => setField("yearImported", e.target.value as any)}
-                    placeholder={t("sell_motorcycle_yearImportedPlaceholder")}
+                  <CustomSelect
+                    value={draft.yearImported || ""}
+                    onChange={(v) => setField("yearImported", v)}
+                    options={[
+                      { value: "", label: t("sell_common_select") },
+                      ...yearOptions,
+                    ]}
                   />
                   {errors.yearImported ? <div className="text-xs text-red-600">{errors.yearImported}</div> : null}
                 </div>
 
                 <div className="grid gap-2">
                   <Label>{t("sell_vehicle_fuel")}</Label>
-                  <Select value={draft.fuel} onChange={(e) => setField("fuel", e.target.value as any)}>
-                    <option value="">{t("sell_common_select")}</option>
-                    <option value="gasoline">{t("sell_motorcycle_fuel_gasoline")}</option>
-                    <option value="electric">{t("sell_motorcycle_fuel_electric")}</option>
-                  </Select>
+                  <CustomSelect
+                    value={draft.fuel || ""}
+                    onChange={(v) => setField("fuel", v)}
+                    options={[
+                      { value: "", label: t("sell_common_select") },
+                      { value: "gasoline", label: t("sell_motorcycle_fuel_gasoline") },
+                      { value: "electric", label: t("sell_motorcycle_fuel_electric") },
+                    ]}
+                  />
                   {errors.fuel ? <div className="text-xs text-red-600">{errors.fuel}</div> : null}
                 </div>
               </div>
@@ -408,12 +585,16 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="grid gap-2">
                   <Label>{t("sell_tire_season")}</Label>
-                  <Select value={draft.season} onChange={(e) => setField("season", e.target.value as any)}>
-                    <option value="">{t("sell_common_select")}</option>
-                    <option value="all-season">{t("sell_tire_season_allSeason")}</option>
-                    <option value="winter">{t("sell_tire_season_winter")}</option>
-                    <option value="summer">{t("sell_tire_season_summer")}</option>
-                  </Select>
+                  <CustomSelect
+                    value={draft.season || ""}
+                    onChange={(v) => setField("season", v)}
+                    options={[
+                      { value: "", label: t("sell_common_select") },
+                      { value: "all-season", label: t("sell_tire_season_allSeason") },
+                      { value: "winter", label: t("sell_tire_season_winter") },
+                      { value: "summer", label: t("sell_tire_season_summer") },
+                    ]}
+                  />
                   {errors.season ? <div className="text-xs text-red-600">{errors.season}</div> : null}
                 </div>
                 <div className="grid gap-2">
@@ -443,11 +624,15 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
                 </div>
                 <div className="grid gap-2">
                   <Label>{t("sell_parts_condition")}</Label>
-                  <Select value={draft.condition} onChange={(e) => setField("condition", e.target.value as any)}>
-                    <option value="">{t("sell_common_select")}</option>
-                    <option value="new">{t("sell_parts_condition_new")}</option>
-                    <option value="used">{t("sell_parts_condition_used")}</option>
-                  </Select>
+                  <CustomSelect
+                    value={draft.condition || ""}
+                    onChange={(v) => setField("condition", v)}
+                    options={[
+                      { value: "", label: t("sell_common_select") },
+                      { value: "new", label: t("sell_parts_condition_new") },
+                      { value: "used", label: t("sell_parts_condition_used") },
+                    ]}
+                  />
                   {errors.condition ? <div className="text-xs text-red-600">{errors.condition}</div> : null}
                 </div>
               </div>
@@ -498,13 +683,25 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
               {imagePreviews.length ? (
                 <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
                   {imagePreviews.map((src, idx) => (
-                    <div key={src} className="relative overflow-hidden rounded-xl border border-zinc-200 bg-white">
+                    <div
+                      key={`${src}-${idx}`}
+                      draggable
+                      onDragStart={() => handleDragStart(idx)}
+                      onDragOver={handleDragOver}
+                      onDrop={() => handleDrop(idx)}
+                      className={`relative cursor-move overflow-hidden rounded-xl border border-zinc-200 bg-white transition-all ${
+                        draggedIndex === idx ? "opacity-50 scale-95" : "hover:border-zinc-300 hover:shadow-md"
+                      }`}
+                    >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={src} alt={`upload-${idx}`} className="h-20 w-full object-cover" />
+                      <img src={src} alt={`upload-${idx}`} className="h-20 w-full object-cover pointer-events-none" />
                       <button
                         type="button"
-                        onClick={() => removeImageAt(idx)}
-                        className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-md backdrop-blur-sm transition-all hover:bg-rose-50 hover:shadow-lg"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removeImageAt(idx);
+                        }}
+                        className="absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-md backdrop-blur-sm transition-all hover:bg-rose-50 hover:shadow-lg"
                         aria-label={t("sell_common_delete")}
                       >
                         <svg className="h-4 w-4 text-zinc-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">

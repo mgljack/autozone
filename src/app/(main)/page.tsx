@@ -8,6 +8,7 @@ import ReactDOM from "react-dom";
 import { useQuery } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
+import { CustomSelect } from "@/components/common/CustomSelect";
 import { useI18n } from "@/context/I18nContext";
 import { formatKm, formatMnt } from "@/lib/format";
 import { formatRelativeTimeKo } from "@/lib/formatRelativeTime";
@@ -80,159 +81,13 @@ function PriceSelect({
   onChange: (value: number) => void;
   options: { value: number; label: string }[];
 }) {
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [dropdownPosition, setDropdownPosition] = React.useState({ top: 0, left: 0, width: 0 });
-  const triggerRef = React.useRef<HTMLButtonElement>(null);
-  const dropdownRef = React.useRef<HTMLDivElement>(null);
-  const selectedOption = options.find((opt) => opt.value === value);
-
-  // Update dropdown position when opened or on scroll/resize
-  React.useEffect(() => {
-    if (!isOpen || !triggerRef.current) return;
-
-    const updatePosition = () => {
-      if (!triggerRef.current) return;
-      // Use requestAnimationFrame to ensure DOM is ready
-      requestAnimationFrame(() => {
-        if (!triggerRef.current) return;
-        const rect = triggerRef.current.getBoundingClientRect();
-        setDropdownPosition({
-          top: rect.bottom + 4, // fixed positioning, no scroll offset needed
-          left: rect.left,
-          width: rect.width,
-        });
-      });
-    };
-
-    // Initial position with slight delay to ensure layout is stable
-    const timeoutId = setTimeout(updatePosition, 0);
-
-    // Update on scroll/resize
-    window.addEventListener("scroll", updatePosition, true);
-    window.addEventListener("resize", updatePosition);
-
-    return () => {
-      clearTimeout(timeoutId);
-      window.removeEventListener("scroll", updatePosition, true);
-      window.removeEventListener("resize", updatePosition);
-    };
-  }, [isOpen]);
-
-  // Close dropdown when clicking outside
-  React.useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      const target = event.target as Node;
-      if (
-        triggerRef.current &&
-        !triggerRef.current.contains(target) &&
-        dropdownRef.current &&
-        !dropdownRef.current.contains(target)
-      ) {
-        setIsOpen(false);
-      }
-    }
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
-    }
-  }, [isOpen]);
-
-  // Close on escape key
-  React.useEffect(() => {
-    function handleEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") setIsOpen(false);
-    }
-    if (isOpen) {
-      document.addEventListener("keydown", handleEscape);
-      return () => document.removeEventListener("keydown", handleEscape);
-    }
-  }, [isOpen]);
-
-  // Close on window scroll (but NOT dropdown internal scroll)
-  React.useEffect(() => {
-    if (isOpen) {
-      const handleScroll = (e: Event) => {
-        // Don't close if scrolling inside the dropdown
-        if (dropdownRef.current?.contains(e.target as Node)) {
-          return;
-        }
-        setIsOpen(false);
-      };
-      window.addEventListener("scroll", handleScroll, true);
-      return () => window.removeEventListener("scroll", handleScroll, true);
-    }
-  }, [isOpen]);
-
   return (
-    <div className="relative flex-1">
-      {/* Trigger button */}
-      <button
-        ref={triggerRef}
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className={[
-          "flex h-12 w-full cursor-pointer items-center justify-between rounded-xl border-0 bg-zinc-100 px-4 text-sm font-medium text-zinc-900 outline-none ring-0 shadow-none transition-all duration-200 focus:border-0 focus:outline-none focus:ring-0 focus:shadow-none",
-          isOpen
-            ? "bg-zinc-200"
-            : "hover:bg-zinc-200",
-        ].join(" ")}
-      >
-        <span>{selectedOption?.label ?? ""}</span>
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className={[
-            "text-zinc-400 transition-transform duration-200",
-            isOpen ? "rotate-180" : "",
-          ].join(" ")}
-        >
-          <path d="M6 9l6 6 6-6" />
-        </svg>
-      </button>
-
-      {/* Dropdown menu - Rendered in Portal */}
-      {isOpen &&
-        typeof document !== "undefined" &&
-        ReactDOM.createPortal(
-          <div
-            ref={dropdownRef}
-            className="fixed z-[9999] overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-xl shadow-zinc-900/15"
-            style={{
-              top: dropdownPosition.top,
-              left: dropdownPosition.left,
-              width: dropdownPosition.width,
-            }}
-            onWheel={(e) => e.stopPropagation()}
-          >
-            <div className="max-h-[252px] overflow-y-auto overscroll-contain pointer-events-auto">
-              {options.map((opt) => (
-                <button
-                  key={opt.value}
-                  type="button"
-                  onClick={() => {
-                    onChange(opt.value);
-                    setIsOpen(false);
-                  }}
-                  className={[
-                    "flex w-full items-center px-4 py-3 text-left text-sm font-medium transition-colors",
-                    opt.value === value
-                      ? "bg-zinc-900 text-white"
-                      : "text-zinc-700 hover:bg-zinc-100",
-                  ].join(" ")}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          </div>,
-          document.body
-        )}
+    <div className="flex-1">
+      <CustomSelect
+        value={value}
+        onChange={onChange}
+        options={options}
+      />
     </div>
   );
 }
@@ -501,12 +356,12 @@ export default function MainHomePage() {
               <div className="flex flex-wrap items-center gap-2">
               <button
                 type="button"
-                  onClick={() => setQuickTab("quick")}
+                onClick={() => setQuickTab("quick")}
                 className={[
                     "relative inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300",
                     quickTab === "quick" 
                       ? "bg-zinc-900 text-white shadow-lg shadow-zinc-900/25" 
-                      : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-700",
+                      : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200 hover:text-zinc-900",
                 ].join(" ")}
               >
                   {quickTab === "quick" && (
@@ -533,7 +388,7 @@ export default function MainHomePage() {
                     "relative inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300",
                     quickTab === "budget" 
                       ? "bg-zinc-900 text-white shadow-lg shadow-zinc-900/25" 
-                      : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-700",
+                      : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200 hover:text-zinc-900",
                 ].join(" ")}
               >
                   {quickTab === "budget" && (
@@ -560,7 +415,7 @@ export default function MainHomePage() {
                     "relative inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300",
                     quickTab === "keyword" 
                       ? "bg-zinc-900 text-white shadow-lg shadow-zinc-900/25" 
-                      : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200 hover:text-zinc-700",
+                      : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200 hover:text-zinc-900",
                 ].join(" ")}
               >
                   {quickTab === "keyword" && (
@@ -587,73 +442,52 @@ export default function MainHomePage() {
                   <div className="flex flex-1 flex-col gap-4 sm:flex-row sm:items-end sm:gap-3">
                     <div className="group flex min-w-0 flex-1 flex-col gap-1.5">
                       <label className="text-xs font-medium uppercase tracking-wider text-zinc-400">{t("home_quickSearch_manufacturer")}</label>
-                      <div className="relative">
-                    <select
-                          className="h-12 w-full cursor-pointer appearance-none rounded-xl border-0 bg-zinc-100 px-4 pr-10 text-sm font-medium text-zinc-900 outline-none ring-0 shadow-none transition-all duration-200 hover:bg-zinc-200 focus:border-0 focus:bg-zinc-200 focus:outline-none focus:ring-0 focus:shadow-none"
-                      value={manufacturer}
-                      onChange={(e) => setManufacturer(e.target.value)}
-                    >
-                      <option value="">{t("home_quickSearch_selectPlaceholder")}</option>
-                      {(taxonomyQuery.data?.manufacturers ?? []).map((m) => (
-                        <option key={m} value={m}>
-                          {m}
-                        </option>
-                      ))}
-                    </select>
-                        <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400">
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M6 9l6 6 6-6"/>
-                          </svg>
-                        </div>
-                      </div>
+                      <CustomSelect
+                        value={manufacturer}
+                        onChange={(v) => setManufacturer(v)}
+                        options={[
+                          { value: "", label: t("home_quickSearch_selectPlaceholder") },
+                          ...(taxonomyQuery.data?.manufacturers ?? []).map((m) => ({
+                            value: m,
+                            label: m,
+                          })),
+                        ]}
+                        placeholder={t("home_quickSearch_selectPlaceholder")}
+                      />
                   </div>
 
                     <div className="group flex min-w-0 flex-1 flex-col gap-1.5">
                       <label className="text-xs font-medium uppercase tracking-wider text-zinc-400">{t("home_quickSearch_model")}</label>
-                      <div className="relative">
-                    <select
-                          className="h-12 w-full cursor-pointer appearance-none rounded-xl border-0 bg-zinc-100 px-4 pr-10 text-sm font-medium text-zinc-900 outline-none ring-0 shadow-none transition-all duration-200 hover:bg-zinc-200 focus:border-0 focus:bg-zinc-200 focus:outline-none focus:ring-0 focus:shadow-none disabled:cursor-not-allowed disabled:opacity-50"
-                      value={model}
-                      onChange={(e) => setModel(e.target.value)}
-                      disabled={!manufacturer}
-                    >
-                      <option value="">{t("home_quickSearch_selectPlaceholder")}</option>
-                      {models.map((m) => (
-                        <option key={m} value={m}>
-                          {m}
-                        </option>
-                      ))}
-                    </select>
-                        <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400">
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M6 9l6 6 6-6"/>
-                          </svg>
-                        </div>
-                      </div>
+                      <CustomSelect
+                        value={model}
+                        onChange={(v) => setModel(v)}
+                        options={[
+                          { value: "", label: t("home_quickSearch_selectPlaceholder") },
+                          ...models.map((m) => ({
+                            value: m,
+                            label: m,
+                          })),
+                        ]}
+                        disabled={!manufacturer}
+                        placeholder={t("home_quickSearch_selectPlaceholder")}
+                      />
                   </div>
 
                     <div className="group flex min-w-0 flex-1 flex-col gap-1.5">
                       <label className="text-xs font-medium uppercase tracking-wider text-zinc-400">{t("home_quickSearch_subModel")}</label>
-                      <div className="relative">
-                    <select
-                          className="h-12 w-full cursor-pointer appearance-none rounded-xl border-0 bg-zinc-100 px-4 pr-10 text-sm font-medium text-zinc-900 outline-none ring-0 shadow-none transition-all duration-200 hover:bg-zinc-200 focus:border-0 focus:bg-zinc-200 focus:outline-none focus:ring-0 focus:shadow-none disabled:cursor-not-allowed disabled:opacity-50"
-                      value={subModel}
-                      onChange={(e) => setSubModel(e.target.value)}
-                      disabled={!manufacturer || !model}
-                    >
-                      <option value="">{t("home_quickSearch_selectPlaceholder")}</option>
-                      {subModels.map((s) => (
-                        <option key={s} value={s}>
-                          {s}
-                        </option>
-                      ))}
-                    </select>
-                        <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400">
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M6 9l6 6 6-6"/>
-                          </svg>
-                        </div>
-                      </div>
+                      <CustomSelect
+                        value={subModel}
+                        onChange={(v) => setSubModel(v)}
+                        options={[
+                          { value: "", label: t("home_quickSearch_selectPlaceholder") },
+                          ...subModels.map((s) => ({
+                            value: s,
+                            label: s,
+                          })),
+                        ]}
+                        disabled={!manufacturer || !model}
+                        placeholder={t("home_quickSearch_selectPlaceholder")}
+                      />
                   </div>
                 </div>
               ) : quickTab === "budget" ? (
@@ -728,26 +562,19 @@ export default function MainHomePage() {
 
                     <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                       <label className="text-xs font-medium uppercase tracking-wider text-zinc-400">{t("home_quickSearch_carTypeSelect")}</label>
-                      <div className="relative">
-                    <select
-                          className="h-12 w-full cursor-pointer appearance-none rounded-xl border-0 bg-zinc-100 px-4 pr-10 text-sm font-medium text-zinc-900 outline-none ring-0 shadow-none transition-all duration-200 hover:bg-zinc-200 focus:border-0 focus:bg-zinc-200 focus:outline-none focus:ring-0 focus:shadow-none"
-                      value={carType}
-                          onChange={(e) => setCarType(e.target.value as typeof carType)}
-                    >
-                      <option value="all">{t("carType_all")}</option>
-                      <option value="sedan">{t("carType_sedan")}</option>
-                      <option value="suv">{t("carType_suv")}</option>
-                      <option value="coupe">{t("carType_coupe")}</option>
-                      <option value="hatchback">{t("carType_hatchback")}</option>
-                      <option value="pickup">{t("carType_pickup")}</option>
-                      <option value="van">{t("carType_van")}</option>
-                    </select>
-                        <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400">
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M6 9l6 6 6-6"/>
-                          </svg>
-                        </div>
-                      </div>
+                      <CustomSelect
+                        value={carType}
+                        onChange={(v) => setCarType(v as typeof carType)}
+                        options={[
+                          { value: "all", label: t("carType_all") },
+                          { value: "sedan", label: t("carType_sedan") },
+                          { value: "suv", label: t("carType_suv") },
+                          { value: "coupe", label: t("carType_coupe") },
+                          { value: "hatchback", label: t("carType_hatchback") },
+                          { value: "pickup", label: t("carType_pickup") },
+                          { value: "van", label: t("carType_van") },
+                        ]}
+                      />
                   </div>
                 </div>
               ) : (
@@ -755,7 +582,7 @@ export default function MainHomePage() {
                     <label className="text-xs font-medium uppercase tracking-wider text-zinc-400">{t("home_quickSearch_keyword")}</label>
                     <div className="relative">
                   <input
-                        className="h-12 w-full rounded-xl border-0 bg-zinc-100 px-4 pr-10 text-sm font-medium text-zinc-900 outline-none ring-0 shadow-none transition-all duration-200 placeholder:text-zinc-400 hover:bg-zinc-200 focus:border-0 focus:bg-zinc-200 focus:outline-none focus:ring-0 focus:shadow-none"
+                        className="h-12 w-full rounded-xl border border-zinc-200 bg-white px-4 pr-10 text-sm font-medium text-zinc-900 outline-none ring-0 shadow-none transition-all duration-200 placeholder:text-zinc-400 hover:border-zinc-300 hover:ring-1 hover:ring-zinc-200 focus:border-zinc-400 focus:ring-1 focus:ring-zinc-300"
                     value={keyword}
                     onChange={(e) => setKeyword(e.target.value)}
                     placeholder={t("home_quickSearch_keywordInputPlaceholder")}

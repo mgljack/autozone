@@ -5,16 +5,17 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 import { CardSkeleton } from "@/components/common/CardSkeleton";
+import { CustomSelect } from "@/components/common/CustomSelect";
 import { EmptyState } from "@/components/common/EmptyState";
 import { Pagination } from "@/components/common/Pagination";
 import { SectionTitle } from "@/components/common/SectionTitle";
 import { RentCard } from "@/components/rent/RentCard";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
 import { useI18n } from "@/context/I18nContext";
 import { SortPills } from "@/components/listings/SortPills";
 import { fetchRentList, fetchRentModels, type RentListQuery, type RentType } from "@/lib/mockApi";
 import type { RentItem } from "@/mock/rent";
+import { formatMnt } from "@/lib/format";
 
 function RentCardGrid({ items }: { items: RentItem[] }) {
   const sortedItems = React.useMemo(() => {
@@ -51,6 +52,9 @@ function firstString(v: string | string[] | undefined) {
 
 type RentSort = "newest" | "priceAsc" | "priceDesc";
 
+// Price options: 30,000 to 300,000 in 10,000 increments
+const PRICE_OPTIONS = Array.from({ length: 28 }, (_, i) => 30000 + i * 10000); // 30,000..300,000
+
 export function RentTypeClient({
   type,
   searchParams,
@@ -76,6 +80,35 @@ export function RentTypeClient({
   const [regionGroup, setRegionGroup] = React.useState(firstString(searchParams.region) ?? "");
   const [priceMinMnt, setPriceMinMnt] = React.useState(firstString(searchParams.priceMinMnt) ?? "");
   const [priceMaxMnt, setPriceMaxMnt] = React.useState(firstString(searchParams.priceMaxMnt) ?? "");
+
+  // Price change handlers with validation
+  const handlePriceMinChange = React.useCallback((value: string) => {
+    if (value === "") {
+      setPriceMinMnt("");
+      return;
+    }
+    const min = Number(value);
+    const max = priceMaxMnt ? Number(priceMaxMnt) : null;
+    setPriceMinMnt(value);
+    // If min > max, adjust max to min
+    if (max !== null && min > max) {
+      setPriceMaxMnt(value);
+    }
+  }, [priceMaxMnt]);
+
+  const handlePriceMaxChange = React.useCallback((value: string) => {
+    if (value === "") {
+      setPriceMaxMnt("");
+      return;
+    }
+    const max = Number(value);
+    const min = priceMinMnt ? Number(priceMinMnt) : null;
+    setPriceMaxMnt(value);
+    // If max < min, adjust min to max
+    if (min !== null && max < min) {
+      setPriceMinMnt(value);
+    }
+  }, [priceMinMnt]);
 
   React.useEffect(() => setPage(1), [sort, searchQuery, model, fuel, transmission, regionGroup, priceMinMnt, priceMaxMnt]);
 
@@ -120,7 +153,7 @@ export function RentTypeClient({
 
   return (
     <div className="grid gap-6">
-      <SectionTitle title={typeLabel} subtitle={t("rent_subtitle")} />
+      <SectionTitle title={typeLabel} />
 
       <div className="grid gap-4 lg:grid-cols-[320px_1fr] items-start">
         <aside className="rounded-2xl border border-zinc-200 bg-white p-4 h-auto self-start">
@@ -134,72 +167,108 @@ export function RentTypeClient({
 
             <label className="grid gap-1">
               <span className="text-xs font-normal text-zinc-600">{t("rent_allModels")}</span>
-              <Select value={model} onChange={(e) => setModel(e.target.value)}>
-                <option value="all">{t("rent_allModels")}</option>
-                {(modelsQuery.data ?? []).map((m) => (
-                  <option key={m} value={m}>
-                    {m}
-                  </option>
-                ))}
-              </Select>
+              <CustomSelect
+                value={model}
+                onChange={(v) => setModel(v)}
+                options={[
+                  { value: "all", label: t("rent_allModels") },
+                  ...(modelsQuery.data ?? []).map((m) => ({
+                    value: m,
+                    label: m,
+                  })),
+                ]}
+              />
             </label>
 
             <label className="grid gap-1">
               <span className="text-xs font-normal text-zinc-600">{t("rent_fuel")}</span>
-              <Select value={fuel} onChange={(e) => setFuel(e.target.value as any)}>
-                <option value="all">{t("common_all")}</option>
-                <option value="gasoline">{t("rent_fuel_gasoline")}</option>
-                <option value="diesel">{t("rent_fuel_diesel")}</option>
-                <option value="electric">{t("rent_fuel_electric")}</option>
-                <option value="hybrid">{t("rent_fuel_hybrid")}</option>
-              </Select>
+              <CustomSelect
+                value={fuel}
+                onChange={(v) => setFuel(v as typeof fuel)}
+                options={[
+                  { value: "all", label: t("common_all") },
+                  { value: "gasoline", label: t("rent_fuel_gasoline") },
+                  { value: "diesel", label: t("rent_fuel_diesel") },
+                  { value: "electric", label: t("rent_fuel_electric") },
+                  { value: "hybrid", label: t("rent_fuel_hybrid") },
+                ]}
+              />
             </label>
 
             <label className="grid gap-1">
               <span className="text-xs font-normal text-zinc-600">{t("rent_transmission")}</span>
-              <Select value={transmission} onChange={(e) => setTransmission(e.target.value as any)}>
-                <option value="all">{t("common_all")}</option>
-                <option value="at">{t("rent_transmission_at")}</option>
-                <option value="mt">{t("rent_transmission_mt")}</option>
-              </Select>
+              <CustomSelect
+                value={transmission}
+                onChange={(v) => setTransmission(v as typeof transmission)}
+                options={[
+                  { value: "all", label: t("common_all") },
+                  { value: "at", label: t("rent_transmission_at") },
+                  { value: "mt", label: t("rent_transmission_mt") },
+                ]}
+              />
             </label>
 
             <label className="grid gap-1">
               <span className="text-xs font-normal text-zinc-600">{t("rent_region")}</span>
-              <Select value={regionGroup} onChange={(e) => setRegionGroup(e.target.value)}>
-                <option value="">{t("common_all")}</option>
-                <option value="Ulaanbaatar">{t("rent_region_ulaanbaatar")}</option>
-                <option value="Erdenet">{t("rent_region_erdenet")}</option>
-                <option value="Darkhan">{t("rent_region_darkhan")}</option>
-                <option value="Other">{t("rent_region_other")}</option>
-              </Select>
+              <CustomSelect
+                value={regionGroup}
+                onChange={(v) => setRegionGroup(v)}
+                options={[
+                  { value: "", label: t("common_all") },
+                  { value: "Ulaanbaatar", label: t("rent_region_ulaanbaatar") },
+                  { value: "Erdenet", label: t("rent_region_erdenet") },
+                  { value: "Darkhan", label: t("rent_region_darkhan") },
+                  { value: "Other", label: t("rent_region_other") },
+                ]}
+              />
             </label>
 
             <div className="grid grid-cols-2 gap-3">
               <label className="grid gap-1">
                 <span className="text-xs font-normal text-zinc-600">{t("rent_priceMin")}</span>
-                <Input value={priceMinMnt} onChange={(e) => setPriceMinMnt(e.target.value.replace(/[^\d]/g, ""))} inputMode="numeric" />
+                <CustomSelect
+                  value={priceMinMnt || ""}
+                  onChange={handlePriceMinChange}
+                  options={[
+                    { value: "", label: t("common_all") },
+                    ...PRICE_OPTIONS.map((price) => ({
+                      value: String(price),
+                      label: formatMnt(price),
+                    })),
+                  ]}
+                />
               </label>
               <label className="grid gap-1">
                 <span className="text-xs font-normal text-zinc-600">{t("rent_priceMax")}</span>
-                <Input value={priceMaxMnt} onChange={(e) => setPriceMaxMnt(e.target.value.replace(/[^\d]/g, ""))} inputMode="numeric" />
+                <CustomSelect
+                  value={priceMaxMnt || ""}
+                  onChange={handlePriceMaxChange}
+                  options={[
+                    { value: "", label: t("common_all") },
+                    ...PRICE_OPTIONS.map((price) => ({
+                      value: String(price),
+                      label: formatMnt(price),
+                    })),
+                  ]}
+                />
               </label>
             </div>
           </div>
         </aside>
 
         <section className="grid gap-3">
-          <div className="flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-start">
-            <SortPills
-              value={sort}
-              onChange={setSort}
-              options={[
-                { key: "newest", labelKey: "rent_sort_newest" },
-                { key: "priceAsc", labelKey: "rent_sort_priceAsc" },
-                { key: "priceDesc", labelKey: "rent_sort_priceDesc" },
-              ]}
-            />
-          </div>
+          <SortPills
+            value={sort}
+            onChange={setSort}
+            options={[
+              { key: "newest", labelKey: "rent_sort_newest" },
+              { key: "priceAsc", labelKey: "rent_sort_priceAsc" },
+              { key: "priceDesc", labelKey: "rent_sort_priceDesc" },
+            ]}
+          />
+
+          {/* Section Divider */}
+          <div className="my-1 h-px w-full bg-gradient-to-r from-transparent via-slate-300/60 to-transparent" />
 
           {listQuery.isLoading ? (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

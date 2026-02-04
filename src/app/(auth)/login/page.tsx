@@ -4,10 +4,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-import { SectionTitle } from "@/components/common/SectionTitle";
+import { LanguageSelect } from "@/components/common/LanguageSelect";
+import { AuthBrandPanel } from "@/components/auth/AuthBrandPanel";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/context/AuthContext";
@@ -59,84 +59,127 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="mx-auto grid w-full max-w-md gap-6 px-4 py-10">
-      <SectionTitle title={t("login_title")} />
+    <div className="min-h-screen bg-white">
+      {/* Back to Home Link */}
+      <div className="mx-auto max-w-5xl px-4 pt-6">
+        <Link className="text-sm text-slate-600 hover:text-slate-900 hover:underline" href="/">
+          {t("common_backToHome")}
+        </Link>
+      </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("login_cardTitle")}</CardTitle>
-        </CardHeader>
-        <CardContent className="grid gap-4">
-          {message ? (
-            <Alert variant={message.type === "error" ? "destructive" : "success"}>
-              <AlertTitle>{message.type === "error" ? t("common_error") : t("common_success")}</AlertTitle>
-              <AlertDescription>{message.text}</AlertDescription>
-            </Alert>
-          ) : null}
+      <div className="mx-auto max-w-5xl px-4 py-8 sm:py-12">
+        <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
+          {/* Left: Brand Panel */}
+          <AuthBrandPanel />
 
-          <Tabs value={tab} onValueChange={(v) => setTab(v as "idpw" | "phone")}>
-            <TabsList>
-              <TabsTrigger value="idpw">{t("login_tab_idpw")}</TabsTrigger>
-              <TabsTrigger value="phone">{t("login_tab_phone")}</TabsTrigger>
-            </TabsList>
+          {/* Right: Form Panel */}
+          <div className="relative rounded-2xl border border-slate-200/70 bg-white p-6 shadow-sm sm:p-8">
+            {/* Language Switcher */}
+            <div className="absolute right-6 top-6 sm:right-8 sm:top-8">
+              <LanguageSelect />
+            </div>
 
-            <TabsContent value="idpw" className="grid gap-3">
-              <Input value={id} onChange={(e) => setId(e.target.value)} placeholder={t("login_placeholder_id")} />
-              <Input value={pw} onChange={(e) => setPw(e.target.value)} placeholder={t("login_placeholder_password")} type="password" />
-              <Button variant="primary" onClick={onIdPwLogin}>{t("auth_login")}</Button>
-            </TabsContent>
+            {/* Title */}
+            <h1 className="mb-2 text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">{t("login_title")}</h1>
 
-            <TabsContent value="phone" className="grid gap-3">
-              <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder={t("login_placeholder_phone")} />
-              {!codeSent ? (
-                <Button variant="secondary" onClick={onSendCode}>
-                  {t("login_sendOtp")}
+            {/* Temporary Test Account Box */}
+            {tab === "idpw" && (
+              <div className="mb-6 rounded-xl border border-slate-200/70 bg-slate-50 p-4">
+                <div className="mb-2 text-xs font-medium text-slate-700">{t("auth_tempAccount_title")}</div>
+                <div className="space-y-1.5 text-sm">
+                  <div className="flex items-center gap-2">
+                    <span className="text-slate-600">{t("auth_tempAccount_id")}:</span>
+                    <code className="rounded-md bg-white px-2 py-0.5 font-mono text-slate-900">demo</code>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-slate-600">{t("auth_tempAccount_password")}:</span>
+                    <code className="rounded-md bg-white px-2 py-0.5 font-mono text-slate-900">demo1234</code>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Messages */}
+            {message ? (
+              <Alert variant={message.type === "error" ? "destructive" : "success"} className="mb-4">
+                <AlertTitle>{message.type === "error" ? t("common_error") : t("common_success")}</AlertTitle>
+                <AlertDescription>{message.text}</AlertDescription>
+              </Alert>
+            ) : null}
+
+            {/* Form */}
+            <Tabs value={tab} onValueChange={(v) => setTab(v as "idpw" | "phone")}>
+              <TabsList className="mb-4">
+                <TabsTrigger value="idpw">{t("login_tab_idpw")}</TabsTrigger>
+                <TabsTrigger value="phone">{t("login_tab_phone")}</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="idpw" className="grid gap-4">
+                <Input
+                  value={id}
+                  onChange={(e) => setId(e.target.value)}
+                  placeholder={t("login_placeholder_id")}
+                  className="h-11 rounded-xl border-slate-200 bg-white focus:ring-1 focus:ring-slate-300"
+                />
+                <Input
+                  value={pw}
+                  onChange={(e) => setPw(e.target.value)}
+                  placeholder={t("login_placeholder_password")}
+                  type="password"
+                  className="h-11 rounded-xl border-slate-200 bg-white focus:ring-1 focus:ring-slate-300"
+                />
+                <Button variant="primary" onClick={onIdPwLogin} className="h-11 w-full rounded-xl">
+                  {t("auth_login")}
                 </Button>
-              ) : (
-                <>
-                  <Input value={otp} onChange={(e) => setOtp(e.target.value)} placeholder={t("login_placeholder_otp")} />
-                  <Button variant="primary" onClick={onPhoneLogin}>{t("login_verifyAndLogin")}</Button>
-                </>
-              )}
-            </TabsContent>
-          </Tabs>
+              </TabsContent>
 
-          <div className="grid gap-2">
-            <div className="text-xs font-normal text-zinc-600">{t("login_socialTitle")}</div>
-            <div className="grid grid-cols-3 gap-2">
-              <Button variant="outline" onClick={() => (loginWithSocial("google"), router.push(returnUrl || "/"))}>
-                Google
-              </Button>
-              <Button variant="outline" onClick={() => (loginWithSocial("facebook"), router.push(returnUrl || "/"))}>
-                Facebook
-              </Button>
-              <Button variant="outline" onClick={() => (loginWithSocial("apple"), router.push(returnUrl || "/"))}>
-                Apple
-              </Button>
+              <TabsContent value="phone" className="grid gap-4">
+                <Input
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder={t("login_placeholder_phone")}
+                  className="h-11 rounded-xl border-slate-200 bg-white focus:ring-1 focus:ring-slate-300"
+                />
+                {!codeSent ? (
+                  <Button variant="secondary" onClick={onSendCode} className="h-11 w-full rounded-xl">
+                    {t("login_sendOtp")}
+                  </Button>
+                ) : (
+                  <>
+                    <Input
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                      placeholder={t("login_placeholder_otp")}
+                      className="h-11 rounded-xl border-slate-200 bg-white focus:ring-1 focus:ring-slate-300"
+                    />
+                    <Button variant="primary" onClick={onPhoneLogin} className="h-11 w-full rounded-xl">
+                      {t("login_verifyAndLogin")}
+                    </Button>
+                  </>
+                )}
+              </TabsContent>
+            </Tabs>
+
+            {/* Links */}
+            <div className="mt-6 flex flex-wrap items-center justify-between gap-2 text-sm">
+              <Link
+                className="text-slate-600 hover:text-slate-900 hover:underline"
+                href={returnUrl ? `/signup?returnUrl=${encodeURIComponent(returnUrl)}` : "/signup"}
+              >
+                {t("login_links_signup")}
+              </Link>
+              <div className="flex items-center gap-3">
+                <Link className="text-slate-600 hover:text-slate-900 hover:underline" href="/find-id">
+                  {t("login_links_findId")}
+                </Link>
+                <Link className="text-slate-600 hover:text-slate-900 hover:underline" href="/find-password">
+                  {t("login_links_findPassword")}
+                </Link>
+              </div>
             </div>
           </div>
-
-          <div className="flex items-center justify-between text-sm text-zinc-700">
-            <Link className="hover:underline" href={returnUrl ? `/signup?returnUrl=${encodeURIComponent(returnUrl)}` : "/signup"}>
-              {t("login_links_signup")}
-            </Link>
-            <Link className="hover:underline" href="/find-id">
-              {t("login_links_findId")}
-            </Link>
-            <Link className="hover:underline" href="/find-password">
-              {t("login_links_findPassword")}
-            </Link>
-          </div>
-
-          <div className="text-sm">
-            <Link className="font-normal text-zinc-900 hover:underline" href="/">
-              ← {t("common_backToHome")}
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }
-
-

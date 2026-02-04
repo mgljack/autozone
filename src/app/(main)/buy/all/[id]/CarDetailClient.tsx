@@ -11,6 +11,7 @@ import { EncarDiagnosticMock } from "@/components/cars/EncarDiagnosticMock";
 import { VehiclePriceComparison } from "@/components/cars/VehiclePriceComparison";
 import { OptionInfoSection } from "@/components/cars/OptionInfoSection";
 import { SellerInfo } from "@/components/listings/SellerInfo";
+import { FinanceCalculatorModal } from "@/components/detail/FinanceCalculatorModal";
 import { useFavorites } from "@/features/favorites/favorites";
 import { useRecentCars } from "@/features/recent/recent";
 import { formatMnt } from "@/lib/format";
@@ -23,6 +24,8 @@ export default function CarDetailClient({ id }: { id: string }) {
   const { addRecent } = useRecentCars();
   const { isFavorite, toggleFavorite } = useFavorites();
   const [sellerOpen, setSellerOpen] = React.useState(false);
+  const [financeModalOpen, setFinanceModalOpen] = React.useState(false);
+  const [financeModalTab, setFinanceModalTab] = React.useState<"insurance" | "loan">("insurance");
 
   const carQuery = useQuery({
     queryKey: ["cars", "detail", id],
@@ -154,24 +157,63 @@ export default function CarDetailClient({ id }: { id: string }) {
         />
 
         <aside className="lg:block">
-          <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm lg:sticky lg:top-24">
+          <div className="rounded-2xl border border-slate-200/70 bg-white p-4 shadow-sm lg:sticky lg:top-24 lg:p-5">
+            {/* Price */}
             <div className="text-3xl font-extrabold tracking-tight text-zinc-900">
               {formatMnt(car.priceMnt)}
             </div>
 
-            {/* Seller Info */}
-            <SellerInfo sellerName={car.seller.name} type={isMotorcycle ? "motorcycle" : "vehicle"} />
-
-            <div className="mt-3 flex flex-wrap gap-2 text-xs font-normal text-zinc-700">
-              <button type="button" className="rounded-full border border-zinc-200 bg-white px-3 py-2 hover:bg-zinc-50">
-                보험료 계산
-              </button>
-              <button type="button" className="rounded-full border border-zinc-200 bg-white px-3 py-2 hover:bg-zinc-50">
-                대출금리 조회
-              </button>
+            {/* Key Specs: Year, Mileage, Fuel */}
+            <div className="mt-4 space-y-2 text-sm">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                <span className="text-slate-500">
+                  {car.yearImported
+                    ? t("carDetail_specs_yearMadeAndImported")
+                    : t("carDetail_specs_yearMade")}
+                </span>
+                <span className="font-semibold text-slate-900">
+                  {car.yearMade}
+                  {car.yearImported ? ` / ${car.yearImported}` : ""}
+                </span>
+              </div>
+              <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                <span className="text-slate-500">{t("carDetail_specs_mileage")}</span>
+                <span className="font-semibold text-slate-900">
+                  {car.mileageKm ? `${car.mileageKm.toLocaleString("ko-KR")}km` : "-"}
+                </span>
+              </div>
+              <div className="flex items-center justify-between pb-2">
+                <span className="text-slate-500">{t("carDetail_specs_fuel")}</span>
+                <span className="font-semibold text-slate-900">
+                  {car.specs?.fuel || "-"}
+                </span>
+              </div>
             </div>
 
-            <div className="mt-4">
+            {/* Action Buttons */}
+            <div className="mt-5 space-y-2">
+              <div className="grid grid-cols-2 gap-2">
+                <Button
+                  variant="outline"
+                  className="h-10 rounded-xl border border-slate-200 bg-white text-sm font-medium text-slate-900 hover:bg-slate-50 transition-colors"
+                  onClick={() => {
+                    setFinanceModalTab("insurance");
+                    setFinanceModalOpen(true);
+                  }}
+                >
+                  보험료 계산
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-10 rounded-xl border border-slate-200 bg-white text-sm font-medium text-slate-900 hover:bg-slate-50 transition-colors"
+                  onClick={() => {
+                    setFinanceModalTab("loan");
+                    setFinanceModalOpen(true);
+                  }}
+                >
+                  대출 계산
+                </Button>
+              </div>
               <Button
                 variant="primary"
                 className="w-full"
@@ -180,9 +222,28 @@ export default function CarDetailClient({ id }: { id: string }) {
                 {t("carDetail_sellerContact")}
               </Button>
               {sellerOpen ? (
-                <div className="mt-3 rounded-2xl border border-zinc-200 bg-white p-4 text-sm">
-                  <div className="font-normal">{car.seller.name}</div>
-                  <a className="mt-1 inline-flex font-normal text-zinc-900 hover:underline" href={`tel:${car.seller.phone.replace(/\s/g, "")}`}>
+                <div className="mt-3 rounded-xl border border-slate-200/70 bg-slate-50/50 p-4 text-sm">
+                  <div className="flex items-center justify-between">
+                    <div className="font-medium text-slate-900">{car.seller.name}</div>
+                    <span className="flex cursor-pointer items-center gap-1 text-sm text-[#b70f28] hover:text-[#8a0b1f] hover:underline">
+                      다른 매물
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="text-[#b70f28]"
+                      >
+                        <path d="M5 12h14" />
+                        <path d="M12 5l7 7-7 7" />
+                      </svg>
+                    </span>
+                  </div>
+                  <a className="mt-1.5 inline-flex font-medium text-slate-900 hover:text-slate-700 hover:underline" href={`tel:${car.seller.phone.replace(/\s/g, "")}`}>
                     {car.seller.phone}
                   </a>
                 </div>
@@ -195,9 +256,6 @@ export default function CarDetailClient({ id }: { id: string }) {
       {/* Title & meta */}
       <div>
         <div className="text-2xl font-normal text-zinc-900">{car.title}</div>
-        <div className="mt-2 text-sm text-zinc-600">
-          {car.yearMade} · {car.yearImported} · {car.mileageKm.toLocaleString("mn-MN")}km · {car.specs.fuel}
-        </div>
       </div>
 
       {/* Section Divider */}
@@ -266,6 +324,14 @@ export default function CarDetailClient({ id }: { id: string }) {
           </div>
         </div>
       )}
+
+      {/* Finance Calculator Modal */}
+      <FinanceCalculatorModal
+        open={financeModalOpen}
+        onOpenChange={setFinanceModalOpen}
+        initialTab={financeModalTab}
+        price={car.priceMnt}
+      />
     </div>
   );
 }

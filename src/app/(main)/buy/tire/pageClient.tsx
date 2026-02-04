@@ -5,12 +5,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 import { CardSkeleton } from "@/components/common/CardSkeleton";
+import { CustomSelect } from "@/components/common/CustomSelect";
 import { EmptyState } from "@/components/common/EmptyState";
 import { Pagination } from "@/components/common/Pagination";
 import { SectionTitle } from "@/components/common/SectionTitle";
 import { TireCard } from "@/components/tires/TireCard";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
 import { useI18n } from "@/context/I18nContext";
 import { SortPills } from "@/components/listings/SortPills";
 import { fetchTiresList, type TiresListQuery } from "@/lib/mockApi";
@@ -141,8 +141,8 @@ export function TirePageClient({ searchParams }: { searchParams: Record<string, 
                     key={size}
                     type="button"
                     onClick={() => toggleSize(size)}
-                    className={`w-full rounded-lg px-2 py-2 text-left text-sm font-normal hover:bg-zinc-50 ${
-                      sizes.includes(size) ? "bg-zinc-100" : ""
+                    className={`w-full rounded-lg border px-2 py-2 text-left text-sm font-normal transition-colors ${
+                      sizes.includes(size) ? "border-zinc-300 bg-zinc-50 ring-1 ring-zinc-200" : "border-transparent hover:bg-zinc-50"
                     }`}
                   >
                     {size}
@@ -165,10 +165,10 @@ export function TirePageClient({ searchParams }: { searchParams: Record<string, 
                     key={value}
                     type="button"
                     onClick={() => toggleSeason(value)}
-                    className={`rounded-lg px-3 py-2 text-sm font-normal transition-colors ${
+                    className={`rounded-lg border px-3 py-2 text-sm font-normal transition-colors ${
                       seasons.includes(value)
-                        ? "bg-zinc-900 text-white"
-                        : "bg-zinc-100 text-zinc-900 hover:bg-zinc-200"
+                        ? "border-zinc-900 bg-zinc-900 text-white"
+                        : "border-zinc-200 bg-white text-zinc-900 hover:border-zinc-300 hover:ring-1 hover:ring-zinc-200"
                     }`}
                   >
                     {t(labelKey)}
@@ -212,8 +212,8 @@ export function TirePageClient({ searchParams }: { searchParams: Record<string, 
                       key={brand}
                       type="button"
                       onClick={() => toggleBrand(brand)}
-                      className={`flex w-full items-center justify-between rounded-lg px-2 py-2 text-left text-sm hover:bg-zinc-50 ${
-                        brands.includes(brand) ? "bg-zinc-100 font-normal" : ""
+                      className={`flex w-full items-center justify-between rounded-lg border px-2 py-2 text-left text-sm transition-colors ${
+                        brands.includes(brand) ? "border-zinc-300 bg-zinc-50 ring-1 ring-zinc-200 font-normal" : "border-transparent hover:bg-zinc-50"
                       }`}
                     >
                       <span className="truncate">{brand}</span>
@@ -225,39 +225,45 @@ export function TirePageClient({ searchParams }: { searchParams: Record<string, 
             {/* 5) Installation Included */}
             <label className="grid gap-1">
               <span className="text-xs font-normal text-zinc-600">{t("tire_filters_installation")}</span>
-              <Select value={installationIncluded} onChange={(e) => setInstallationIncluded(e.target.value)}>
-                <option value="all">{t("common_all")}</option>
-                <option value="true">{t("tire_filters_installation_included")}</option>
-                <option value="false">{t("tire_filters_installation_notIncluded")}</option>
-              </Select>
+              <CustomSelect
+                value={installationIncluded}
+                onChange={(v) => setInstallationIncluded(v)}
+                options={[
+                  { value: "all", label: t("common_all") },
+                  { value: "true", label: t("tire_filters_installation_included") },
+                  { value: "false", label: t("tire_filters_installation_notIncluded") },
+                ]}
+              />
             </label>
 
             {/* Region (optional, matching All Cars) */}
             <label className="grid gap-1">
               <span className="text-xs font-normal text-zinc-600">{t("buyAll_filters_region")}</span>
-              <Select value={regionGroup} onChange={(e) => setRegionGroup(e.target.value)}>
-                <option value="">{t("common_all")}</option>
-                <option value="Ulaanbaatar">{t("buyAll_option_region_ua")}</option>
-                <option value="Erdenet">{t("buyAll_option_region_erdenet")}</option>
-                <option value="Darkhan">{t("buyAll_option_region_darkhan")}</option>
-                <option value="Other">{t("buyAll_option_region_other")}</option>
-              </Select>
+              <CustomSelect
+                value={regionGroup}
+                onChange={(v) => setRegionGroup(v)}
+                options={[
+                  { value: "", label: t("common_all") },
+                  { value: "Ulaanbaatar", label: t("buyAll_option_region_ua") },
+                  { value: "Erdenet", label: t("buyAll_option_region_erdenet") },
+                  { value: "Darkhan", label: t("buyAll_option_region_darkhan") },
+                  { value: "Other", label: t("buyAll_option_region_other") },
+                ]}
+              />
             </label>
           </div>
         </aside>
 
         <section className="grid gap-3">
-          <div className="flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-start">
-            <SortPills
-              value={sort}
-              onChange={setSort}
-              options={[
-                { key: "newest", labelKey: "common_sort_newest" },
-                { key: "priceAsc", labelKey: "buyAll_sort_priceAsc" },
-                { key: "priceDesc", labelKey: "buyAll_sort_priceDesc" },
-              ]}
-            />
-          </div>
+          <SortPills
+            value={sort}
+            onChange={setSort}
+            options={[
+              { key: "newest", labelKey: "common_sort_newest" },
+              { key: "priceAsc", labelKey: "buyAll_sort_priceAsc" },
+              { key: "priceDesc", labelKey: "buyAll_sort_priceDesc" },
+            ]}
+          />
 
           {listQuery.isLoading ? (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

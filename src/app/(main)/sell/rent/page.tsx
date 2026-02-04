@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -68,6 +69,7 @@ export default function RentRegistrationPage() {
   const [images, setImages] = React.useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = React.useState<string[]>([]);
   const [errors, setErrors] = React.useState<Record<string, string>>({});
+  const [draggedIndex, setDraggedIndex] = React.useState<number | null>(null);
 
   React.useEffect(() => {
     if (!session) return;
@@ -123,6 +125,35 @@ export default function RentRegistrationPage() {
     setImagePreviews(previews);
   };
 
+  const handleDragStart = (idx: number) => {
+    setDraggedIndex(idx);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (dropIndex: number) => {
+    if (draggedIndex === null || draggedIndex === dropIndex) {
+      setDraggedIndex(null);
+      return;
+    }
+
+    // Reorder images and previews
+    const newImages = [...images];
+    const newPreviews = [...imagePreviews];
+    
+    const [draggedImage] = newImages.splice(draggedIndex, 1);
+    const [draggedPreview] = newPreviews.splice(draggedIndex, 1);
+    
+    newImages.splice(dropIndex, 0, draggedImage);
+    newPreviews.splice(dropIndex, 0, draggedPreview);
+    
+    setImages(newImages);
+    setImagePreviews(newPreviews);
+    setDraggedIndex(null);
+  };
+
   const validate = () => {
     const next: Record<string, string> = {};
 
@@ -172,10 +203,34 @@ export default function RentRegistrationPage() {
     router.push("/rent/small");
   };
 
+  // Banner image for rental
+  const bannerImage = "https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=1200&h=600&fit=crop&auto=format";
+
   return (
     <RequireAuth returnUrl="/sell/rent">
       <div className="grid gap-6">
-        <SectionTitle title={t("sell_rental_title")} subtitle={t("sell_rental_subtitle")} />
+        {/* Premium Banner Section */}
+        <section className="mb-2">
+          <div className="relative h-32 overflow-hidden rounded-2xl border border-slate-200/70 sm:h-40">
+            <Image
+              src={bannerImage}
+              alt={t("sell_rental_title")}
+              fill
+              className="object-cover"
+              sizes="100vw"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-slate-900/60 to-slate-900/40" />
+            <div className="relative z-10 flex h-full items-center p-6 sm:p-8">
+              <div className="max-w-2xl">
+                <h1 className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">{t("sell_rental_title")}</h1>
+                <p className="mt-2 text-sm text-slate-100 sm:text-base">
+                  {t("sell_rental_subtitle")}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
 
         <Card>
           <CardHeader>
@@ -324,13 +379,25 @@ export default function RentRegistrationPage() {
               {imagePreviews.length ? (
                 <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
                   {imagePreviews.map((src, idx) => (
-                    <div key={src} className="relative overflow-hidden rounded-xl border border-zinc-200 bg-white">
+                    <div
+                      key={`${src}-${idx}`}
+                      draggable
+                      onDragStart={() => handleDragStart(idx)}
+                      onDragOver={handleDragOver}
+                      onDrop={() => handleDrop(idx)}
+                      className={`relative cursor-move overflow-hidden rounded-xl border border-zinc-200 bg-white transition-all ${
+                        draggedIndex === idx ? "opacity-50 scale-95" : "hover:border-zinc-300 hover:shadow-md"
+                      }`}
+                    >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={src} alt={`upload-${idx}`} className="h-20 w-full object-cover" />
+                      <img src={src} alt={`upload-${idx}`} className="h-20 w-full object-cover pointer-events-none" />
                       <button
                         type="button"
-                        onClick={() => removeImageAt(idx)}
-                        className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-md backdrop-blur-sm transition-all hover:bg-rose-50 hover:shadow-lg"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removeImageAt(idx);
+                        }}
+                        className="absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-md backdrop-blur-sm transition-all hover:bg-rose-50 hover:shadow-lg"
                         aria-label={t("sell_common_delete")}
                       >
                         <svg className="h-4 w-4 text-zinc-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
