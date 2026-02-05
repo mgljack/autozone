@@ -278,8 +278,6 @@ export default function CarDetailClient({ id }: { id: string }) {
         <div className="text-lg font-bold text-zinc-900">{t("carDetail_specs_title")}</div>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <Row label={t("carDetail_specs_price")} value={formatMnt(car.priceMnt)} />
-          <Row label={t("carDetail_specs_tier")} value={car.tier.toUpperCase()} />
-          <Row label={t("carDetail_specs_registeredDate")} value={new Date(car.createdAt).toLocaleDateString("ko-KR")} />
           <Row label={t("carDetail_specs_yearMade")} value={String(car.yearMade)} />
           <Row label={t("carDetail_specs_yearImported")} value={String(car.yearImported)} />
           <Row label={t("carDetail_specs_mileage")} value={`${car.mileageKm.toLocaleString("ko-KR")}km`} />
@@ -290,7 +288,6 @@ export default function CarDetailClient({ id }: { id: string }) {
           <Row label={t("carDetail_specs_steering")} value={car.specs.steering} />
           <Row label={t("carDetail_specs_accident")} value={car.specs.accident ? t("common_yes") : t("common_no")} />
           <Row label={t("carDetail_specs_plate")} value={car.specs.hasPlate ? t("common_yes") : t("common_no")} />
-          <Row label={t("carDetail_specs_vin")} value={car.specs.vin} mono />
         </div>
       </div>
 

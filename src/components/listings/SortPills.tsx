@@ -24,19 +24,19 @@ export function SortPills<T extends string = CarsSort>({ value, onChange, option
         const isActive = value === sort.key;
         return (
           <div key={sort.key} className="flex items-center">
-            <button
-              type="button"
-              onClick={() => onChange(sort.key)}
-              aria-pressed={isActive}
+          <button
+            type="button"
+            onClick={() => onChange(sort.key)}
+            aria-pressed={isActive}
               className={cn(
                 "text-sm leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400",
-                isActive
+              isActive
                   ? "text-slate-900 font-medium"
                   : "text-slate-500 hover:text-slate-900"
               )}
-            >
-              {t(sort.labelKey)}
-            </button>
+          >
+            {t(sort.labelKey)}
+          </button>
             {idx !== options.length - 1 && (
               <span className="mx-2 h-4 w-px bg-slate-300/70" />
             )}

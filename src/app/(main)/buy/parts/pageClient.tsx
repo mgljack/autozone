@@ -157,15 +157,15 @@ export function PartsClient({ searchParams }: { searchParams: Record<string, str
         </aside>
 
         <section className="grid gap-3">
-          <SortPills
-            value={sort}
-            onChange={setSort}
-            options={[
-              { key: "newest", labelKey: "common_sort_newest" },
-              { key: "priceAsc", labelKey: "buyAll_sort_priceAsc" },
-              { key: "priceDesc", labelKey: "buyAll_sort_priceDesc" },
-            ]}
-          />
+            <SortPills
+              value={sort}
+              onChange={setSort}
+              options={[
+                { key: "newest", labelKey: "common_sort_newest" },
+                { key: "priceAsc", labelKey: "buyAll_sort_priceAsc" },
+                { key: "priceDesc", labelKey: "buyAll_sort_priceDesc" },
+              ]}
+            />
 
           {listQuery.isLoading ? (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

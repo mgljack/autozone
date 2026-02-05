@@ -295,6 +295,8 @@
   "carDetail_options_ventilatedSeat": "Ventilated Seat",
   "carDetail_options_leatherSeat": "Leather Seat",
   "carDetail_options_heatedSteering": "Heated Steering",
+  "carDetail_options_viewAll": "View All Options",
+  "carDetail_options_empty": "No options registered",
   "carDetail_desc": "Description",
   "carDetail_sticky_title": "Promo / CTA",
   "carDetail_sticky_body": "This is a prototype sticky banner.",

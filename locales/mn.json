@@ -295,6 +295,8 @@
   "carDetail_options_ventilatedSeat": "Суудал хөрнө",
   "carDetail_options_leatherSeat": "Арьсан суудал",
   "carDetail_options_heatedSteering": "Рүль хална",
+  "carDetail_options_viewAll": "Бүх сонголтууд",
+  "carDetail_options_empty": "Бүртгэгдсэн сонголт байхгүй",
   "carDetail_desc": "Тайлбар",
   "carDetail_sticky_title": "Промо / CTA",
   "carDetail_sticky_body": "Энэ бол prototype sticky баннер.",

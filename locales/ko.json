@@ -295,6 +295,8 @@
   "carDetail_options_ventilatedSeat": "통풍시트",
   "carDetail_options_leatherSeat": "가죽시트",
   "carDetail_options_heatedSteering": "열선 핸들",
+  "carDetail_options_viewAll": "옵션모두보기",
+  "carDetail_options_empty": "등록된 옵션이 없습니다",
   "carDetail_desc": "설명",
   "carDetail_sticky_title": "프로모션 / CTA",
   "carDetail_sticky_body": "프로토타입 스티키 배너입니다.",

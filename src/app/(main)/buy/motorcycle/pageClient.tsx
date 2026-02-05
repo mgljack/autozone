@@ -339,7 +339,7 @@ export function MotorcycleAllClient({ searchParams }: { searchParams: Record<str
         </aside>
 
         <section className="grid gap-3">
-          <VehicleSortPills value={sort} onChange={setSort} />
+            <VehicleSortPills value={sort} onChange={setSort} />
 
           {/* Section Divider */}
           <div className="my-1 h-px w-full bg-gradient-to-r from-transparent via-slate-300/60 to-transparent" />

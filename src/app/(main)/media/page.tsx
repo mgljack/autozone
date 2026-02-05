@@ -67,7 +67,7 @@ export default function MediaPage() {
         <div className="flex items-center py-2 overflow-x-auto whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {(["news", "video", "event"] as MediaDTO["type"][]).map((type, idx) => {
             const isActive = tab === type;
-            return (
+  return (
               <div key={type} className="flex items-center">
                 <button
                   type="button"
@@ -151,31 +151,31 @@ export default function MediaPage() {
                 <div className="space-y-12">
                   <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
                     {gridItems.map((m) => (
-                      <Link
-                        key={m.id}
-                        href={`/media/${m.id}`}
+                  <Link
+                    key={m.id}
+                    href={`/media/${m.id}`}
                         className="group block"
-                      >
+                  >
                         <div className="space-y-4">
                           {/* Image */}
                           <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-zinc-100">
-                            <Image
-                              src={m.thumbnailUrl}
-                              alt={m.title}
-                              fill
+                      <Image 
+                        src={m.thumbnailUrl} 
+                        alt={m.title} 
+                        fill 
                               className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105 rounded-xl"
-                              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                            />
-                          </div>
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      />
+                    </div>
 
                           {/* Content */}
                           <div className="space-y-3">
                             {/* Category */}
                             <div>
                               <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider">
-                                {getTypeLabel(m.type)}
-                              </span>
-                            </div>
+                          {getTypeLabel(m.type)}
+                        </span>
+                      </div>
 
                             {/* Title */}
                             <h3 className="text-xl font-bold text-zinc-900 line-clamp-2 leading-tight group-hover:text-zinc-700 transition-colors">
@@ -187,47 +187,47 @@ export default function MediaPage() {
                               {m.excerpt}
                             </p>
 
-                            {/* Date */}
+                      {/* Date */}
                             <div className="text-xs text-zinc-500">
                               {formatDate(m.createdAt)}
                             </div>
-                          </div>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-
-                  {/* Pagination */}
-                  {totalPages > 1 && (
-                    <div className="flex flex-col items-center gap-4 pt-4">
-                      {hasMore && (
-                        <button
-                          type="button"
-                          onClick={() => setPage((p) => p + 1)}
-                          className="rounded-xl border border-zinc-200 bg-white px-8 py-3 text-sm font-normal text-zinc-900 transition-all hover:bg-zinc-50 hover:border-zinc-300"
-                        >
-                          {t("common_seeMore")}
-                        </button>
-                      )}
-
-                      <div className="flex items-center justify-center gap-2">
-                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                          <button
-                            key={p}
-                            type="button"
-                            onClick={() => setPage(p)}
-                            className={`rounded-lg px-3 py-1.5 text-sm font-normal transition-colors ${
-                              p === page
-                                ? "bg-zinc-900 text-white"
-                                : "bg-white text-zinc-600 hover:bg-zinc-100 border border-zinc-200"
-                            }`}
-                          >
-                            {p}
-                          </button>
-                        ))}
                       </div>
                     </div>
+                  </Link>
+                ))}
+              </div>
+
+                  {/* Pagination */}
+              {totalPages > 1 && (
+                    <div className="flex flex-col items-center gap-4 pt-4">
+                  {hasMore && (
+                    <button
+                      type="button"
+                      onClick={() => setPage((p) => p + 1)}
+                          className="rounded-xl border border-zinc-200 bg-white px-8 py-3 text-sm font-normal text-zinc-900 transition-all hover:bg-zinc-50 hover:border-zinc-300"
+                    >
+                          {t("common_seeMore")}
+                    </button>
                   )}
+
+                  <div className="flex items-center justify-center gap-2">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                      <button
+                        key={p}
+                        type="button"
+                        onClick={() => setPage(p)}
+                        className={`rounded-lg px-3 py-1.5 text-sm font-normal transition-colors ${
+                          p === page
+                            ? "bg-zinc-900 text-white"
+                            : "bg-white text-zinc-600 hover:bg-zinc-100 border border-zinc-200"
+                        }`}
+                      >
+                        {p}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
                 </div>
               )}
             </div>

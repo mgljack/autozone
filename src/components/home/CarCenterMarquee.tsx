@@ -73,7 +73,7 @@ export function CarCenterMarquee({ centers }: CarCenterMarqueeProps) {
                 key={`${center.id}-${idx}`}
                 className="group shrink-0"
                 style={{ 
-                  width: "280px",
+                  width: "280px", 
                   flexShrink: 0,
                   flexGrow: 0,
                 }}
@@ -83,34 +83,34 @@ export function CarCenterMarquee({ centers }: CarCenterMarqueeProps) {
                   className="relative flex cursor-pointer items-center gap-4 rounded-2xl bg-white p-4 shadow-md transition-all duration-200 hover:scale-105 hover:shadow-lg"
                   style={{ 
                     minHeight: "120px",
-                  }}
-                >
-                  {/* Icon Accent - Top Right */}
-                  <div className="absolute right-3 top-3">
-                    <WrenchIcon 
-                      className="h-4 w-4 opacity-30 transition-opacity group-hover:opacity-50" 
-                      style={{ color: "var(--accent-orange)" }}
-                    />
-                  </div>
+                }}
+              >
+                {/* Icon Accent - Top Right */}
+                <div className="absolute right-3 top-3">
+                  <WrenchIcon 
+                    className="h-4 w-4 opacity-30 transition-opacity group-hover:opacity-50" 
+                    style={{ color: "var(--accent-orange)" }}
+                  />
+                </div>
 
-                  {/* Circular Image */}
-                  <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full bg-zinc-100 ring-2 ring-zinc-200/50 transition-all group-hover:ring-zinc-300/70">
-                    <Image
-                      src={center.imageUrl || "/samples/cars/car-01.svg"}
-                      alt={center.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
+                {/* Circular Image */}
+                <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full bg-zinc-100 ring-2 ring-zinc-200/50 transition-all group-hover:ring-zinc-300/70">
+                  <Image
+                    src={center.imageUrl || "/samples/cars/car-01.svg"}
+                    alt={center.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
 
-                  {/* Text Content */}
-                  <div className="min-w-0 flex-1 pr-2">
-                    <h3 className="truncate text-base font-semibold leading-tight text-zinc-900">{center.name}</h3>
-                    {servicesPreview && (
-                      <p className="mt-1.5 line-clamp-1 text-sm leading-tight text-zinc-600">{servicesPreview}</p>
-                    )}
-                  </div>
-                </Link>
+                {/* Text Content */}
+                <div className="min-w-0 flex-1 pr-2">
+                  <h3 className="truncate text-base font-semibold leading-tight text-zinc-900">{center.name}</h3>
+                  {servicesPreview && (
+                    <p className="mt-1.5 line-clamp-1 text-sm leading-tight text-zinc-600">{servicesPreview}</p>
+                  )}
+                </div>
+              </Link>
 
                 {/* Reveal Panel - Slides down on hover */}
                 <div className="overflow-hidden max-h-0 opacity-0 transition-all duration-300 ease-out group-hover:max-h-[160px] group-hover:opacity-100">

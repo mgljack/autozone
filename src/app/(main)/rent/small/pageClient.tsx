@@ -257,15 +257,15 @@ export function RentTypeClient({
         </aside>
 
         <section className="grid gap-3">
-          <SortPills
-            value={sort}
-            onChange={setSort}
-            options={[
-              { key: "newest", labelKey: "rent_sort_newest" },
-              { key: "priceAsc", labelKey: "rent_sort_priceAsc" },
-              { key: "priceDesc", labelKey: "rent_sort_priceDesc" },
-            ]}
-          />
+            <SortPills
+              value={sort}
+              onChange={setSort}
+              options={[
+                { key: "newest", labelKey: "rent_sort_newest" },
+                { key: "priceAsc", labelKey: "rent_sort_priceAsc" },
+                { key: "priceDesc", labelKey: "rent_sort_priceDesc" },
+              ]}
+            />
 
           {/* Section Divider */}
           <div className="my-1 h-px w-full bg-gradient-to-r from-transparent via-slate-300/60 to-transparent" />

@@ -356,7 +356,7 @@ export default function MainHomePage() {
               <div className="flex flex-wrap items-center gap-2">
               <button
                 type="button"
-                onClick={() => setQuickTab("quick")}
+                  onClick={() => setQuickTab("quick")}
                 className={[
                     "relative inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300",
                     quickTab === "quick" 
@@ -443,7 +443,7 @@ export default function MainHomePage() {
                     <div className="group flex min-w-0 flex-1 flex-col gap-1.5">
                       <label className="text-xs font-medium uppercase tracking-wider text-zinc-400">{t("home_quickSearch_manufacturer")}</label>
                       <CustomSelect
-                        value={manufacturer}
+                      value={manufacturer}
                         onChange={(v) => setManufacturer(v)}
                         options={[
                           { value: "", label: t("home_quickSearch_selectPlaceholder") },
@@ -459,7 +459,7 @@ export default function MainHomePage() {
                     <div className="group flex min-w-0 flex-1 flex-col gap-1.5">
                       <label className="text-xs font-medium uppercase tracking-wider text-zinc-400">{t("home_quickSearch_model")}</label>
                       <CustomSelect
-                        value={model}
+                      value={model}
                         onChange={(v) => setModel(v)}
                         options={[
                           { value: "", label: t("home_quickSearch_selectPlaceholder") },
@@ -468,7 +468,7 @@ export default function MainHomePage() {
                             label: m,
                           })),
                         ]}
-                        disabled={!manufacturer}
+                      disabled={!manufacturer}
                         placeholder={t("home_quickSearch_selectPlaceholder")}
                       />
                   </div>
@@ -476,7 +476,7 @@ export default function MainHomePage() {
                     <div className="group flex min-w-0 flex-1 flex-col gap-1.5">
                       <label className="text-xs font-medium uppercase tracking-wider text-zinc-400">{t("home_quickSearch_subModel")}</label>
                       <CustomSelect
-                        value={subModel}
+                      value={subModel}
                         onChange={(v) => setSubModel(v)}
                         options={[
                           { value: "", label: t("home_quickSearch_selectPlaceholder") },
@@ -485,7 +485,7 @@ export default function MainHomePage() {
                             label: s,
                           })),
                         ]}
-                        disabled={!manufacturer || !model}
+                      disabled={!manufacturer || !model}
                         placeholder={t("home_quickSearch_selectPlaceholder")}
                       />
                   </div>
@@ -563,7 +563,7 @@ export default function MainHomePage() {
                     <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                       <label className="text-xs font-medium uppercase tracking-wider text-zinc-400">{t("home_quickSearch_carTypeSelect")}</label>
                       <CustomSelect
-                        value={carType}
+                      value={carType}
                         onChange={(v) => setCarType(v as typeof carType)}
                         options={[
                           { value: "all", label: t("carType_all") },

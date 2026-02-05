@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useI18n } from "@/context/I18nContext";
+import { AllOptionsModal, normalizeOptionsToGroups } from "@/components/detail/AllOptionsModal";
 
 type VehicleOptions = {
   sunroof?: boolean;
@@ -30,17 +31,30 @@ const fixedOptions = [
 
 export function OptionInfoSection({ options }: OptionInfoSectionProps) {
   const { t } = useI18n();
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const groupedOptions = React.useMemo(
+    () => normalizeOptionsToGroups(options, t),
+    [options, t]
+  );
 
   return (
     <div>
       {/* Header */}
-      <div className="flex items-center gap-2">
-        <h3 className="text-lg font-bold text-zinc-900">{t("carDetail_options_title")}</h3>
-        <InfoIcon />
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <h3 className="text-lg font-bold text-zinc-900">{t("carDetail_options_title")}</h3>
+          <InfoIcon />
+        </div>
+        <button
+          onClick={() => setModalOpen(true)}
+          className="h-9 rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:border-[#b70f28] transition-colors"
+        >
+          {t("carDetail_options_viewAll")}
+        </button>
       </div>
 
       {/* Sublabel */}
-      <div className="mt-6 text-sm font-semibold text-zinc-700">{t("carDetail_options_sublabel")}</div>
+      <div className="mt-6 text-sm font-semibold text-[#b70f28]">{t("carDetail_options_sublabel")}</div>
 
       {/* Options Grid */}
       <div className="mt-6 grid grid-cols-7 justify-items-center gap-x-6 overflow-x-auto scrollbar-hide">
@@ -63,6 +77,13 @@ export function OptionInfoSection({ options }: OptionInfoSectionProps) {
           );
         })}
       </div>
+
+      {/* All Options Modal */}
+      <AllOptionsModal
+        open={modalOpen}
+        onOpenChange={setModalOpen}
+        groupedOptions={groupedOptions}
+      />
     </div>
   );
 }

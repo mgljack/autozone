@@ -254,40 +254,40 @@ export function CarGallery({
                   sizes="(max-width: 1800px) 98vw, 1800px"
                 />
               </div>
-            </div>
+              </div>
 
             {/* Navigation arrows */}
             {safe.length > 1 && (
               <>
-                <button
-                  type="button"
+              <button
+                type="button"
                   className="absolute left-4 top-1/2 z-20 inline-flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 backdrop-blur-md text-white shadow-lg transition-all hover:bg-white/20 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-white/50"
                   aria-label="Previous image"
-                  onClick={() => setActiveIndex((i) => (i - 1 + safe.length) % safe.length)}
-                >
+                onClick={() => setActiveIndex((i) => (i - 1 + safe.length) % safe.length)}
+              >
                   <ChevronLeftIcon className="h-6 w-6" />
-                </button>
-                <button
-                  type="button"
+              </button>
+              <button
+                type="button"
                   className="absolute right-4 top-1/2 z-20 inline-flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 backdrop-blur-md text-white shadow-lg transition-all hover:bg-white/20 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-white/50"
                   aria-label="Next image"
-                  onClick={() => setActiveIndex((i) => (i + 1) % safe.length)}
-                >
+                onClick={() => setActiveIndex((i) => (i + 1) % safe.length)}
+              >
                   <ChevronRightIcon className="h-6 w-6" />
-                </button>
+              </button>
               </>
             )}
-          </div>
+            </div>
 
           {/* Thumbnail strip - floating at bottom */}
           {safe.length > 1 && (
             <div className="absolute bottom-4 left-4 right-4 z-30">
               <div className="flex gap-2 overflow-x-auto pb-2 [scrollbar-width:thin] [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-white/30 [&::-webkit-scrollbar-thumb]:rounded-full">
-                {safe.map((src, idx) => (
-                  <button
-                    key={`${src}-${idx}`}
-                    type="button"
-                    onClick={() => setActiveIndex(idx)}
+              {safe.map((src, idx) => (
+                <button
+                  key={`${src}-${idx}`}
+                  type="button"
+                  onClick={() => setActiveIndex(idx)}
                     className={`relative h-16 w-20 sm:h-20 sm:w-28 shrink-0 overflow-hidden rounded-lg border-2 transition-all ${
                       idx === activeIndex 
                         ? "border-white ring-2 ring-white/50 scale-105" 
@@ -295,12 +295,12 @@ export function CarGallery({
                     } bg-black/40 backdrop-blur-sm`}
                     aria-label={`${selectLabel} ${idx + 1}`}
                     aria-pressed={idx === activeIndex}
-                  >
-                    <Image src={src} alt="" fill className="object-cover" />
-                  </button>
-                ))}
-              </div>
+                >
+                  <Image src={src} alt="" fill className="object-cover" />
+                </button>
+              ))}
             </div>
+          </div>
           )}
         </DialogContent>
       </Dialog>

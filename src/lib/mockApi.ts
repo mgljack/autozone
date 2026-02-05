@@ -809,7 +809,35 @@ function toCarListItemDTO(c: Car): CarListItemDTO {
   };
 }
 
+// Generate random options for mock data (prototype)
+function generateRandomOptions(id: string): {
+  sunroof: boolean;
+  sensors: boolean;
+  smartKey: boolean;
+  heatedSeat: boolean;
+  ventilatedSeat: boolean;
+  leatherSeat: boolean;
+  heatedSteering: boolean;
+} {
+  // Use car ID as seed for consistent options per car
+  const seed = id.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  const random = (n: number) => (seed + n) % 3 === 0;
+  
+  return {
+    sunroof: random(1),
+    sensors: random(2),
+    smartKey: random(3),
+    heatedSeat: random(4),
+    ventilatedSeat: random(5),
+    leatherSeat: random(6),
+    heatedSteering: random(7),
+  };
+}
+
 function toCarDetailDTO(c: Car & { options?: any }): CarDetailDTO {
+  // Use provided options or generate random ones for prototype
+  const options = c.options || generateRandomOptions(c.id);
+  
   return {
     id: c.id,
     title: carTitleFromMock(c),
@@ -832,7 +860,7 @@ function toCarDetailDTO(c: Car & { options?: any }): CarDetailDTO {
       hasPlate: c.hasPlate,
       vin: c.vin,
     },
-    options: c.options,
+    options,
     seller: {
       name: c.sellerName,
       phone: c.sellerPhone,
