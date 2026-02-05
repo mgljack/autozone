@@ -360,8 +360,8 @@ export default function MainHomePage() {
                 className={[
                     "relative inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300",
                     quickTab === "quick" 
-                      ? "bg-zinc-900 text-white shadow-lg shadow-zinc-900/25" 
-                      : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200 hover:text-zinc-900",
+                      ? "bg-gradient-to-r from-rose-600 to-rose-500 text-white shadow-lg shadow-rose-500/30" 
+                      : "bg-zinc-100 text-zinc-700 hover:bg-gradient-to-r hover:from-rose-600 hover:to-rose-500 hover:text-white hover:animate-[shake_0.8s_ease-in-out]",
                 ].join(" ")}
               >
                   {quickTab === "quick" && (
@@ -387,8 +387,8 @@ export default function MainHomePage() {
                 className={[
                     "relative inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300",
                     quickTab === "budget" 
-                      ? "bg-zinc-900 text-white shadow-lg shadow-zinc-900/25" 
-                      : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200 hover:text-zinc-900",
+                      ? "bg-gradient-to-r from-rose-600 to-rose-500 text-white shadow-lg shadow-rose-500/30" 
+                      : "bg-zinc-100 text-zinc-700 hover:bg-gradient-to-r hover:from-rose-600 hover:to-rose-500 hover:text-white hover:animate-[shake_0.8s_ease-in-out]",
                 ].join(" ")}
               >
                   {quickTab === "budget" && (
@@ -414,8 +414,8 @@ export default function MainHomePage() {
                 className={[
                     "relative inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300",
                     quickTab === "keyword" 
-                      ? "bg-zinc-900 text-white shadow-lg shadow-zinc-900/25" 
-                      : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200 hover:text-zinc-900",
+                      ? "bg-gradient-to-r from-rose-600 to-rose-500 text-white shadow-lg shadow-rose-500/30" 
+                      : "bg-zinc-100 text-zinc-700 hover:bg-gradient-to-r hover:from-rose-600 hover:to-rose-500 hover:text-white hover:animate-[shake_0.8s_ease-in-out]",
                 ].join(" ")}
               >
                   {quickTab === "keyword" && (
