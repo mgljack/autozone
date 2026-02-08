@@ -158,10 +158,10 @@ export default function MediaDetailClient({ id }: { id: string }) {
             <button
               type="button"
               onClick={handleLike}
-              className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+              className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors border ${
                 liked
-                  ? "bg-rose-50 text-rose-600 hover:bg-rose-100"
-                  : "bg-zinc-500 text-white hover:bg-zinc-600"
+                  ? "bg-rose-600 border-rose-600 text-white hover:bg-rose-700 hover:border-rose-700"
+                  : "bg-zinc-500 border-zinc-500 text-white hover:bg-zinc-600 hover:border-zinc-600"
               }`}
             >
               <LikeIcon liked={liked} size="md" />

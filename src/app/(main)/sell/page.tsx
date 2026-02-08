@@ -80,7 +80,6 @@ export default function SellCategorySelectPage() {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0 flex-1">
             <h1 className="text-[24px] font-bold text-zinc-900">{t("sell_title")}</h1>
-            <p className="mt-2 text-sm text-zinc-600">{t("sell_subtitle")}</p>
           </div>
           <Link href="/mypage?tab=listings">
             <Button variant="outline" size="sm" className="gap-2">

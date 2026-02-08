@@ -10,6 +10,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
 import { cn } from "@/lib/utils";
+import { NotificationDropdown } from "./NotificationDropdown";
 
 function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
   const pathname = usePathname();
@@ -84,6 +85,7 @@ export function Header() {
   const [mounted, setMounted] = React.useState(false);
   const [rentOpen, setRentOpen] = React.useState(false);
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [notificationOpen, setNotificationOpen] = React.useState(false);
   const rentOpenTimer = React.useRef<number | null>(null);
   const rentCloseTimer = React.useRef<number | null>(null);
 
@@ -277,12 +279,10 @@ export function Header() {
             </>
           ) : null}
           {/* Notification Icon - Always rightmost */}
+          <div className="relative">
           <button
             type="button"
-            onClick={() => {
-              // Placeholder handler
-              console.log("Notifications clicked");
-            }}
+              onClick={() => setNotificationOpen(!notificationOpen)}
             className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-rose-600 transition-all duration-200 hover:scale-105 hover:bg-rose-600/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-600/50 focus-visible:ring-offset-2"
             aria-label={tt("common_notifications")}
             title={tt("common_notifications")}
@@ -290,6 +290,11 @@ export function Header() {
           >
             <BellIcon className="h-[20px] w-[20px] sm:h-[22px] sm:w-[22px]" />
           </button>
+            <NotificationDropdown
+              open={notificationOpen}
+              onClose={() => setNotificationOpen(false)}
+            />
+          </div>
         </div>
       </div>
 

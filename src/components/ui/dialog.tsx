@@ -31,7 +31,7 @@ export function Dialog({
         onClick={() => onOpenChange(false)}
         aria-hidden="true"
       />
-      <div className="absolute inset-0 flex items-center justify-center p-0 sm:p-4">
+      <div className="absolute inset-0 flex items-center justify-center p-1">
         {children}
       </div>
     </div>
@@ -46,7 +46,7 @@ export function DialogContent({
     <div
       role="dialog"
       aria-modal="true"
-      className={cn("w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl flex flex-col", className)}
+      className={cn("w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-1 shadow-xl flex flex-col", className)}
       {...props}
     />
   );

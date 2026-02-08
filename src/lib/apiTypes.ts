@@ -54,6 +54,11 @@ export type CarDetailDTO = {
     leatherSeat: boolean;
     heatedSteering: boolean;
   };
+  selectedOptions?: Array<{
+    key: string;
+    label: string;
+    category: string;
+  }>;
 
   seller: {
     name: string;

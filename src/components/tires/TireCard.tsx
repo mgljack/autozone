@@ -10,6 +10,7 @@ import { useI18n } from "@/context/I18nContext";
 import { useFavorites, type FavoriteItem } from "@/features/favorites/favorites";
 import { LikeIcon } from "@/components/ui/LikeIcon";
 import { PremiumTierBadge } from "@/components/badges/PremiumTierBadge";
+import { cn } from "@/lib/utils";
 import type { TireListItemDTO } from "@/lib/apiTypes";
 
 export function TireCard({ tire, index, tier: tierProp }: { tire: TireListItemDTO; index?: number; tier?: "gold" | "silver" | null }) {
@@ -73,7 +74,12 @@ export function TireCard({ tire, index, tier: tierProp }: { tire: TireListItemDT
         <div className="absolute right-2 top-2 z-10">
           <button
             type="button"
-            className="grid h-7 w-7 place-items-center rounded-full bg-zinc-500 shadow-sm transition-all duration-150 hover:scale-105 hover:bg-zinc-600"
+            className={cn(
+              "grid h-7 w-7 place-items-center rounded-full shadow-sm transition-all duration-150 hover:scale-105 border",
+              favored
+                ? "bg-rose-600 border-rose-600 hover:bg-rose-700 hover:border-rose-700"
+                : "bg-zinc-500 border-zinc-500 hover:bg-zinc-600 hover:border-zinc-600"
+            )}
             aria-label="Favorite"
             aria-pressed={favored}
             onClick={onFavoriteClick}

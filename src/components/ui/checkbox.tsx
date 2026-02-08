@@ -22,12 +22,15 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
         />
         <div
           className={cn(
-            "peer h-5 w-5 rounded border-2 border-zinc-300 transition-colors peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-rose-600/50 peer-focus:ring-offset-2 peer-checked:border-rose-600 peer-checked:bg-rose-600",
+            "relative flex h-5 w-5 items-center justify-center rounded border-2 border-zinc-300 bg-white transition-colors peer-focus:outline-none",
             className,
           )}
         >
           <svg
-            className="pointer-events-none absolute left-0.5 top-0.5 h-4 w-4 text-white opacity-0 transition-opacity peer-checked:opacity-100"
+            className={cn(
+              "pointer-events-none h-3.5 w-3.5 transition-opacity",
+              checked ? "opacity-100 text-rose-600" : "opacity-0"
+            )}
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"

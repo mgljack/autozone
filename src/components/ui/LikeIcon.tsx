@@ -23,7 +23,7 @@ export function LikeIcon({ liked, size = "sm", className }: LikeIconProps) {
       className={cn(
         "transition-all duration-150",
         sizeClasses,
-        "text-white",
+        liked ? "text-white" : "text-white",
         className
       )}
       aria-hidden="true"

@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
+import { CustomSelect } from "@/components/common/CustomSelect";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -393,6 +394,7 @@ export function CarCenterForm() {
                 value={draft.name}
                 onChange={(e) => setField("name", e.target.value)}
                 placeholder={t("carCenter_form_namePlaceholder")}
+                className="h-12"
               />
               {errors.name ? <div className="text-xs text-red-600">{errors.name}</div> : null}
             </div>
@@ -407,16 +409,20 @@ export function CarCenterForm() {
             </div>
             <div className="grid gap-2">
               <Label>{t("carCenter_form_category")}</Label>
-              <Select value={draft.category} onChange={(e) => setField("category", e.target.value)}>
-                <option value="">{t("sell_common_select")}</option>
-                <option value="engine">{t("carCenter_form_category_engine")}</option>
-                <option value="brake">{t("carCenter_form_category_brake")}</option>
-                <option value="tire">{t("carCenter_form_category_tire")}</option>
-                <option value="oil">{t("carCenter_form_category_oil")}</option>
-                <option value="electric">{t("carCenter_form_category_electric")}</option>
-                <option value="body">{t("carCenter_form_category_body")}</option>
-                <option value="other">{t("carCenter_form_category_other")}</option>
-              </Select>
+              <CustomSelect
+                value={draft.category || ""}
+                onChange={(v) => setField("category", v)}
+                options={[
+                  { value: "", label: t("sell_common_select") },
+                  { value: "engine", label: t("carCenter_form_category_engine") },
+                  { value: "brake", label: t("carCenter_form_category_brake") },
+                  { value: "tire", label: t("carCenter_form_category_tire") },
+                  { value: "oil", label: t("carCenter_form_category_oil") },
+                  { value: "electric", label: t("carCenter_form_category_electric") },
+                  { value: "body", label: t("carCenter_form_category_body") },
+                  { value: "other", label: t("carCenter_form_category_other") },
+                ]}
+              />
             </div>
             <div className="grid gap-2">
               <Label>{t("carCenter_form_services")}</Label>
@@ -424,6 +430,7 @@ export function CarCenterForm() {
                 value={draft.services.join(", ")}
                 onChange={(e) => setField("services", e.target.value.split(",").map((s) => s.trim()).filter(Boolean))}
                 placeholder={t("carCenter_form_servicesPlaceholder")}
+                className="h-12"
               />
             </div>
           </CardContent>
@@ -441,6 +448,7 @@ export function CarCenterForm() {
                 value={draft.phone1}
                 onChange={(e) => setField("phone1", e.target.value)}
                 placeholder={t("carCenter_form_phone1Placeholder")}
+                className="h-12"
               />
               {errors.phone1 ? <div className="text-xs text-red-600">{errors.phone1}</div> : null}
             </div>
@@ -450,6 +458,7 @@ export function CarCenterForm() {
                 value={draft.phone2}
                 onChange={(e) => setField("phone2", e.target.value)}
                 placeholder={t("carCenter_form_phone2Placeholder")}
+                className="h-12"
               />
             </div>
             <div className="grid gap-2">
@@ -458,17 +467,22 @@ export function CarCenterForm() {
                 value={draft.hours}
                 onChange={(e) => setField("hours", e.target.value)}
                 placeholder={t("carCenter_form_hoursPlaceholder")}
+                className="h-12"
               />
               {errors.hours ? <div className="text-xs text-red-600">{errors.hours}</div> : null}
             </div>
             <div className="grid gap-2">
               <Label>{t("carCenter_form_daysOff")}</Label>
-              <Select value={draft.daysOff} onChange={(e) => setField("daysOff", e.target.value)}>
-                <option value="">{t("sell_common_select")}</option>
-                <option value="everyday">{t("carCenter_form_daysOff_everyday")}</option>
-                <option value="weekend">{t("carCenter_form_daysOff_weekend")}</option>
-                <option value="weekday">{t("carCenter_form_daysOff_weekday")}</option>
-              </Select>
+              <CustomSelect
+                value={draft.daysOff || ""}
+                onChange={(v) => setField("daysOff", v)}
+                options={[
+                  { value: "", label: t("sell_common_select") },
+                  { value: "everyday", label: t("carCenter_form_daysOff_everyday") },
+                  { value: "weekend", label: t("carCenter_form_daysOff_weekend") },
+                  { value: "weekday", label: t("carCenter_form_daysOff_weekday") },
+                ]}
+              />
             </div>
             <div className="flex items-center gap-2">
               <Checkbox
@@ -495,6 +509,7 @@ export function CarCenterForm() {
                   setSelectedGeocodeResult(null);
                 }}
                 placeholder={t("carCenter_form_addressPlaceholder")}
+                className="h-12"
               />
               {errors.address ? <div className="text-xs text-red-600">{errors.address}</div> : null}
               {geocodeQuery.isLoading && <div className="text-xs text-zinc-500">{t("common_loading")}</div>}
@@ -523,17 +538,22 @@ export function CarCenterForm() {
                 value={draft.addressDetail}
                 onChange={(e) => setField("addressDetail", e.target.value)}
                 placeholder={t("carCenter_form_addressDetailPlaceholder")}
+                className="h-12"
               />
             </div>
             <div className="grid gap-2">
               <Label>{t("carCenter_form_region")}</Label>
-              <Select value={draft.region} onChange={(e) => setField("region", e.target.value)}>
-                <option value="">{t("sell_common_select")}</option>
-                <option value="Ulaanbaatar">Ulaanbaatar</option>
-                <option value="Erdenet">Erdenet</option>
-                <option value="Darkhan">Darkhan</option>
-                <option value="Other">Other</option>
-              </Select>
+              <CustomSelect
+                value={draft.region || ""}
+                onChange={(v) => setField("region", v)}
+                options={[
+                  { value: "", label: t("sell_common_select") },
+                  { value: "Ulaanbaatar", label: "Ulaanbaatar" },
+                  { value: "Erdenet", label: "Erdenet" },
+                  { value: "Darkhan", label: "Darkhan" },
+                  { value: "Other", label: "Other" },
+                ]}
+              />
             </div>
           </CardContent>
         </Card>
@@ -552,6 +572,7 @@ export function CarCenterForm() {
                     value={item.name}
                     onChange={(e) => updateServiceItem(idx, "name", e.target.value)}
                     placeholder={t("carCenter_form_serviceName")}
+                    className="h-12"
                   />
                 </div>
                 <div className="grid gap-2">
@@ -561,12 +582,14 @@ export function CarCenterForm() {
                     onChange={(e) => updateServiceItem(idx, "priceMnt", e.target.value)}
                     placeholder="0"
                     type="number"
+                    className="h-12"
                   />
                 </div>
                 <div className="grid gap-2">
                   <Label className="text-xs">{t("carCenter_form_serviceDuration")}</Label>
                   <div className="flex gap-2">
                     <Input
+                      className="h-12"
                       value={item.duration || ""}
                       onChange={(e) => updateServiceItem(idx, "duration", e.target.value)}
                       placeholder="30분"

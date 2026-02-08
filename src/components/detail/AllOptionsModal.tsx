@@ -13,58 +13,56 @@ type AllOptionsModalProps = {
 // Normalize vehicle options to grouped categories
 export function normalizeOptionsToGroups(
   options: { [key: string]: boolean } | undefined,
-  t: (key: string) => string
+  t: (key: string) => string,
+  selectedOptions?: Array<{ key: string; label: string; category: string }>
 ): Record<string, string[]> {
-  if (!options) return {};
+  const safetyKey = t("carDetail_options_category_safety");
+  const convenienceKey = t("carDetail_options_category_convenience");
+  const seatKey = t("carDetail_options_category_seat");
+  const exteriorKey = t("carDetail_options_category_exterior");
+  const multimediaKey = t("carDetail_options_category_multimedia");
 
   const grouped: Record<string, string[]> = {
-    안전: [],
-    편의: [],
-    "시트/내장": [],
-    외장: [],
-    멀티미디어: [],
+    [safetyKey]: [],
+    [convenienceKey]: [],
+    [seatKey]: [],
+    [exteriorKey]: [],
+    [multimediaKey]: [],
   };
 
   // Map existing boolean options to categories
-  if (options.sunroof) {
-    grouped.외장.push(t("carDetail_options_sunroof"));
-  }
-  if (options.sensors) {
-    grouped.안전.push(t("carDetail_options_sensors"));
-  }
-  if (options.smartKey) {
-    grouped.편의.push(t("carDetail_options_smartKey"));
-  }
-  if (options.heatedSeat) {
-    grouped["시트/내장"].push(t("carDetail_options_heatedSeat"));
-  }
-  if (options.ventilatedSeat) {
-    grouped["시트/내장"].push(t("carDetail_options_ventilatedSeat"));
-  }
-  if (options.leatherSeat) {
-    grouped["시트/내장"].push(t("carDetail_options_leatherSeat"));
-  }
-  if (options.heatedSteering) {
-    grouped.편의.push(t("carDetail_options_heatedSteering"));
-  }
-
-  // Add mock additional options for prototype (if needed)
-  // This can be replaced with actual data from backend later
-  if (options.sunroof || options.sensors || options.smartKey) {
-    // Add some mock options for demonstration
+  if (options) {
+    if (options.sunroof) {
+      grouped[exteriorKey].push(t("carDetail_options_sunroof"));
+    }
     if (options.sensors) {
-      grouped.안전.push("ABS", "후방카메라");
+      grouped[safetyKey].push(t("carDetail_options_sensors"));
     }
     if (options.smartKey) {
-      grouped.편의.push("원격시동", "무선충전");
+      grouped[convenienceKey].push(t("carDetail_options_smartKey"));
     }
-    if (options.sunroof) {
-      grouped.외장.push("LED 헤드라이트", "크롬 도어핸들");
+    if (options.heatedSeat) {
+      grouped[seatKey].push(t("carDetail_options_heatedSeat"));
+    }
+    if (options.ventilatedSeat) {
+      grouped[seatKey].push(t("carDetail_options_ventilatedSeat"));
     }
     if (options.leatherSeat) {
-      grouped["시트/내장"].push("전동시트", "메모리시트");
+      grouped[seatKey].push(t("carDetail_options_leatherSeat"));
     }
-    grouped.멀티미디어.push("네비게이션", "후방모니터", "블루투스");
+    if (options.heatedSteering) {
+      grouped[convenienceKey].push(t("carDetail_options_heatedSteering"));
+    }
+  }
+
+  // Add selected additional options
+  if (selectedOptions && selectedOptions.length > 0) {
+    selectedOptions.forEach((opt) => {
+      const categoryKey = opt.category;
+      if (grouped[categoryKey] && !grouped[categoryKey].includes(opt.label)) {
+        grouped[categoryKey].push(opt.label);
+      }
+    });
   }
 
   // Remove empty categories

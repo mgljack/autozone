@@ -32,6 +32,11 @@ export type SellDraftCar = SellDraftBase & {
     leatherSeat: boolean;
     heatedSteering: boolean;
   };
+  selectedOptions?: Array<{
+    key: string;
+    label: string;
+    category: string;
+  }>;
 };
 
 export type SellDraftMotorcycle = SellDraftBase & {

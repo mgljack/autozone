@@ -4,9 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { useQuery } from "@tanstack/react-query";
 
 import { RequireAuth } from "@/components/common/RequireAuth";
 import { SectionTitle } from "@/components/common/SectionTitle";
+import { CustomSelect } from "@/components/common/CustomSelect";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -15,6 +17,7 @@ import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useI18n } from "@/context/I18nContext";
 import { useAuth } from "@/context/AuthContext";
+import { fetchCarTaxonomy } from "@/lib/mockApi";
 
 type RentDraft = {
   rentType: "small" | "large" | "truck" | "";
@@ -26,7 +29,6 @@ type RentDraft = {
   transmission: "at" | "mt" | "";
   region: "Ulaanbaatar" | "Erdenet" | "Darkhan" | "Other" | "";
   pricePerDayMnt: string;
-  availabilityDate: string;
   description: string;
   contactName: string;
   contactEmail: string;
@@ -57,7 +59,6 @@ export default function RentRegistrationPage() {
       transmission: "",
       region: "",
       pricePerDayMnt: "",
-      availabilityDate: "",
       description: "",
       contactName: "",
       contactEmail: "",
@@ -70,6 +71,36 @@ export default function RentRegistrationPage() {
   const [imagePreviews, setImagePreviews] = React.useState<string[]>([]);
   const [errors, setErrors] = React.useState<Record<string, string>>({});
   const [draggedIndex, setDraggedIndex] = React.useState<number | null>(null);
+
+  // Fetch car taxonomy for manufacturer and model dropdowns
+  const taxonomyQuery = useQuery({
+    queryKey: ["carTaxonomy"],
+    queryFn: () => fetchCarTaxonomy(),
+  });
+
+  // Get available models based on selected manufacturer
+  const availableModels = React.useMemo(() => {
+    if (!draft.manufacturer || !taxonomyQuery.data) return [];
+    return taxonomyQuery.data.modelsByManufacturer[draft.manufacturer] ?? [];
+  }, [draft.manufacturer, taxonomyQuery.data]);
+
+  // Generate year options (1990 to current year)
+  const yearOptions = React.useMemo(() => {
+    const currentYear = new Date().getFullYear();
+    const years: { value: string; label: string }[] = [];
+    for (let year = currentYear; year >= 1990; year--) {
+      years.push({ value: String(year), label: String(year) });
+    }
+    return years;
+  }, []);
+
+
+  React.useEffect(() => {
+    if (draft.manufacturer && !availableModels.includes(draft.model)) {
+      setField("model", "");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [draft.manufacturer, availableModels]);
 
   React.useEffect(() => {
     if (!session) return;
@@ -177,7 +208,6 @@ export default function RentRegistrationPage() {
     if (!draft.transmission) next.transmission = t("sell_error_transmissionRequired");
     if (!draft.region) next.region = t("sell_error_regionRequired");
     require("pricePerDayMnt", draft.pricePerDayMnt);
-    require("availabilityDate", draft.availabilityDate);
 
     setErrors(next);
     return Object.keys(next).length === 0;
@@ -240,20 +270,31 @@ export default function RentRegistrationPage() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="grid gap-2">
                 <Label>{t("sell_rental_rentType")}</Label>
-                <Select value={draft.rentType} onChange={(e) => setField("rentType", e.target.value as any)}>
-                  <option value="">{t("sell_common_select")}</option>
-                  <option value="small">{t("sell_rental_rentType_small")}</option>
-                  <option value="large">{t("sell_rental_rentType_large")}</option>
-                  <option value="truck">{t("sell_rental_rentType_truck")}</option>
-                </Select>
+                <CustomSelect
+                  value={draft.rentType || ""}
+                  onChange={(v) => setField("rentType", v)}
+                  options={[
+                    { value: "", label: t("sell_common_select") },
+                    { value: "small", label: t("sell_rental_rentType_small") },
+                    { value: "large", label: t("sell_rental_rentType_large") },
+                    { value: "truck", label: t("sell_rental_rentType_truck") },
+                  ]}
+                />
                 {errors.rentType ? <div className="text-xs text-red-600">{errors.rentType}</div> : null}
               </div>
 
               <div className="grid gap-2">
                 <Label>{t("sell_vehicle_manufacturer")}</Label>
-                <Input
-                  value={draft.manufacturer}
-                  onChange={(e) => setField("manufacturer", e.target.value)}
+                <CustomSelect
+                  value={draft.manufacturer || ""}
+                  onChange={(v) => setField("manufacturer", v)}
+                  options={[
+                    { value: "", label: t("sell_common_select") },
+                    ...(taxonomyQuery.data?.manufacturers ?? []).map((m) => ({
+                      value: m,
+                      label: m,
+                    })),
+                  ]}
                   placeholder={t("sell_vehicle_manufacturerPlaceholder")}
                 />
                 {errors.manufacturer ? <div className="text-xs text-red-600">{errors.manufacturer}</div> : null}
@@ -261,19 +302,31 @@ export default function RentRegistrationPage() {
 
               <div className="grid gap-2">
                 <Label>{t("sell_vehicle_model")}</Label>
-                <Input
-                  value={draft.model}
-                  onChange={(e) => setField("model", e.target.value)}
+                <CustomSelect
+                  value={draft.model || ""}
+                  onChange={(v) => setField("model", v)}
+                  options={[
+                    { value: "", label: t("sell_common_select") },
+                    ...availableModels.map((m) => ({
+                      value: m,
+                      label: m,
+                    })),
+                  ]}
                   placeholder={t("sell_vehicle_modelPlaceholder")}
+                  disabled={!draft.manufacturer}
                 />
                 {errors.model ? <div className="text-xs text-red-600">{errors.model}</div> : null}
               </div>
 
               <div className="grid gap-2">
                 <Label>{t("sell_vehicle_yearMade")}</Label>
-                <Input
-                  value={draft.yearMade}
-                  onChange={(e) => setField("yearMade", e.target.value)}
+                <CustomSelect
+                  value={draft.yearMade || ""}
+                  onChange={(v) => setField("yearMade", v)}
+                  options={[
+                    { value: "", label: t("sell_common_select") },
+                    ...yearOptions,
+                  ]}
                   placeholder={t("sell_rental_yearMadePlaceholder")}
                 />
                 {errors.yearMade ? <div className="text-xs text-red-600">{errors.yearMade}</div> : null}
@@ -286,41 +339,54 @@ export default function RentRegistrationPage() {
                   onChange={(e) => setField("mileageKm", e.target.value.replace(/[^\d]/g, ""))}
                   placeholder={t("sell_rental_mileageKmPlaceholder")}
                   inputMode="numeric"
+                  className="h-12"
                 />
                 {errors.mileageKm ? <div className="text-xs text-red-600">{errors.mileageKm}</div> : null}
               </div>
 
               <div className="grid gap-2">
                 <Label>{t("sell_vehicle_fuel")}</Label>
-                <Select value={draft.fuel} onChange={(e) => setField("fuel", e.target.value as any)}>
-                  <option value="">{t("sell_common_select")}</option>
-                  <option value="gasoline">{t("sell_rental_fuel_gasoline")}</option>
-                  <option value="diesel">{t("sell_rental_fuel_diesel")}</option>
-                  <option value="electric">{t("sell_rental_fuel_electric")}</option>
-                  <option value="hybrid">{t("sell_rental_fuel_hybrid")}</option>
-                </Select>
+                <CustomSelect
+                  value={draft.fuel || ""}
+                  onChange={(v) => setField("fuel", v)}
+                  options={[
+                    { value: "", label: t("sell_common_select") },
+                    { value: "gasoline", label: t("sell_rental_fuel_gasoline") },
+                    { value: "diesel", label: t("sell_rental_fuel_diesel") },
+                    { value: "electric", label: t("sell_rental_fuel_electric") },
+                    { value: "hybrid", label: t("sell_rental_fuel_hybrid") },
+                  ]}
+                />
                 {errors.fuel ? <div className="text-xs text-red-600">{errors.fuel}</div> : null}
               </div>
 
               <div className="grid gap-2">
                 <Label>{t("sell_vehicle_transmission")}</Label>
-                <Select value={draft.transmission} onChange={(e) => setField("transmission", e.target.value as any)}>
-                  <option value="">{t("sell_common_select")}</option>
-                  <option value="at">{t("sell_rental_transmission_at")}</option>
-                  <option value="mt">{t("sell_rental_transmission_mt")}</option>
-                </Select>
+                <CustomSelect
+                  value={draft.transmission || ""}
+                  onChange={(v) => setField("transmission", v)}
+                  options={[
+                    { value: "", label: t("sell_common_select") },
+                    { value: "at", label: t("sell_rental_transmission_at") },
+                    { value: "mt", label: t("sell_rental_transmission_mt") },
+                  ]}
+                />
                 {errors.transmission ? <div className="text-xs text-red-600">{errors.transmission}</div> : null}
               </div>
 
               <div className="grid gap-2">
                 <Label>{t("sell_vehicle_region")}</Label>
-                <Select value={draft.region} onChange={(e) => setField("region", e.target.value as any)}>
-                  <option value="">{t("sell_common_select")}</option>
-                  <option value="Ulaanbaatar">{t("sell_rental_region_ulaanbaatar")}</option>
-                  <option value="Erdenet">{t("sell_rental_region_erdenet")}</option>
-                  <option value="Darkhan">{t("sell_rental_region_darkhan")}</option>
-                  <option value="Other">{t("sell_rental_region_other")}</option>
-                </Select>
+                <CustomSelect
+                  value={draft.region || ""}
+                  onChange={(v) => setField("region", v)}
+                  options={[
+                    { value: "", label: t("sell_common_select") },
+                    { value: "Ulaanbaatar", label: t("sell_rental_region_ulaanbaatar") },
+                    { value: "Erdenet", label: t("sell_rental_region_erdenet") },
+                    { value: "Darkhan", label: t("sell_rental_region_darkhan") },
+                    { value: "Other", label: t("sell_rental_region_other") },
+                  ]}
+                />
                 {errors.region ? <div className="text-xs text-red-600">{errors.region}</div> : null}
               </div>
 
@@ -331,18 +397,9 @@ export default function RentRegistrationPage() {
                   onChange={(e) => setField("pricePerDayMnt", e.target.value.replace(/[^\d]/g, ""))}
                   placeholder={t("sell_rental_pricePerDayPlaceholder")}
                   inputMode="numeric"
+                  className="h-12"
                 />
                 {errors.pricePerDayMnt ? <div className="text-xs text-red-600">{errors.pricePerDayMnt}</div> : null}
-              </div>
-
-              <div className="grid gap-2">
-                <Label>{t("sell_rental_availabilityDate")}</Label>
-                <Input
-                  type="date"
-                  value={draft.availabilityDate}
-                  onChange={(e) => setField("availabilityDate", e.target.value)}
-                />
-                {errors.availabilityDate ? <div className="text-xs text-red-600">{errors.availabilityDate}</div> : null}
               </div>
             </div>
           </CardContent>
@@ -485,7 +542,6 @@ export default function RentRegistrationPage() {
                   transmission: "",
                   region: "",
                   pricePerDayMnt: "",
-                  availabilityDate: "",
                   description: "",
                   contactName: "",
                   contactEmail: "",

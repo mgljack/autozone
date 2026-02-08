@@ -87,6 +87,7 @@ function PriceSelect({
         value={value}
         onChange={onChange}
         options={options}
+        triggerClassName="flex h-auto w-full cursor-pointer items-center justify-between bg-transparent border-0 p-0 text-base font-medium text-slate-800 outline-none ring-0 shadow-none transition-all duration-200 hover:border-0 hover:ring-0 focus:border-0 focus:ring-0"
       />
     </div>
   );
@@ -228,7 +229,7 @@ export default function MainHomePage() {
   }, [bannerPaused, bannerCount, canSlide]);
 
   return (
-    <div className="relative grid gap-16">
+    <div className="relative grid gap-10">
 
       {/* 1) Hero */}
       <section className="relative w-full">
@@ -351,274 +352,303 @@ export default function MainHomePage() {
       {/* 2) Quick search - Premium Modern Design */}
       <section className="w-full">
         <div className="mx-auto w-full max-w-[1280px] px-4">
-          <div className="relative overflow-hidden rounded-[28px] bg-white px-6 py-6 shadow-[0_8px_40px_rgba(0,0,0,0.08)] sm:px-8 sm:py-7">
-              {/* Tabs row - Pill style */}
-              <div className="flex flex-wrap items-center gap-2">
-              <button
-                type="button"
-                  onClick={() => setQuickTab("quick")}
-                className={[
-                    "relative inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300",
-                    quickTab === "quick" 
-                      ? "bg-gradient-to-r from-rose-600 to-rose-500 text-white shadow-lg shadow-rose-500/30" 
-                      : "bg-zinc-100 text-zinc-700 hover:bg-gradient-to-r hover:from-rose-600 hover:to-rose-500 hover:text-white hover:animate-[shake_0.8s_ease-in-out]",
-                ].join(" ")}
-              >
-                  {quickTab === "quick" && (
-                    <span className="flex h-4 w-4 items-center justify-center">
-                    <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-                      <path
-                        d="M20 6 9 17l-5-5"
-                        fill="none"
-                        stroke="currentColor"
-                          strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </span>
-                  )}
-                <span>{t("home_quickSearch_tab_quick")}</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setQuickTab("budget")}
-                className={[
-                    "relative inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300",
-                    quickTab === "budget" 
-                      ? "bg-gradient-to-r from-rose-600 to-rose-500 text-white shadow-lg shadow-rose-500/30" 
-                      : "bg-zinc-100 text-zinc-700 hover:bg-gradient-to-r hover:from-rose-600 hover:to-rose-500 hover:text-white hover:animate-[shake_0.8s_ease-in-out]",
-                ].join(" ")}
-              >
-                  {quickTab === "budget" && (
-                    <span className="flex h-4 w-4 items-center justify-center">
-                    <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-                      <path
-                        d="M20 6 9 17l-5-5"
-                        fill="none"
-                        stroke="currentColor"
-                          strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </span>
-                  )}
-                <span>{t("home_quickSearch_tab_budget")}</span>
-              </button>
-
-              <button
-                type="button"
-                  onClick={() => setQuickTab("keyword")}
-                className={[
-                    "relative inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300",
-                    quickTab === "keyword" 
-                      ? "bg-gradient-to-r from-rose-600 to-rose-500 text-white shadow-lg shadow-rose-500/30" 
-                      : "bg-zinc-100 text-zinc-700 hover:bg-gradient-to-r hover:from-rose-600 hover:to-rose-500 hover:text-white hover:animate-[shake_0.8s_ease-in-out]",
-                ].join(" ")}
-              >
-                  {quickTab === "keyword" && (
-                    <span className="flex h-4 w-4 items-center justify-center">
-                    <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-                      <path
-                        d="M20 6 9 17l-5-5"
-                        fill="none"
-                        stroke="currentColor"
-                          strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </span>
-                  )}
-                <span>{t("home_quickSearch_tab_keyword")}</span>
-              </button>
-            </div>
-
-            {/* Inputs row */}
-              <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-              {quickTab === "quick" ? (
-                  <div className="flex flex-1 flex-col gap-4 sm:flex-row sm:items-end sm:gap-3">
-                    <div className="group flex min-w-0 flex-1 flex-col gap-1.5">
-                      <label className="text-xs font-medium uppercase tracking-wider text-zinc-400">{t("home_quickSearch_manufacturer")}</label>
-                      <CustomSelect
-                      value={manufacturer}
-                        onChange={(v) => setManufacturer(v)}
-                        options={[
-                          { value: "", label: t("home_quickSearch_selectPlaceholder") },
-                          ...(taxonomyQuery.data?.manufacturers ?? []).map((m) => ({
-                            value: m,
-                            label: m,
-                          })),
-                        ]}
-                        placeholder={t("home_quickSearch_selectPlaceholder")}
-                      />
-                  </div>
-
-                    <div className="group flex min-w-0 flex-1 flex-col gap-1.5">
-                      <label className="text-xs font-medium uppercase tracking-wider text-zinc-400">{t("home_quickSearch_model")}</label>
-                      <CustomSelect
-                      value={model}
-                        onChange={(v) => setModel(v)}
-                        options={[
-                          { value: "", label: t("home_quickSearch_selectPlaceholder") },
-                          ...models.map((m) => ({
-                            value: m,
-                            label: m,
-                          })),
-                        ]}
-                      disabled={!manufacturer}
-                        placeholder={t("home_quickSearch_selectPlaceholder")}
-                      />
-                  </div>
-
-                    <div className="group flex min-w-0 flex-1 flex-col gap-1.5">
-                      <label className="text-xs font-medium uppercase tracking-wider text-zinc-400">{t("home_quickSearch_subModel")}</label>
-                      <CustomSelect
-                      value={subModel}
-                        onChange={(v) => setSubModel(v)}
-                        options={[
-                          { value: "", label: t("home_quickSearch_selectPlaceholder") },
-                          ...subModels.map((s) => ({
-                            value: s,
-                            label: s,
-                          })),
-                        ]}
-                      disabled={!manufacturer || !model}
-                        placeholder={t("home_quickSearch_selectPlaceholder")}
-                      />
-                  </div>
-                </div>
-              ) : quickTab === "budget" ? (
-                  <div className="flex flex-1 flex-col gap-4 sm:flex-row sm:items-end sm:gap-3">
-                    {/* Price Range Selectors with scrollable dropdown */}
-                    <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-                      <label className="text-xs font-medium uppercase tracking-wider text-zinc-400">{t("home_quickSearch_priceSelect")}</label>
-                      <div className="flex items-center gap-2">
-                        <PriceSelect
-                          value={minManwon}
-                          onChange={(next) => {
-                            setMinManwon(next);
-                            if (next > maxManwon) setMaxManwon(next);
-                          }}
-                          options={[
-                            { value: 500, label: "5 сая" },
-                            { value: 1000, label: "10 сая" },
-                            { value: 1500, label: "15 сая" },
-                            { value: 2000, label: "20 сая" },
-                            { value: 2500, label: "25 сая" },
-                            { value: 3000, label: "30 сая" },
-                            { value: 3500, label: "35 сая" },
-                            { value: 4000, label: "40 сая" },
-                            { value: 4500, label: "45 сая" },
-                            { value: 5000, label: "50 сая" },
-                            { value: 5500, label: "55 сая" },
-                            { value: 6000, label: "60 сая" },
-                            { value: 6500, label: "65 сая" },
-                            { value: 7000, label: "70 сая" },
-                            { value: 7500, label: "75 сая" },
-                            { value: 8000, label: "80 сая" },
-                            { value: 8500, label: "85 сая" },
-                            { value: 9000, label: "90 сая" },
-                            { value: 9500, label: "95 сая" },
-                            { value: 10000, label: "100+ сая" },
-                          ]}
-                        />
-
-                        <span className="flex h-12 w-8 shrink-0 items-center justify-center text-sm font-medium text-zinc-400">~</span>
-
-                        <PriceSelect
-                          value={maxManwon}
-                          onChange={(next) => {
-                            setMaxManwon(next);
-                            if (next < minManwon) setMinManwon(next);
-                          }}
-                          options={[
-                            { value: 500, label: "5 сая" },
-                            { value: 1000, label: "10 сая" },
-                            { value: 1500, label: "15 сая" },
-                            { value: 2000, label: "20 сая" },
-                            { value: 2500, label: "25 сая" },
-                            { value: 3000, label: "30 сая" },
-                            { value: 3500, label: "35 сая" },
-                            { value: 4000, label: "40 сая" },
-                            { value: 4500, label: "45 сая" },
-                            { value: 5000, label: "50 сая" },
-                            { value: 5500, label: "55 сая" },
-                            { value: 6000, label: "60 сая" },
-                            { value: 6500, label: "65 сая" },
-                            { value: 7000, label: "70 сая" },
-                            { value: 7500, label: "75 сая" },
-                            { value: 8000, label: "80 сая" },
-                            { value: 8500, label: "85 сая" },
-                            { value: 9000, label: "90 сая" },
-                            { value: 9500, label: "95 сая" },
-                            { value: 10000, label: "100+ сая" },
-                          ]}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-                      <label className="text-xs font-medium uppercase tracking-wider text-zinc-400">{t("home_quickSearch_carTypeSelect")}</label>
-                      <CustomSelect
-                      value={carType}
-                        onChange={(v) => setCarType(v as typeof carType)}
-                        options={[
-                          { value: "all", label: t("carType_all") },
-                          { value: "sedan", label: t("carType_sedan") },
-                          { value: "suv", label: t("carType_suv") },
-                          { value: "coupe", label: t("carType_coupe") },
-                          { value: "hatchback", label: t("carType_hatchback") },
-                          { value: "pickup", label: t("carType_pickup") },
-                          { value: "van", label: t("carType_van") },
-                        ]}
-                      />
-                  </div>
-                </div>
-              ) : (
-                  <div className="flex flex-1 flex-col gap-1.5">
-                    <label className="text-xs font-medium uppercase tracking-wider text-zinc-400">{t("home_quickSearch_keyword")}</label>
-                    <div className="relative">
-                  <input
-                        className="h-12 w-full rounded-xl border border-zinc-200 bg-white px-4 pr-10 text-sm font-medium text-zinc-900 outline-none ring-0 shadow-none transition-all duration-200 placeholder:text-zinc-400 hover:border-zinc-300 hover:ring-1 hover:ring-zinc-200 focus:border-zinc-400 focus:ring-1 focus:ring-zinc-300"
-                    value={keyword}
-                    onChange={(e) => setKeyword(e.target.value)}
-                    placeholder={t("home_quickSearch_keywordInputPlaceholder")}
-                  />
-                      <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <circle cx="11" cy="11" r="8"/>
-                          <path d="m21 21-4.35-4.35"/>
-                        </svg>
-                      </div>
-                    </div>
-                </div>
+          {/* Search Mode Buttons - Outside container */}
+          <div className="mb-3 flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setQuickTab("quick")}
+              className={[
+                "relative inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 cursor-pointer",
+                quickTab === "quick"
+                  ? "bg-gradient-to-r from-rose-600 to-rose-500 text-white shadow-lg shadow-rose-500/30"
+                  : "bg-zinc-100 text-zinc-700 hover:bg-gradient-to-r hover:from-rose-600 hover:to-rose-500 hover:text-white hover:animate-[shake_0.8s_ease-in-out]",
+              ].join(" ")}
+            >
+              {quickTab === "quick" && (
+                <span className="flex h-4 w-4 items-center justify-center">
+                  <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                    <path
+                      d="M20 6 9 17l-5-5"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
               )}
+              <span>{t("home_quickSearch_tab_quick")}</span>
+            </button>
 
+            <button
+              type="button"
+              onClick={() => setQuickTab("budget")}
+              className={[
+                "relative inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 cursor-pointer",
+                quickTab === "budget"
+                  ? "bg-gradient-to-r from-rose-600 to-rose-500 text-white shadow-lg shadow-rose-500/30"
+                  : "bg-zinc-100 text-zinc-700 hover:bg-gradient-to-r hover:from-rose-600 hover:to-rose-500 hover:text-white hover:animate-[shake_0.8s_ease-in-out]",
+              ].join(" ")}
+            >
+              {quickTab === "budget" && (
+                <span className="flex h-4 w-4 items-center justify-center">
+                  <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                    <path
+                      d="M20 6 9 17l-5-5"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+              )}
+              <span>{t("home_quickSearch_tab_budget")}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setQuickTab("keyword")}
+              className={[
+                "relative inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 cursor-pointer",
+                quickTab === "keyword"
+                  ? "bg-gradient-to-r from-rose-600 to-rose-500 text-white shadow-lg shadow-rose-500/30"
+                  : "bg-zinc-100 text-zinc-700 hover:bg-gradient-to-r hover:from-rose-600 hover:to-rose-500 hover:text-white hover:animate-[shake_0.8s_ease-in-out]",
+              ].join(" ")}
+            >
+              {quickTab === "keyword" && (
+                <span className="flex h-4 w-4 items-center justify-center">
+                  <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                    <path
+                      d="M20 6 9 17l-5-5"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </span>
+              )}
+              <span>{t("home_quickSearch_tab_keyword")}</span>
+            </button>
+          </div>
+
+          {/* Search Container - Pill shape */}
+          <div className="w-full rounded-full border border-slate-200/70 bg-white shadow-sm px-8 py-5">
+            <div className="flex items-center">
+              <div className="flex flex-1 items-center justify-between">
+                {quickTab === "quick" ? (
+                  <>
+                    {/* Manufacturer */}
+                    <div className="flex-1 px-2">
+                      <div className="flex flex-col justify-center gap-1.5 rounded-xl px-4 py-2 hover:bg-slate-50/60 transition-colors cursor-pointer h-full">
+                        <CustomSelect
+                          value={manufacturer}
+                          onChange={(v) => setManufacturer(v)}
+                          options={[
+                            { value: "", label: t("home_quickSearch_selectPlaceholder") },
+                            ...(taxonomyQuery.data?.manufacturers ?? []).map((m) => ({
+                              value: m,
+                              label: m,
+                            })),
+                          ]}
+                          placeholder={t("home_quickSearch_selectPlaceholder")}
+                          showLabel={true}
+                          label={t("home_quickSearch_manufacturer")}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="h-12 w-px bg-slate-200/80" />
+
+                    {/* Model */}
+                    <div className="flex-1 px-2">
+                      <div className="flex flex-col justify-center gap-1.5 rounded-xl px-4 py-2 hover:bg-slate-50/60 transition-colors cursor-pointer h-full">
+                        <CustomSelect
+                          value={model}
+                          onChange={(v) => setModel(v)}
+                          options={[
+                            { value: "", label: t("home_quickSearch_selectPlaceholder") },
+                            ...models.map((m) => ({
+                              value: m,
+                              label: m,
+                            })),
+                          ]}
+                          disabled={!manufacturer}
+                          placeholder={t("home_quickSearch_selectPlaceholder")}
+                          showLabel={true}
+                          label={t("home_quickSearch_model")}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="h-12 w-px bg-slate-200/80" />
+
+                    {/* SubModel */}
+                    <div className="flex-1 px-2">
+                      <div className="flex flex-col justify-center gap-1.5 rounded-xl px-4 py-2 hover:bg-slate-50/60 transition-colors cursor-pointer h-full">
+                        <CustomSelect
+                          value={subModel}
+                          onChange={(v) => setSubModel(v)}
+                          options={[
+                            { value: "", label: t("home_quickSearch_selectPlaceholder") },
+                            ...subModels.map((s) => ({
+                              value: s,
+                              label: s,
+                            })),
+                          ]}
+                          disabled={!manufacturer || !model}
+                          placeholder={t("home_quickSearch_selectPlaceholder")}
+                          showLabel={true}
+                          label={t("home_quickSearch_subModel")}
+                        />
+                      </div>
+                    </div>
+                  </>
+                ) : quickTab === "budget" ? (
+                  <>
+                    {/* Price Range */}
+                    <div className="flex-1 px-2">
+                      <div className="flex flex-col justify-center gap-1.5 rounded-xl px-4 py-2 hover:bg-slate-50/60 transition-colors h-full">
+                        <div className="flex items-center gap-2">
+                          <div className="flex-1">
+                            <div className="flex flex-col justify-center gap-1.5">
+                              <div className="text-xs text-slate-500 h-[14px] flex items-center">{t("home_quickSearch_min")}</div>
+                              <PriceSelect
+                                value={minManwon}
+                                onChange={(next) => {
+                                  setMinManwon(next);
+                                  if (next > maxManwon) setMaxManwon(next);
+                                }}
+                                options={[
+                                  { value: 500, label: "5 сая" },
+                                  { value: 1000, label: "10 сая" },
+                                  { value: 1500, label: "15 сая" },
+                                  { value: 2000, label: "20 сая" },
+                                  { value: 2500, label: "25 сая" },
+                                  { value: 3000, label: "30 сая" },
+                                  { value: 3500, label: "35 сая" },
+                                  { value: 4000, label: "40 сая" },
+                                  { value: 4500, label: "45 сая" },
+                                  { value: 5000, label: "50 сая" },
+                                  { value: 5500, label: "55 сая" },
+                                  { value: 6000, label: "60 сая" },
+                                  { value: 6500, label: "65 сая" },
+                                  { value: 7000, label: "70 сая" },
+                                  { value: 7500, label: "75 сая" },
+                                  { value: 8000, label: "80 сая" },
+                                  { value: 8500, label: "85 сая" },
+                                  { value: 9000, label: "90 сая" },
+                                  { value: 9500, label: "95 сая" },
+                                  { value: 10000, label: "100+ сая" },
+                                ]}
+                              />
+                            </div>
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex flex-col justify-center gap-1.5">
+                              <div className="text-xs text-slate-500 h-[14px] flex items-center">{t("home_quickSearch_max")}</div>
+                              <PriceSelect
+                                value={maxManwon}
+                                onChange={(next) => {
+                                  setMaxManwon(next);
+                                  if (next < minManwon) setMinManwon(next);
+                                }}
+                                options={[
+                                  { value: 500, label: "5 сая" },
+                                  { value: 1000, label: "10 сая" },
+                                  { value: 1500, label: "15 сая" },
+                                  { value: 2000, label: "20 сая" },
+                                  { value: 2500, label: "25 сая" },
+                                  { value: 3000, label: "30 сая" },
+                                  { value: 3500, label: "35 сая" },
+                                  { value: 4000, label: "40 сая" },
+                                  { value: 4500, label: "45 сая" },
+                                  { value: 5000, label: "50 сая" },
+                                  { value: 5500, label: "55 сая" },
+                                  { value: 6000, label: "60 сая" },
+                                  { value: 6500, label: "65 сая" },
+                                  { value: 7000, label: "70 сая" },
+                                  { value: 7500, label: "75 сая" },
+                                  { value: 8000, label: "80 сая" },
+                                  { value: 8500, label: "85 сая" },
+                                  { value: 9000, label: "90 сая" },
+                                  { value: 9500, label: "95 сая" },
+                                  { value: 10000, label: "100+ сая" },
+                                ]}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="h-12 w-px bg-slate-200/80" />
+
+                    {/* Car Type */}
+                    <div className="flex-1 px-2">
+                      <div className="flex flex-col justify-center gap-1.5 rounded-xl px-4 py-2 hover:bg-slate-50/60 transition-colors cursor-pointer h-full">
+                        <CustomSelect
+                          value={carType}
+                          onChange={(v) => setCarType(v as typeof carType)}
+                          options={[
+                            { value: "all", label: t("carType_all") },
+                            { value: "sedan", label: t("carType_sedan") },
+                            { value: "suv", label: t("carType_suv") },
+                            { value: "coupe", label: t("carType_coupe") },
+                            { value: "hatchback", label: t("carType_hatchback") },
+                            { value: "pickup", label: t("carType_pickup") },
+                            { value: "van", label: t("carType_van") },
+                          ]}
+                          showLabel={true}
+                          label={t("home_quickSearch_carTypeSelect")}
+                        />
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {/* Keyword */}
+                    <div className="min-w-[300px] px-2">
+                      <div className="flex flex-col justify-center gap-1.5 rounded-xl px-4 py-2 hover:bg-slate-50/60 transition-colors h-full">
+                        <div className="text-xs text-slate-500">{t("home_quickSearch_keyword")}</div>
+                        <div className="relative">
+                          <input
+                            className="h-auto w-full bg-transparent border-0 p-0 text-base font-medium text-slate-800 outline-none ring-0 shadow-none placeholder:text-slate-400"
+                            value={keyword}
+                            onChange={(e) => setKeyword(e.target.value)}
+                            placeholder={t("home_quickSearch_keywordInputPlaceholder")}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Search button */}
               <button
                 type="button"
                 onClick={onSearch}
-                  className="group relative inline-flex h-12 min-w-[140px] items-center justify-center gap-2.5 overflow-hidden rounded-xl bg-gradient-to-r from-rose-600 to-rose-500 px-6 text-base font-bold text-white shadow-lg shadow-rose-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-rose-500/40 active:scale-[0.98] sm:h-12"
+                className="ml-6 h-14 rounded-full px-10 text-white font-semibold bg-gradient-to-r from-rose-600 to-rose-500 hover:opacity-95 transition-opacity flex items-center gap-3 shadow-lg shadow-rose-500/30 cursor-pointer"
               >
-                  <span className="absolute inset-0 bg-gradient-to-r from-rose-700 to-rose-600 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                  <span className="relative">{t("home_quickSearch_search")}</span>
+                <span>{t("home_quickSearch_search")}</span>
                 <svg
                   viewBox="0 0 24 24"
-                    width={18}
-                    height={18}
+                  width={20}
+                  height={20}
                   aria-hidden="true"
-                    className="relative transition-transform duration-300 group-hover:translate-x-0.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 >
-                  <path
-                    d="M21 21l-4.35-4.35m1.35-5.15a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
-                    fill="none"
-                    stroke="currentColor"
-                      strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.35-4.35" />
                 </svg>
               </button>
             </div>

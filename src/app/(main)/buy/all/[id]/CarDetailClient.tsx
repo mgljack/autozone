@@ -12,6 +12,7 @@ import { VehiclePriceComparison } from "@/components/cars/VehiclePriceComparison
 import { OptionInfoSection } from "@/components/cars/OptionInfoSection";
 import { SellerInfo } from "@/components/listings/SellerInfo";
 import { FinanceCalculatorModal } from "@/components/detail/FinanceCalculatorModal";
+import { RotatingInfoTiles, CalendarIcon, GaugeIcon, FuelIcon, EngineIcon, GearIcon, CarIcon, PaletteIcon } from "@/components/detail/RotatingInfoTiles";
 import { useFavorites } from "@/features/favorites/favorites";
 import { useRecentCars } from "@/features/recent/recent";
 import { formatMnt } from "@/lib/format";
@@ -163,31 +164,51 @@ export default function CarDetailClient({ id }: { id: string }) {
               {formatMnt(car.priceMnt)}
             </div>
 
-            {/* Key Specs: Year, Mileage, Fuel */}
-            <div className="mt-4 space-y-2 text-sm">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                <span className="text-slate-500">
-                  {car.yearImported
-                    ? t("carDetail_specs_yearMadeAndImported")
-                    : t("carDetail_specs_yearMade")}
-                </span>
-                <span className="font-semibold text-slate-900">
-                  {car.yearMade}
-                  {car.yearImported ? ` / ${car.yearImported}` : ""}
-                </span>
-              </div>
-              <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                <span className="text-slate-500">{t("carDetail_specs_mileage")}</span>
-                <span className="font-semibold text-slate-900">
-                  {car.mileageKm ? `${car.mileageKm.toLocaleString("ko-KR")}km` : "-"}
-                </span>
-              </div>
-              <div className="flex items-center justify-between pb-2">
-                <span className="text-slate-500">{t("carDetail_specs_fuel")}</span>
-                <span className="font-semibold text-slate-900">
-                  {car.specs?.fuel || "-"}
-                </span>
-              </div>
+            {/* Rotating Info Tiles */}
+            <div className="mt-4">
+              <RotatingInfoTiles
+                items={[
+                  {
+                    id: "year",
+                    front: {
+                      icon: <CalendarIcon />,
+                      label: t("carDetail_specs_yearMade"),
+                      value: car.yearMade ? String(car.yearMade) : "—",
+                    },
+                    back: {
+                      icon: <CalendarIcon />,
+                      label: t("carDetail_specs_yearImported"),
+                      value: car.yearImported ? String(car.yearImported) : "—",
+                    },
+                  },
+                  {
+                    id: "mileage",
+                    front: {
+                      icon: <GaugeIcon />,
+                      label: t("carDetail_specs_mileage"),
+                      value: car.mileageKm ? `${car.mileageKm.toLocaleString("ko-KR")}km` : "—",
+                    },
+                    back: {
+                      icon: <GearIcon />,
+                      label: t("carDetail_specs_transmission"),
+                      value: car.specs?.transmission || "—",
+                    },
+                  },
+                  {
+                    id: "fuel",
+                    front: {
+                      icon: <FuelIcon />,
+                      label: t("carDetail_specs_fuel"),
+                      value: car.specs?.fuel || "—",
+                    },
+                    back: {
+                      icon: <PaletteIcon />,
+                      label: t("carDetail_specs_color"),
+                      value: car.specs?.color || "—",
+                    },
+                  },
+                ]}
+              />
             </div>
 
             {/* Action Buttons */}
@@ -262,7 +283,7 @@ export default function CarDetailClient({ id }: { id: string }) {
       <div className="my-6 h-px w-full bg-gradient-to-r from-transparent via-slate-300/60 to-transparent" />
 
       {/* Options Section */}
-      {!isMotorcycle ? <OptionInfoSection options={car.options} /> : null}
+      {!isMotorcycle ? <OptionInfoSection options={car.options} selectedOptions={car.selectedOptions} /> : null}
 
       {/* Section Divider */}
       {!isMotorcycle && <div className="my-6 h-px w-full bg-gradient-to-r from-transparent via-slate-300/60 to-transparent" />}

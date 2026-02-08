@@ -425,6 +425,7 @@ function getPublishedCarsFromLocalStorage(): Car[] {
       vin: d.vin || `VIN_${x.id}`,
       hasPlate: d.hasPlate === "yes",
       options: d.options || undefined,
+      selectedOptions: d.selectedOptions,
     };
   });
 }
@@ -834,7 +835,7 @@ function generateRandomOptions(id: string): {
   };
 }
 
-function toCarDetailDTO(c: Car & { options?: any }): CarDetailDTO {
+function toCarDetailDTO(c: Car & { options?: any; selectedOptions?: Array<{ key: string; label: string; category: string }> }): CarDetailDTO {
   // Use provided options or generate random ones for prototype
   const options = c.options || generateRandomOptions(c.id);
   
@@ -861,6 +862,7 @@ function toCarDetailDTO(c: Car & { options?: any }): CarDetailDTO {
       vin: c.vin,
     },
     options,
+    selectedOptions: c.selectedOptions,
     seller: {
       name: c.sellerName,
       phone: c.sellerPhone,

@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { useFavorites } from "@/features/favorites/favorites";
 import { LikeIcon } from "@/components/ui/LikeIcon";
+import { cn } from "@/lib/utils";
 import type { Car } from "@/lib/api/cars";
 import { formatKm, formatMnt } from "@/lib/format";
 
@@ -39,7 +40,12 @@ export function CarCard({ car }: { car: Car }) {
               createdAt: car.postedAt,
             });
           }}
-          className="shrink-0 flex items-center justify-center h-7 w-7 rounded-full bg-zinc-500 transition-all duration-150 hover:scale-105 hover:bg-zinc-600"
+          className={cn(
+            "shrink-0 flex items-center justify-center h-7 w-7 rounded-full transition-all duration-150 hover:scale-105 border",
+            favored
+              ? "bg-rose-600 border-rose-600 hover:bg-rose-700 hover:border-rose-700"
+              : "bg-zinc-500 border-zinc-500 hover:bg-zinc-600 hover:border-zinc-600"
+          )}
           aria-pressed={favored}
         >
           <LikeIcon liked={favored} size="sm" />

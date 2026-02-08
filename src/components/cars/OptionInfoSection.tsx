@@ -16,6 +16,7 @@ type VehicleOptions = {
 
 type OptionInfoSectionProps = {
   options?: VehicleOptions;
+  selectedOptions?: Array<{ key: string; label: string; category: string }>;
 };
 
 // Fixed 7 options with icon components
@@ -29,21 +30,21 @@ const fixedOptions = [
   { key: "heatedSteering" as const, icon: HeatedSteeringIcon },
 ];
 
-export function OptionInfoSection({ options }: OptionInfoSectionProps) {
+export function OptionInfoSection({ options, selectedOptions }: OptionInfoSectionProps) {
   const { t } = useI18n();
   const [modalOpen, setModalOpen] = React.useState(false);
   const groupedOptions = React.useMemo(
-    () => normalizeOptionsToGroups(options, t),
-    [options, t]
+    () => normalizeOptionsToGroups(options, t, selectedOptions),
+    [options, t, selectedOptions]
   );
 
   return (
     <div>
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <h3 className="text-lg font-bold text-zinc-900">{t("carDetail_options_title")}</h3>
-          <InfoIcon />
+      <div className="flex items-center gap-2">
+        <h3 className="text-lg font-bold text-zinc-900">{t("carDetail_options_title")}</h3>
+        <InfoIcon />
         </div>
         <button
           onClick={() => setModalOpen(true)}

@@ -6,6 +6,7 @@ import React from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { LikeIcon } from "@/components/ui/LikeIcon";
 import { useI18n } from "@/context/I18nContext";
+import { cn } from "@/lib/utils";
 
 function ChevronLeftIcon({ className }: { className?: string }) {
   return (
@@ -159,7 +160,12 @@ export function CarGallery({
           </button>
           <button
             type="button"
-            className="group relative inline-flex h-7 w-7 items-center justify-center rounded-full bg-zinc-500 shadow-[0_2px_6px_rgba(0,0,0,0.08)] transition-all duration-150 ease-out hover:scale-105 hover:bg-zinc-600 hover:shadow-[0_6px_18px_rgba(0,0,0,0.12)] active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#111827]/20 focus-visible:ring-offset-2"
+            className={cn(
+              "group relative inline-flex h-7 w-7 items-center justify-center rounded-full shadow-[0_2px_6px_rgba(0,0,0,0.08)] transition-all duration-150 ease-out hover:scale-105 hover:shadow-[0_6px_18px_rgba(0,0,0,0.12)] active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#111827]/20 focus-visible:ring-offset-2",
+              liked 
+                ? "bg-rose-600 border border-rose-600 hover:bg-rose-700 hover:border-rose-700" 
+                : "bg-zinc-500 border border-zinc-500 hover:bg-zinc-600 hover:border-zinc-600"
+            )}
             aria-label="Like"
             aria-pressed={liked}
             onClick={onToggleLike}

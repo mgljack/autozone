@@ -10,12 +10,18 @@ export function CustomSelect<T extends string | number>({
   options,
   disabled,
   placeholder,
+  triggerClassName,
+  showLabel,
+  label,
 }: {
   value: T;
   onChange: (value: T) => void;
   options: { value: T; label: string }[];
   disabled?: boolean;
   placeholder?: string;
+  triggerClassName?: string;
+  showLabel?: boolean;
+  label?: string;
 }) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [dropdownPosition, setDropdownPosition] = React.useState({ top: 0, left: 0, width: 0 });
@@ -100,8 +106,21 @@ export function CustomSelect<T extends string | number>({
     }
   }, [isOpen]);
 
+  const defaultTriggerClass = "flex h-12 w-full cursor-pointer items-center justify-between rounded-xl border border-zinc-200 bg-white px-4 text-sm font-medium text-zinc-900 outline-none ring-0 shadow-none transition-all duration-200";
+  const unstyledTriggerClass = "flex h-auto w-full cursor-pointer items-center justify-between bg-transparent border-0 p-0 text-base font-medium text-slate-800 outline-none ring-0 shadow-none transition-all duration-200";
+  
+  const triggerClass = triggerClassName || (showLabel ? unstyledTriggerClass : defaultTriggerClass);
+  const triggerStateClass = disabled
+    ? "cursor-not-allowed opacity-50"
+    : isOpen
+      ? (showLabel || triggerClassName) ? "" : "border-zinc-300 ring-1 ring-zinc-300"
+      : (showLabel || triggerClassName) ? "" : "hover:border-zinc-300 hover:ring-1 hover:ring-zinc-200 focus:border-zinc-400 focus:ring-1 focus:ring-zinc-300";
+
   return (
-    <div className="relative">
+    <div className="relative w-full">
+      {showLabel && label && (
+        <div className="text-xs text-slate-500 h-[14px] flex items-center">{label}</div>
+      )}
       {/* Trigger button */}
       <button
         ref={triggerRef}
@@ -109,15 +128,13 @@ export function CustomSelect<T extends string | number>({
         onClick={() => !disabled && setIsOpen(!isOpen)}
         disabled={disabled}
         className={[
-          "flex h-12 w-full cursor-pointer items-center justify-between rounded-xl border border-zinc-200 bg-white px-4 text-sm font-medium text-zinc-900 outline-none ring-0 shadow-none transition-all duration-200",
-          disabled
-            ? "cursor-not-allowed opacity-50"
-            : isOpen
-              ? "border-zinc-300 ring-1 ring-zinc-300"
-              : "hover:border-zinc-300 hover:ring-1 hover:ring-zinc-200 focus:border-zinc-400 focus:ring-1 focus:ring-zinc-300",
+          triggerClass,
+          triggerStateClass,
         ].join(" ")}
       >
-        <span>{selectedOption?.label ?? placeholder ?? ""}</span>
+        <span className={showLabel ? "text-base font-medium text-slate-800" : ""}>
+          {selectedOption?.label ?? placeholder ?? ""}
+        </span>
         <svg
           width="16"
           height="16"
@@ -128,7 +145,8 @@ export function CustomSelect<T extends string | number>({
           strokeLinecap="round"
           strokeLinejoin="round"
           className={[
-            "text-zinc-400 transition-transform duration-200",
+            showLabel ? "text-slate-400" : "text-zinc-400",
+            "transition-transform duration-200",
             isOpen ? "rotate-180" : "",
           ].join(" ")}
         >

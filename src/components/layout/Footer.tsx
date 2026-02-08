@@ -22,7 +22,7 @@ export function Footer() {
               <Link className="hover:underline" href="/notice">
                 {t("footer_notice")}
               </Link>
-              <Link className="hover:underline" href="#">
+              <Link className="hover:underline" href="/guide">
                 {t("footer_guide")}
               </Link>
             </div>

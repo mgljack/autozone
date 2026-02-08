@@ -21,15 +21,17 @@ import { createDefaultDraft } from "@/features/sell/defaults";
 import { readDraft, upsertMyListing, writeDraft } from "@/features/sell/storage";
 import type { SellCategory, SellDraft } from "@/features/sell/types";
 import { PostCreateSummaryCard } from "@/components/posting/PostCreateSummaryCard";
+import { AddOptionsModal, type SelectedOption } from "@/components/posting/AddOptionsModal";
 import { fetchCarTaxonomy } from "@/lib/mockApi";
 import { sampleCarImage } from "@/mock/cars";
 
-export default function SellFormByCategoryPage({ params }: { params: { category: string } }) {
+export default function SellFormByCategoryPage({ params }: { params: Promise<{ category: string }> }) {
   const { t } = useI18n();
   const router = useRouter();
   const { session } = useAuth();
 
-  const category = (params.category as SellCategory) || "car";
+  const resolvedParams = React.use(params);
+  const category = (resolvedParams.category as SellCategory) || "car";
   const isValidCategory = category === "car" || category === "motorcycle" || category === "tire" || category === "parts";
 
   const [draft, setDraft] = React.useState<SellDraft>(() => {
@@ -45,6 +47,7 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
   const [errors, setErrors] = React.useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [draggedIndex, setDraggedIndex] = React.useState<number | null>(null);
+  const [addOptionsModalOpen, setAddOptionsModalOpen] = React.useState(false);
 
   // Fetch car taxonomy for manufacturer and model dropdowns
   const taxonomyQuery = useQuery({
@@ -283,7 +286,7 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
 
   if (!isValidCategory) {
     return (
-      <RequireAuth returnUrl={`/sell/${params.category}`}>
+      <RequireAuth returnUrl={`/sell/${resolvedParams.category}`}>
         <div className="grid gap-6">
           <SectionTitle title={t("sell_title")} subtitle={t("sell_common_unsupportedCategory")} />
           <Link href="/sell">
@@ -295,7 +298,7 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
   }
 
   return (
-    <RequireAuth returnUrl={`/sell/${params.category}`}>
+    <RequireAuth returnUrl={`/sell/${resolvedParams.category}`}>
       <div className="grid gap-6 pb-24 lg:pb-6">
         {/* Premium Banner Section */}
         <section className="mb-2">
@@ -496,7 +499,20 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
 
                 {/* Options */}
                 <div className="grid gap-3">
-                  <Label>{t("carDetail_options_title")}</Label>
+                  <div className="flex items-center justify-between">
+                    <Label>{t("carDetail_options_title")}</Label>
+                    {draft.category === "car" && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setAddOptionsModalOpen(true)}
+                        className="h-8 text-xs"
+                      >
+                        {t("sell_options_addMore")}
+                      </Button>
+                    )}
+                  </div>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                     {[
                       { key: "sunroof", label: t("carDetail_options_sunroof") },
@@ -534,7 +550,60 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
                       );
                     })}
                   </div>
+                  
+                  {/* Additional Selected Options */}
+                  {draft.category === "car" && draft.selectedOptions && draft.selectedOptions.length > 0 && (
+                    <div className="mt-3">
+                      <div className="text-xs font-medium text-zinc-500 mb-2">{t("sell_common_selected")}</div>
+                      <div className="flex flex-wrap gap-2">
+                        {draft.selectedOptions.map((opt) => (
+                          <span
+                            key={opt.key}
+                            className="group inline-flex items-center gap-1.5 rounded-full bg-rose-50 border border-rose-200 px-3 py-1 text-sm font-medium text-rose-700 pr-1"
+                          >
+                            {opt.label}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const current = draft.selectedOptions || [];
+                                setField("selectedOptions", current.filter((o) => o.key !== opt.key));
+                              }}
+                              className="ml-1 flex h-4 w-4 items-center justify-center rounded-full hover:bg-rose-200 transition-colors"
+                              aria-label="Remove option"
+                            >
+                              <svg
+                                width="12"
+                                height="12"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="text-rose-600"
+                              >
+                                <path d="M18 6L6 18" />
+                                <path d="M6 6l12 12" />
+                              </svg>
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
+                
+                {/* Add Options Modal */}
+                {draft.category === "car" && (
+                  <AddOptionsModal
+                    open={addOptionsModalOpen}
+                    onOpenChange={setAddOptionsModalOpen}
+                    selectedOptions={draft.selectedOptions || []}
+                    onOptionsChange={(options: SelectedOption[]) => {
+                      setField("selectedOptions", options);
+                    }}
+                  />
+                )}
               </>
             ) : null}
 
@@ -642,7 +711,10 @@ export default function SellFormByCategoryPage({ params }: { params: { category:
               <Label>{t("sell_vehicle_price")}</Label>
               <Input
                 value={(draft as any).priceMnt ?? ""}
-                onChange={(e) => setField("priceMnt" as any, e.target.value as any)}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/[^0-9]/g, "");
+                  setField("priceMnt" as any, value as any);
+                }}
                 placeholder={t("sell_vehicle_pricePlaceholder")}
                 className="h-11 rounded-xl focus:ring-2 focus:ring-rose-500/20"
               />
